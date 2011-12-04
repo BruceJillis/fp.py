@@ -7,19 +7,22 @@ class	Environment:
 		self.mapping[param] = self.index
 		self.index	+= 1
 
+	def	addat(self,	param, at):
+		self.mapping[param] = at
+
 	def	get(self,	param):
 		if	not	param	in self.mapping:
 			exit('unknown	local	var: ' + param)
 		return	self.mapping[param]
 
 	def	count(self):
-		return	self.index
+		return len(self.mapping.keys())
 
-	def increment(self):
+	def increment(self, amount = 1):
 		result = Environment()
 		result.index = self.index
 		for k in self.mapping:
-			result.mapping[k] = self.mapping[k] + 1
+			result.mapping[k] = self.mapping[k] + amount
 		return result
 
 class Code:
@@ -30,6 +33,7 @@ class Code:
 	APPLY = 5
 	UPDATE = 6
 	POP = 7
+	SLIDE = 8
 
 	def __init__(self):
 		self.combinators = {}
@@ -55,9 +59,14 @@ class Code:
 			str = "UPDATE %s" % (instr[1])
 		if instr[0] == self.POP:
 			str = "POP %s" % (instr[1])
+		if instr[0] == self.SLIDE:
+			str = "SLIDE %s" % (instr[1])
 		if instr[0] == self.APPLY:
 			str = "APPLY"
 		return "%s" % (str)
+
+	def Slide(self, value):
+		self.instructions.append((Code.SLIDE, int(value)))
 
 	def Update(self, value):
 		self.instructions.append((Code.UPDATE, int(value)))

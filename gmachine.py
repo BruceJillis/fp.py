@@ -162,24 +162,17 @@ class GMachine:
 			elif i[0] == Code.UNWIND:
 				a = self.stack[-1:][0]
 				o = self.heap[a]
+				print a,o
 				if o.__class__ == NGlobal:
-					print 'unw glob', self.stats.steps
-					print self.stack
 					aas = []
 					for n in range(o.n + 1):
-						print n
 						an = self.stack.pop()
 						if n > 0:
 							aas.append(self.heap[an].a2)
 					self.stack.append(an)
-					print aas, self.stack
 					aas.reverse()
-					for aa in aas:
-						self.stack.append(aa)
-					print aas, self.stack
+					self.stack += aas
 					self.code = o.code
-					if self.stats.steps > 1125:
-						exit()
 				elif o.__class__ == NApply:
 					self.stack.append(o.a1)
 					self.code = [i] + self.code
@@ -196,8 +189,15 @@ class GMachine:
 				an = self.stack[-(i[1]+1):][0]
 				self.heap[an] = NInd(a)				
 			elif i[0] == Code.POP:
-				for a in range(i[1]):
+				for n in range(i[1]):
 					self.stack.pop()
+			elif i[0] == Code.SLIDE:
+				a = self.stack.pop()
+				i = i[1]
+				while i >= 1:
+					self.stack.pop()
+					i -= 1
+				self.stack.append(a)
 			else:
 				raise Exception('unknown instruction: ' + str(i))
 			self.stats.step()

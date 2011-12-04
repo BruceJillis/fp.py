@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/CoreAnalyzer.g 2011-12-04 17:45:55
+# $ANTLR 3.4 grammars/CoreAnalyzer.g 2011-12-04 20:10:38
 
 import sys
 from antlr3 import *
@@ -212,11 +212,11 @@ class CoreAnalyzer(TreeParser):
 
 
     # $ANTLR start "expression"
-    # grammars/CoreAnalyzer.g:20:1: expression[info] : ( ^( LET ( definition )+ expression[info] ) | ^( LETREC ( definition )+ expression[info] ) | ^( CASE expression[info] ( alternative )+ ) | ^( LAMBDA ( ID )+ expression[info] ) | ^( MUL expression[info] expression[info] ) | ^( DIV expression[info] expression[info] ) | ^( ADD expression[info] expression[info] ) | ^( MIN expression[info] expression[info] ) | ^( AND expression[info] expression[info] ) | ^( OR expression[info] expression[info] ) | ^( EQ expression[info] expression[info] ) | ^( NEQ expression[info] expression[info] ) | ^( LT expression[info] expression[info] ) | ^( LTE expression[info] expression[info] ) | ^( GT expression[info] expression[info] ) | ^( GTE expression[info] expression[info] ) | ^( APPLICATION expression[info] expression[info] ) | basic[info] );
+    # grammars/CoreAnalyzer.g:20:1: expression[info] : ( ^( LET ( definition[info] )+ expression[info] ) | ^( LETREC ( definition[info] )+ expression[info] ) | ^( CASE expression[info] ( alternative[info] )+ ) | ^( LAMBDA ( ID )+ expression[info] ) | ^( MUL expression[info] expression[info] ) | ^( DIV expression[info] expression[info] ) | ^( ADD expression[info] expression[info] ) | ^( MIN expression[info] expression[info] ) | ^( AND expression[info] expression[info] ) | ^( OR expression[info] expression[info] ) | ^( EQ expression[info] expression[info] ) | ^( NEQ expression[info] expression[info] ) | ^( LT expression[info] expression[info] ) | ^( LTE expression[info] expression[info] ) | ^( GT expression[info] expression[info] ) | ^( GTE expression[info] expression[info] ) | ^( APPLICATION expression[info] expression[info] ) | basic[info] );
     def expression(self, info):
         try:
             try:
-                # grammars/CoreAnalyzer.g:21:2: ( ^( LET ( definition )+ expression[info] ) | ^( LETREC ( definition )+ expression[info] ) | ^( CASE expression[info] ( alternative )+ ) | ^( LAMBDA ( ID )+ expression[info] ) | ^( MUL expression[info] expression[info] ) | ^( DIV expression[info] expression[info] ) | ^( ADD expression[info] expression[info] ) | ^( MIN expression[info] expression[info] ) | ^( AND expression[info] expression[info] ) | ^( OR expression[info] expression[info] ) | ^( EQ expression[info] expression[info] ) | ^( NEQ expression[info] expression[info] ) | ^( LT expression[info] expression[info] ) | ^( LTE expression[info] expression[info] ) | ^( GT expression[info] expression[info] ) | ^( GTE expression[info] expression[info] ) | ^( APPLICATION expression[info] expression[info] ) | basic[info] )
+                # grammars/CoreAnalyzer.g:21:2: ( ^( LET ( definition[info] )+ expression[info] ) | ^( LETREC ( definition[info] )+ expression[info] ) | ^( CASE expression[info] ( alternative[info] )+ ) | ^( LAMBDA ( ID )+ expression[info] ) | ^( MUL expression[info] expression[info] ) | ^( DIV expression[info] expression[info] ) | ^( ADD expression[info] expression[info] ) | ^( MIN expression[info] expression[info] ) | ^( AND expression[info] expression[info] ) | ^( OR expression[info] expression[info] ) | ^( EQ expression[info] expression[info] ) | ^( NEQ expression[info] expression[info] ) | ^( LT expression[info] expression[info] ) | ^( LTE expression[info] expression[info] ) | ^( GT expression[info] expression[info] ) | ^( GTE expression[info] expression[info] ) | ^( APPLICATION expression[info] expression[info] ) | basic[info] )
                 alt7 = 18
                 LA7 = self.input.LA(1)
                 if LA7 == LET:
@@ -262,12 +262,12 @@ class CoreAnalyzer(TreeParser):
 
 
                 if alt7 == 1:
-                    # grammars/CoreAnalyzer.g:21:4: ^( LET ( definition )+ expression[info] )
+                    # grammars/CoreAnalyzer.g:21:4: ^( LET ( definition[info] )+ expression[info] )
                     pass 
                     self.match(self.input, LET, self.FOLLOW_LET_in_expression105)
 
                     self.match(self.input, DOWN, None)
-                    # grammars/CoreAnalyzer.g:21:10: ( definition )+
+                    # grammars/CoreAnalyzer.g:21:10: ( definition[info] )+
                     cnt3 = 0
                     while True: #loop3
                         alt3 = 2
@@ -278,10 +278,10 @@ class CoreAnalyzer(TreeParser):
 
 
                         if alt3 == 1:
-                            # grammars/CoreAnalyzer.g:21:10: definition
+                            # grammars/CoreAnalyzer.g:21:10: definition[info]
                             pass 
                             self._state.following.append(self.FOLLOW_definition_in_expression107)
-                            self.definition()
+                            self.definition(info)
 
                             self._state.following.pop()
 
@@ -296,7 +296,7 @@ class CoreAnalyzer(TreeParser):
                         cnt3 += 1
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression110)
+                    self._state.following.append(self.FOLLOW_expression_in_expression111)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -306,12 +306,12 @@ class CoreAnalyzer(TreeParser):
 
 
                 elif alt7 == 2:
-                    # grammars/CoreAnalyzer.g:22:4: ^( LETREC ( definition )+ expression[info] )
+                    # grammars/CoreAnalyzer.g:22:4: ^( LETREC ( definition[info] )+ expression[info] )
                     pass 
-                    self.match(self.input, LETREC, self.FOLLOW_LETREC_in_expression118)
+                    self.match(self.input, LETREC, self.FOLLOW_LETREC_in_expression119)
 
                     self.match(self.input, DOWN, None)
-                    # grammars/CoreAnalyzer.g:22:13: ( definition )+
+                    # grammars/CoreAnalyzer.g:22:13: ( definition[info] )+
                     cnt4 = 0
                     while True: #loop4
                         alt4 = 2
@@ -322,10 +322,10 @@ class CoreAnalyzer(TreeParser):
 
 
                         if alt4 == 1:
-                            # grammars/CoreAnalyzer.g:22:13: definition
+                            # grammars/CoreAnalyzer.g:22:13: definition[info]
                             pass 
-                            self._state.following.append(self.FOLLOW_definition_in_expression120)
-                            self.definition()
+                            self._state.following.append(self.FOLLOW_definition_in_expression121)
+                            self.definition(info)
 
                             self._state.following.pop()
 
@@ -340,7 +340,7 @@ class CoreAnalyzer(TreeParser):
                         cnt4 += 1
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression123)
+                    self._state.following.append(self.FOLLOW_expression_in_expression125)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -350,17 +350,17 @@ class CoreAnalyzer(TreeParser):
 
 
                 elif alt7 == 3:
-                    # grammars/CoreAnalyzer.g:23:4: ^( CASE expression[info] ( alternative )+ )
+                    # grammars/CoreAnalyzer.g:23:4: ^( CASE expression[info] ( alternative[info] )+ )
                     pass 
-                    self.match(self.input, CASE, self.FOLLOW_CASE_in_expression131)
+                    self.match(self.input, CASE, self.FOLLOW_CASE_in_expression133)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression133)
+                    self._state.following.append(self.FOLLOW_expression_in_expression135)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    # grammars/CoreAnalyzer.g:23:28: ( alternative )+
+                    # grammars/CoreAnalyzer.g:23:28: ( alternative[info] )+
                     cnt5 = 0
                     while True: #loop5
                         alt5 = 2
@@ -371,10 +371,10 @@ class CoreAnalyzer(TreeParser):
 
 
                         if alt5 == 1:
-                            # grammars/CoreAnalyzer.g:23:28: alternative
+                            # grammars/CoreAnalyzer.g:23:28: alternative[info]
                             pass 
-                            self._state.following.append(self.FOLLOW_alternative_in_expression136)
-                            self.alternative()
+                            self._state.following.append(self.FOLLOW_alternative_in_expression138)
+                            self.alternative(info)
 
                             self._state.following.pop()
 
@@ -396,7 +396,7 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 4:
                     # grammars/CoreAnalyzer.g:24:4: ^( LAMBDA ( ID )+ expression[info] )
                     pass 
-                    self.match(self.input, LAMBDA, self.FOLLOW_LAMBDA_in_expression144)
+                    self.match(self.input, LAMBDA, self.FOLLOW_LAMBDA_in_expression147)
 
                     self.match(self.input, DOWN, None)
                     # grammars/CoreAnalyzer.g:24:13: ( ID )+
@@ -417,7 +417,7 @@ class CoreAnalyzer(TreeParser):
                         if alt6 == 1:
                             # grammars/CoreAnalyzer.g:24:13: ID
                             pass 
-                            self.match(self.input, ID, self.FOLLOW_ID_in_expression146)
+                            self.match(self.input, ID, self.FOLLOW_ID_in_expression149)
 
 
                         else:
@@ -430,7 +430,7 @@ class CoreAnalyzer(TreeParser):
                         cnt6 += 1
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression149)
+                    self._state.following.append(self.FOLLOW_expression_in_expression152)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -442,15 +442,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 5:
                     # grammars/CoreAnalyzer.g:25:4: ^( MUL expression[info] expression[info] )
                     pass 
-                    self.match(self.input, MUL, self.FOLLOW_MUL_in_expression157)
+                    self.match(self.input, MUL, self.FOLLOW_MUL_in_expression160)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression159)
+                    self._state.following.append(self.FOLLOW_expression_in_expression162)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression162)
+                    self._state.following.append(self.FOLLOW_expression_in_expression165)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -462,15 +462,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 6:
                     # grammars/CoreAnalyzer.g:26:4: ^( DIV expression[info] expression[info] )
                     pass 
-                    self.match(self.input, DIV, self.FOLLOW_DIV_in_expression170)
+                    self.match(self.input, DIV, self.FOLLOW_DIV_in_expression173)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression172)
+                    self._state.following.append(self.FOLLOW_expression_in_expression175)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression175)
+                    self._state.following.append(self.FOLLOW_expression_in_expression178)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -482,15 +482,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 7:
                     # grammars/CoreAnalyzer.g:27:4: ^( ADD expression[info] expression[info] )
                     pass 
-                    self.match(self.input, ADD, self.FOLLOW_ADD_in_expression183)
+                    self.match(self.input, ADD, self.FOLLOW_ADD_in_expression186)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression185)
+                    self._state.following.append(self.FOLLOW_expression_in_expression188)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression188)
+                    self._state.following.append(self.FOLLOW_expression_in_expression191)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -502,15 +502,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 8:
                     # grammars/CoreAnalyzer.g:28:4: ^( MIN expression[info] expression[info] )
                     pass 
-                    self.match(self.input, MIN, self.FOLLOW_MIN_in_expression196)
+                    self.match(self.input, MIN, self.FOLLOW_MIN_in_expression199)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression198)
+                    self._state.following.append(self.FOLLOW_expression_in_expression201)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression201)
+                    self._state.following.append(self.FOLLOW_expression_in_expression204)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -522,15 +522,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 9:
                     # grammars/CoreAnalyzer.g:29:4: ^( AND expression[info] expression[info] )
                     pass 
-                    self.match(self.input, AND, self.FOLLOW_AND_in_expression209)
+                    self.match(self.input, AND, self.FOLLOW_AND_in_expression212)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression211)
+                    self._state.following.append(self.FOLLOW_expression_in_expression214)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression214)
+                    self._state.following.append(self.FOLLOW_expression_in_expression217)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -542,15 +542,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 10:
                     # grammars/CoreAnalyzer.g:30:4: ^( OR expression[info] expression[info] )
                     pass 
-                    self.match(self.input, OR, self.FOLLOW_OR_in_expression222)
+                    self.match(self.input, OR, self.FOLLOW_OR_in_expression225)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression224)
+                    self._state.following.append(self.FOLLOW_expression_in_expression227)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression227)
+                    self._state.following.append(self.FOLLOW_expression_in_expression230)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -562,15 +562,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 11:
                     # grammars/CoreAnalyzer.g:31:4: ^( EQ expression[info] expression[info] )
                     pass 
-                    self.match(self.input, EQ, self.FOLLOW_EQ_in_expression235)
+                    self.match(self.input, EQ, self.FOLLOW_EQ_in_expression238)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression237)
+                    self._state.following.append(self.FOLLOW_expression_in_expression240)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression240)
+                    self._state.following.append(self.FOLLOW_expression_in_expression243)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -582,15 +582,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 12:
                     # grammars/CoreAnalyzer.g:32:4: ^( NEQ expression[info] expression[info] )
                     pass 
-                    self.match(self.input, NEQ, self.FOLLOW_NEQ_in_expression248)
+                    self.match(self.input, NEQ, self.FOLLOW_NEQ_in_expression251)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression250)
+                    self._state.following.append(self.FOLLOW_expression_in_expression253)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression253)
+                    self._state.following.append(self.FOLLOW_expression_in_expression256)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -602,15 +602,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 13:
                     # grammars/CoreAnalyzer.g:33:4: ^( LT expression[info] expression[info] )
                     pass 
-                    self.match(self.input, LT, self.FOLLOW_LT_in_expression261)
+                    self.match(self.input, LT, self.FOLLOW_LT_in_expression264)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression263)
+                    self._state.following.append(self.FOLLOW_expression_in_expression266)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression266)
+                    self._state.following.append(self.FOLLOW_expression_in_expression269)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -622,15 +622,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 14:
                     # grammars/CoreAnalyzer.g:34:4: ^( LTE expression[info] expression[info] )
                     pass 
-                    self.match(self.input, LTE, self.FOLLOW_LTE_in_expression274)
+                    self.match(self.input, LTE, self.FOLLOW_LTE_in_expression277)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression276)
+                    self._state.following.append(self.FOLLOW_expression_in_expression279)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression279)
+                    self._state.following.append(self.FOLLOW_expression_in_expression282)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -642,15 +642,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 15:
                     # grammars/CoreAnalyzer.g:35:4: ^( GT expression[info] expression[info] )
                     pass 
-                    self.match(self.input, GT, self.FOLLOW_GT_in_expression287)
+                    self.match(self.input, GT, self.FOLLOW_GT_in_expression290)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression289)
+                    self._state.following.append(self.FOLLOW_expression_in_expression292)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression292)
+                    self._state.following.append(self.FOLLOW_expression_in_expression295)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -662,15 +662,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 16:
                     # grammars/CoreAnalyzer.g:36:4: ^( GTE expression[info] expression[info] )
                     pass 
-                    self.match(self.input, GTE, self.FOLLOW_GTE_in_expression300)
+                    self.match(self.input, GTE, self.FOLLOW_GTE_in_expression303)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression302)
+                    self._state.following.append(self.FOLLOW_expression_in_expression305)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression305)
+                    self._state.following.append(self.FOLLOW_expression_in_expression308)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -682,15 +682,15 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 17:
                     # grammars/CoreAnalyzer.g:37:4: ^( APPLICATION expression[info] expression[info] )
                     pass 
-                    self.match(self.input, APPLICATION, self.FOLLOW_APPLICATION_in_expression313)
+                    self.match(self.input, APPLICATION, self.FOLLOW_APPLICATION_in_expression316)
 
                     self.match(self.input, DOWN, None)
-                    self._state.following.append(self.FOLLOW_expression_in_expression315)
+                    self._state.following.append(self.FOLLOW_expression_in_expression318)
                     self.expression(info)
 
                     self._state.following.pop()
 
-                    self._state.following.append(self.FOLLOW_expression_in_expression318)
+                    self._state.following.append(self.FOLLOW_expression_in_expression321)
                     self.expression(info)
 
                     self._state.following.pop()
@@ -702,7 +702,7 @@ class CoreAnalyzer(TreeParser):
                 elif alt7 == 18:
                     # grammars/CoreAnalyzer.g:38:4: basic[info]
                     pass 
-                    self._state.following.append(self.FOLLOW_basic_in_expression325)
+                    self._state.following.append(self.FOLLOW_basic_in_expression328)
                     self.basic(info)
 
                     self._state.following.pop()
@@ -744,24 +744,24 @@ class CoreAnalyzer(TreeParser):
                 if alt8 == 1:
                     # grammars/CoreAnalyzer.g:42:4: ID
                     pass 
-                    self.match(self.input, ID, self.FOLLOW_ID_in_basic337)
+                    self.match(self.input, ID, self.FOLLOW_ID_in_basic340)
 
 
                 elif alt8 == 2:
                     # grammars/CoreAnalyzer.g:43:4: NUMBER
                     pass 
-                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic342)
+                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic345)
 
 
                 elif alt8 == 3:
                     # grammars/CoreAnalyzer.g:44:4: ^( PACK NUMBER NUMBER )
                     pass 
-                    self.match(self.input, PACK, self.FOLLOW_PACK_in_basic348)
+                    self.match(self.input, PACK, self.FOLLOW_PACK_in_basic351)
 
                     self.match(self.input, DOWN, None)
-                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic350)
+                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic353)
 
-                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic352)
+                    self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic355)
 
                     self.match(self.input, UP, None)
 
@@ -781,19 +781,19 @@ class CoreAnalyzer(TreeParser):
 
 
     # $ANTLR start "alternative"
-    # grammars/CoreAnalyzer.g:47:1: alternative : ^( ARROW NUMBER expression[info] ) ;
-    def alternative(self, ):
+    # grammars/CoreAnalyzer.g:47:1: alternative[info] : ^( ARROW NUMBER expression[info] ) ;
+    def alternative(self, info):
         try:
             try:
                 # grammars/CoreAnalyzer.g:48:2: ( ^( ARROW NUMBER expression[info] ) )
                 # grammars/CoreAnalyzer.g:48:4: ^( ARROW NUMBER expression[info] )
                 pass 
-                self.match(self.input, ARROW, self.FOLLOW_ARROW_in_alternative364)
+                self.match(self.input, ARROW, self.FOLLOW_ARROW_in_alternative368)
 
                 self.match(self.input, DOWN, None)
-                self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_alternative366)
+                self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_alternative370)
 
-                self._state.following.append(self.FOLLOW_expression_in_alternative368)
+                self._state.following.append(self.FOLLOW_expression_in_alternative372)
                 self.expression(info)
 
                 self._state.following.pop()
@@ -817,19 +817,19 @@ class CoreAnalyzer(TreeParser):
 
 
     # $ANTLR start "definition"
-    # grammars/CoreAnalyzer.g:51:1: definition : ^( IS ID expression[info] ) ;
-    def definition(self, ):
+    # grammars/CoreAnalyzer.g:51:1: definition[info] : ^( IS ID expression[info] ) ;
+    def definition(self, info):
         try:
             try:
                 # grammars/CoreAnalyzer.g:52:2: ( ^( IS ID expression[info] ) )
                 # grammars/CoreAnalyzer.g:52:4: ^( IS ID expression[info] )
                 pass 
-                self.match(self.input, IS, self.FOLLOW_IS_in_definition381)
+                self.match(self.input, IS, self.FOLLOW_IS_in_definition386)
 
                 self.match(self.input, DOWN, None)
-                self.match(self.input, ID, self.FOLLOW_ID_in_definition383)
+                self.match(self.input, ID, self.FOLLOW_ID_in_definition388)
 
-                self._state.following.append(self.FOLLOW_expression_in_definition385)
+                self._state.following.append(self.FOLLOW_expression_in_definition390)
                 self.expression(info)
 
                 self._state.following.pop()
@@ -861,67 +861,67 @@ class CoreAnalyzer(TreeParser):
     FOLLOW_expression_in_combinator89 = frozenset([3])
     FOLLOW_LET_in_expression105 = frozenset([2])
     FOLLOW_definition_in_expression107 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression110 = frozenset([3])
-    FOLLOW_LETREC_in_expression118 = frozenset([2])
-    FOLLOW_definition_in_expression120 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression123 = frozenset([3])
-    FOLLOW_CASE_in_expression131 = frozenset([2])
-    FOLLOW_expression_in_expression133 = frozenset([7])
-    FOLLOW_alternative_in_expression136 = frozenset([3, 7])
-    FOLLOW_LAMBDA_in_expression144 = frozenset([2])
-    FOLLOW_ID_in_expression146 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression149 = frozenset([3])
-    FOLLOW_MUL_in_expression157 = frozenset([2])
-    FOLLOW_expression_in_expression159 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression162 = frozenset([3])
-    FOLLOW_DIV_in_expression170 = frozenset([2])
-    FOLLOW_expression_in_expression172 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression175 = frozenset([3])
-    FOLLOW_ADD_in_expression183 = frozenset([2])
-    FOLLOW_expression_in_expression185 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression188 = frozenset([3])
-    FOLLOW_MIN_in_expression196 = frozenset([2])
-    FOLLOW_expression_in_expression198 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression201 = frozenset([3])
-    FOLLOW_AND_in_expression209 = frozenset([2])
-    FOLLOW_expression_in_expression211 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression214 = frozenset([3])
-    FOLLOW_OR_in_expression222 = frozenset([2])
-    FOLLOW_expression_in_expression224 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression227 = frozenset([3])
-    FOLLOW_EQ_in_expression235 = frozenset([2])
-    FOLLOW_expression_in_expression237 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression240 = frozenset([3])
-    FOLLOW_NEQ_in_expression248 = frozenset([2])
-    FOLLOW_expression_in_expression250 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression253 = frozenset([3])
-    FOLLOW_LT_in_expression261 = frozenset([2])
-    FOLLOW_expression_in_expression263 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression266 = frozenset([3])
-    FOLLOW_LTE_in_expression274 = frozenset([2])
-    FOLLOW_expression_in_expression276 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression279 = frozenset([3])
-    FOLLOW_GT_in_expression287 = frozenset([2])
-    FOLLOW_expression_in_expression289 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression292 = frozenset([3])
-    FOLLOW_GTE_in_expression300 = frozenset([2])
-    FOLLOW_expression_in_expression302 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression305 = frozenset([3])
-    FOLLOW_APPLICATION_in_expression313 = frozenset([2])
-    FOLLOW_expression_in_expression315 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_expression318 = frozenset([3])
-    FOLLOW_basic_in_expression325 = frozenset([1])
-    FOLLOW_ID_in_basic337 = frozenset([1])
-    FOLLOW_NUMBER_in_basic342 = frozenset([1])
-    FOLLOW_PACK_in_basic348 = frozenset([2])
-    FOLLOW_NUMBER_in_basic350 = frozenset([32])
-    FOLLOW_NUMBER_in_basic352 = frozenset([3])
-    FOLLOW_ARROW_in_alternative364 = frozenset([2])
-    FOLLOW_NUMBER_in_alternative366 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_alternative368 = frozenset([3])
-    FOLLOW_IS_in_definition381 = frozenset([2])
-    FOLLOW_ID_in_definition383 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
-    FOLLOW_expression_in_definition385 = frozenset([3])
+    FOLLOW_expression_in_expression111 = frozenset([3])
+    FOLLOW_LETREC_in_expression119 = frozenset([2])
+    FOLLOW_definition_in_expression121 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 20, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression125 = frozenset([3])
+    FOLLOW_CASE_in_expression133 = frozenset([2])
+    FOLLOW_expression_in_expression135 = frozenset([7])
+    FOLLOW_alternative_in_expression138 = frozenset([3, 7])
+    FOLLOW_LAMBDA_in_expression147 = frozenset([2])
+    FOLLOW_ID_in_expression149 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression152 = frozenset([3])
+    FOLLOW_MUL_in_expression160 = frozenset([2])
+    FOLLOW_expression_in_expression162 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression165 = frozenset([3])
+    FOLLOW_DIV_in_expression173 = frozenset([2])
+    FOLLOW_expression_in_expression175 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression178 = frozenset([3])
+    FOLLOW_ADD_in_expression186 = frozenset([2])
+    FOLLOW_expression_in_expression188 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression191 = frozenset([3])
+    FOLLOW_MIN_in_expression199 = frozenset([2])
+    FOLLOW_expression_in_expression201 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression204 = frozenset([3])
+    FOLLOW_AND_in_expression212 = frozenset([2])
+    FOLLOW_expression_in_expression214 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression217 = frozenset([3])
+    FOLLOW_OR_in_expression225 = frozenset([2])
+    FOLLOW_expression_in_expression227 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression230 = frozenset([3])
+    FOLLOW_EQ_in_expression238 = frozenset([2])
+    FOLLOW_expression_in_expression240 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression243 = frozenset([3])
+    FOLLOW_NEQ_in_expression251 = frozenset([2])
+    FOLLOW_expression_in_expression253 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression256 = frozenset([3])
+    FOLLOW_LT_in_expression264 = frozenset([2])
+    FOLLOW_expression_in_expression266 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression269 = frozenset([3])
+    FOLLOW_LTE_in_expression277 = frozenset([2])
+    FOLLOW_expression_in_expression279 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression282 = frozenset([3])
+    FOLLOW_GT_in_expression290 = frozenset([2])
+    FOLLOW_expression_in_expression292 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression295 = frozenset([3])
+    FOLLOW_GTE_in_expression303 = frozenset([2])
+    FOLLOW_expression_in_expression305 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression308 = frozenset([3])
+    FOLLOW_APPLICATION_in_expression316 = frozenset([2])
+    FOLLOW_expression_in_expression318 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_expression321 = frozenset([3])
+    FOLLOW_basic_in_expression328 = frozenset([1])
+    FOLLOW_ID_in_basic340 = frozenset([1])
+    FOLLOW_NUMBER_in_basic345 = frozenset([1])
+    FOLLOW_PACK_in_basic351 = frozenset([2])
+    FOLLOW_NUMBER_in_basic353 = frozenset([32])
+    FOLLOW_NUMBER_in_basic355 = frozenset([3])
+    FOLLOW_ARROW_in_alternative368 = frozenset([2])
+    FOLLOW_NUMBER_in_alternative370 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_alternative372 = frozenset([3])
+    FOLLOW_IS_in_definition386 = frozenset([2])
+    FOLLOW_ID_in_definition388 = frozenset([4, 5, 6, 8, 13, 15, 16, 17, 18, 21, 23, 24, 26, 27, 28, 29, 30, 32, 34, 35])
+    FOLLOW_expression_in_definition390 = frozenset([3])
 
 
 

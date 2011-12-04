@@ -18,9 +18,9 @@ combinator[info]
 ;
 
 expression[info]
-	: ^(LET definition+ expression[info])
-	| ^(LETREC definition+ expression[info])
-	| ^(CASE expression[info] alternative+)
+	: ^(LET definition[info]+ expression[info])
+	| ^(LETREC definition[info]+ expression[info])
+	| ^(CASE expression[info] alternative[info]+)
 	| ^(LAMBDA ID+ expression[info])
 	| ^(MUL expression[info] expression[info])
 	| ^(DIV expression[info] expression[info])
@@ -44,10 +44,10 @@ basic[info]
 	| ^(PACK NUMBER NUMBER)
 ;
 
-alternative
+alternative[info]
 	: ^(ARROW NUMBER expression[info])
 ;
 
-definition
+definition[info]
 	: ^(IS ID expression[info])
 ;

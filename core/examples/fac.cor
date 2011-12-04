@@ -1,2 +1,2 @@
-id = S K K;
-main = twice twice id 3
+main = let id1 = I I I 
+       in id1 id1 3
