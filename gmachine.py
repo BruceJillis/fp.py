@@ -7,13 +7,13 @@ class Node:
 
 class NGlobal(Node):
 	"represents an combinator at runtime"
-	def __init__(self, nargs, code, name):
-		self.nargs = int(nargs)
+	def __init__(self, n, code, name):
+		self.n = int(n)
 		self.code = code
 		self.name = name
 	
 	def __repr__(self):
-		return 'NGlobal(%s, %s)' % (self.nargs, self.name)
+		return 'NGlobal(%s, %s)' % (self.n, self.name)
 
 class NApply(Node):
 	"represents an application of two expressions at runtime"
@@ -152,8 +152,7 @@ class GMachine:
 					self.globals[str(i[1])] = a
 				self.stack.append(a)
 			elif i[0] == Code.PUSH:
-				a = self.stack[-(i[1]+2):][0]
-				a = self.heap[a].a2
+				a = self.stack[-(i[1]+1):][0]
 				self.stack.append(a)
 			elif i[0] == Code.APPLY:
 				a1 = self.stack.pop()
@@ -164,7 +163,23 @@ class GMachine:
 				a = self.stack[-1:][0]
 				o = self.heap[a]
 				if o.__class__ == NGlobal:
+					print 'unw glob', self.stats.steps
+					print self.stack
+					aas = []
+					for n in range(o.n + 1):
+						print n
+						an = self.stack.pop()
+						if n > 0:
+							aas.append(self.heap[an].a2)
+					self.stack.append(an)
+					print aas, self.stack
+					aas.reverse()
+					for aa in aas:
+						self.stack.append(aa)
+					print aas, self.stack
 					self.code = o.code
+					if self.stats.steps > 1125:
+						exit()
 				elif o.__class__ == NApply:
 					self.stack.append(o.a1)
 					self.code = [i] + self.code
