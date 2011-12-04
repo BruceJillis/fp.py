@@ -1,0 +1,2 @@
+square x = x * x;
+main = square (square 3)

@@ -1,0 +1,5 @@
+*.pyc
+*.tokens
+Thumbs.db
+
+etc/antlr-3.4/**/*
