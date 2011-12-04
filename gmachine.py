@@ -198,6 +198,8 @@ class GMachine:
 					self.stack.pop()
 					i -= 1
 				self.stack.append(a)
+			elif i[0] == Code.ALLOC:
+				pass
 			else:
 				raise Exception('unknown instruction: ' + str(i))
 			self.stats.step()

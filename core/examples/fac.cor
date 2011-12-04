@@ -1,2 +1,2 @@
-main = let id1 = I I I 
-       in id1 id1 3
+Y f = letrec x = f x in x;
+main = let id1 = I I I in id1 id1 3

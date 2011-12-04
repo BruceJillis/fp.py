@@ -17,7 +17,7 @@ start[info, code]
 
 combinator[info, code]
    :  { env = Environment() }
-      ^(COMBINATOR n=ID (i=ID { env.add($i.text) } )* expression[info, env, code]) {
+      ^(COMBINATOR n=ID {info.current = $n.text} (i=ID { env.add($i.text) } )* expression[info, env, code]) {
       code.Update(env.count())
       code.Pop(env.count())
       code.Unwind()
@@ -31,21 +31,37 @@ expression[info, env, code]
       tmp = Environment()
    } 
       ^(LET 
-            (definition[info, tmp, code] { n += 1; tmp = tmp.increment() })+ 
+            (definition[info, tmp, code, True] { n += 1; tmp = tmp.increment() })+ 
             { 
                n -= 1
                nn = n + 1
-               env = env.increment(0)
-               env.increment(n)
+               env2 = env.increment(n)
                for m in tmp.mapping:
-                  env.addat(m, n)
+                  env2.addat(m, n)
                   n -= 1
-               print env.mapping
             }
-            expression[info, env, code]) {
+            expression[info, env2, code]) {
       code.Slide(nn)
    }
-   | ^(LETREC definition[info, env, code]+ expression[info, env, code])
+   | {
+      params = info.letrec(self.input.index())
+      n = len(params)
+      code.Alloc(n)
+      env2 = env.increment(n)
+      # bookkeeping for the environment
+      n_param = n - 1
+      for p in params:
+         env2.addat(p, n_param)
+         n_param -= 1
+      # bookkeeping for the updates of the local variable of the letrec
+      n_update = n - 1
+   }
+     ^(LETREC 
+         (definition[info, env2, code, False] {code.Update(n_update); n_update -= 1} )+ 
+         expression[info, env2, code]
+      ) {
+      code.Slide(n)
+   }
    | ^(CASE expression[info, env, code] alternative+)
    | ^(LAMBDA ID+ expression[info, env, code])
    | ^(MUL expression[info, env, code] expression[info, env, code])
@@ -83,8 +99,9 @@ alternative
    : ^(ARROW NUMBER expression[info, env, code])
 ;
 
-definition[info, env, code]
+definition[info, env, code, record]
    : ^(IS ID expression[info, env, code]) {
-      env.add($ID.text)
+      if record:
+         env.add($ID.text)
    }
 ;

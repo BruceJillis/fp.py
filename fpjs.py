@@ -68,6 +68,11 @@ for filename in args.files:
 	process(filename, info, code)
 
 # evaluate the generated code
+print code.combinators['Y'][0]
+result = []
+for instr in code.combinators['Y'][0]:
+	result.append(code.to_str(instr))
+print ', '.join(result)
 gm = GMachine(code)
 print gm.run()
 print gm.stats

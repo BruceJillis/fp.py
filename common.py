@@ -12,7 +12,7 @@ class	Environment:
 
 	def	get(self,	param):
 		if	not	param	in self.mapping:
-			exit('unknown	local	var: ' + param)
+			exit('unknown local var: %s ' % (param))
 		return	self.mapping[param]
 
 	def	count(self):
@@ -34,6 +34,7 @@ class Code:
 	UPDATE = 6
 	POP = 7
 	SLIDE = 8
+	ALLOC = 9
 
 	def __init__(self):
 		self.combinators = {}
@@ -61,9 +62,14 @@ class Code:
 			str = "POP %s" % (instr[1])
 		if instr[0] == self.SLIDE:
 			str = "SLIDE %s" % (instr[1])
+		if instr[0] == self.ALLOC:
+			str = "ALLOC %s" % (instr[1])
 		if instr[0] == self.APPLY:
 			str = "APPLY"
 		return "%s" % (str)
+
+	def Alloc(self, value):
+		self.instructions.append((Code.ALLOC, int(value)))
 
 	def Slide(self, value):
 		self.instructions.append((Code.SLIDE, int(value)))
@@ -97,9 +103,25 @@ class Code:
 
 class Information:
 	def __init__(self):
+		self.current = None
 		self.combinators = {}
+		self.letrecs = {}
 	
 	def combinator(self, name, params):
 		if name in self.combinators:
-			raise Exception('duplicate combinator names: ' + name)
+			raise Exception('duplicate combinator name: %s ' % (name))
+		if params == None:
+			params = []
 		self.combinators[name] = params
+	
+	def params(self, name):
+		if not name in self.combinators:
+			raise Exception('unknown combinator: %s' % (name) )
+		return self.combinators[name]
+
+	def letrec(self, name, param = None):
+		if param == None:
+			return self.letrecs[name]
+		if not name in self.letrecs:
+			self.letrecs[name] = []
+		self.letrecs[name].append(param)
