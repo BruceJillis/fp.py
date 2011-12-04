@@ -3,67 +3,67 @@ sources.
 
 Core
 ----
-	The core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
+The core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
 
-	Here is an example Core program, which evaluates to 42:
-		
-		main = double 21
-		double x = x + x
-
-	A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double.
-
-	Supercombinators can have local definitions, using the let construct of the Core language:
-		
-		main = quadruple 20 ;
-		quadruple x = let twice_x = x+x in twice_x + twice_x
-
-	Here twice_x is defined locally within the body of quadruple to be x+x, and quadruple returns twice_x + twice_x. A let expression is non-recursive. For recursive definitions, the Core language uses the letrec construct, which is exactly like let except that its definitions can be recursive. For example:
-		
-		infinite n = letrec ns = cons n ns in ns
+Here is an example Core program, which evaluates to 42:
 	
-	The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code.
-	
-	The left-hand side of a let or letrec binding must always be a simple variable.
+	main = double 21
+	double x = x + x
 
-	It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
-	
-		double_list xs = map (\ x. 2*x) xs
-	
-	the lambda abstraction (\ x. 2*x) denotes the function which doubles its argument.
-	
-	A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. 
+A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double.
 
-	The Core language provides a single family of constructors:
-		
-		Pack{tag, arity}
-
-	Here, tag is an integer which uniquely identifies the constructor, and arity tells how many arguments it takes. So in the Core language one writes:
+Supercombinators can have local definitions, using the let construct of the Core language:
 	
-		Pack{2,2} (Pack{1,1} 3) (Pack{1,1} 4)
+	main = quadruple 20 ;
+	quadruple x = let twice_x = x+x in twice_x + twice_x
 
-	instead of:
+Here twice_x is defined locally within the body of quadruple to be x+x, and quadruple returns twice_x + twice_x. A let expression is non-recursive. For recursive definitions, the Core language uses the letrec construct, which is exactly like let except that its definitions can be recursive. For example:
 	
-		Branch (Leaf 3) (Leaf 4)
-	
-	The tag is required so that objects built with different constructors can be distinguished from one another. In a well-typed program, objects of different type will never need to be 
-	distinguished at run-time, so tags only need to be unique within a data type. Hence, we can start the tag at 1 afresh for each new data type.
+	infinite n = letrec ns = cons n ns in ns
 
-	In general, the pattern matching allowed by modern functional programming languages can be rather complex, with multiple nested patterns, overlapping patterns, guards and so on. For 
-	the Core language, we eliminate these complications by outlawing all complex forms of pattern matching! We do this by providing only case expressions in the Core language.  
-	
-	The important thing about case expressions is that each alternative consists only of a tag followed by a number of variables (which should be the same as the arity of the constructor). No nested patterns are allowed. Case 
-	expressions have a very simple operational interpretation, rather like a multi-way jump: evaluate the expression to be analysed, get the tag of the constructor it is built with and evaluate the appropriate alternative.
+The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code.
 
-      precedence | associativity | operator
-      -------------------------------------
-          6      | left          | application
-          5      | left          | / *  
-          4      | left          | + -
-          3      | left          | < <= == != >= >
-          2      | left          | &
-          1      | left          | |
+The left-hand side of a let or letrec binding must always be a simple variable.
+
+It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
+
+	double_list xs = map (\ x. 2*x) xs
+
+the lambda abstraction (\ x. 2*x) denotes the function which doubles its argument.
+
+A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. 
+
+The Core language provides a single family of constructors:
+	
+	Pack{tag, arity}
+
+Here, tag is an integer which uniquely identifies the constructor, and arity tells how many arguments it takes. So in the Core language one writes:
+
+	Pack{2,2} (Pack{1,1} 3) (Pack{1,1} 4)
+
+instead of:
+
+	Branch (Leaf 3) (Leaf 4)
+
+The tag is required so that objects built with different constructors can be distinguished from one another. In a well-typed program, objects of different type will never need to be 
+distinguished at run-time, so tags only need to be unique within a data type. Hence, we can start the tag at 1 afresh for each new data type.
+
+In general, the pattern matching allowed by modern functional programming languages can be rather complex, with multiple nested patterns, overlapping patterns, guards and so on. For 
+the Core language, we eliminate these complications by outlawing all complex forms of pattern matching! We do this by providing only case expressions in the Core language.  
+
+The important thing about case expressions is that each alternative consists only of a tag followed by a number of variables (which should be the same as the arity of the constructor). No nested patterns are allowed. Case 
+expressions have a very simple operational interpretation, rather like a multi-way jump: evaluate the expression to be analysed, get the tag of the constructor it is built with and evaluate the appropriate alternative.
+
+	precedence | associativity | operator
+	-------------------------------------
+		 6      | left          | application
+		 5      | left          | / *  
+		 4      | left          | + -
+		 3      | left          | < <= == != >= >
+		 2      | left          | &
+		 1      | left          | |
 
 Sources
 -------
-	[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton 
-	Jones & David R. Lester
+[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton 
+Jones & David R. Lester
