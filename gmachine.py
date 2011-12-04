@@ -2,9 +2,11 @@ from common import Code
 import time
 
 class Node:
+	"base node for all runtime value representations"
 	pass
 
 class NGlobal(Node):
+	"represents an combinator at runtime"
 	def __init__(self, nargs, code, name):
 		self.nargs = int(nargs)
 		self.code = code
@@ -14,6 +16,7 @@ class NGlobal(Node):
 		return 'NGlobal(%s, %s)' % (self.nargs, self.name)
 
 class NApply(Node):
+	"represents an application of two expressions at runtime"
 	def __init__(self, a1, a2):
 		self.a1 = a1
 		self.a2 = a2
@@ -22,11 +25,20 @@ class NApply(Node):
 		return 'NApply(%s, %s)' % (repr(self.a1), repr(self.a2))
 
 class NNum(Node):
+	"represents a number at runtime"
 	def __init__(self, value):
 		self.value = int(value)
 
 	def __repr__(self):
 		return 'NNum(%s)' % (self.value)
+
+class NInd(Node):
+	"represents an indirection at runtime"
+	def __init__(self, a):
+		self.a = int(a)
+
+	def __repr__(self):
+		return 'NInd(%s)' % (self.a)
 
 class Heap:
 	def __init__(self, code, globals):
@@ -42,6 +54,9 @@ class Heap:
 
 	def iter(self):
 		return self._heap.keys()
+
+	def __setitem__(self, name, value):
+		self._heap[name] = value
 
 	def __getitem__(self, name):
 		return self._heap[name]
@@ -149,24 +164,25 @@ class GMachine:
 				a = self.stack[-1:][0]
 				o = self.heap[a]
 				if o.__class__ == NGlobal:
-					n = o.nargs
-					while n > 0:
-						n -= 1
 					self.code = o.code
 				elif o.__class__ == NApply:
 					self.stack.append(o.a1)
-					self.code = [(Code.UNWIND,)] + self.code
+					self.code = [i] + self.code
+				elif o.__class__ == NInd:
+					self.stack.pop()
+					self.stack.append(o.a)
+					self.code = [i] + self.code
 				elif o.__class__ == NNum:
 					self.code = []
 					self.stack.append(o)
 					break
-			elif i[0] == Code.SLIDE:
+			elif i[0] == Code.UPDATE:
 				a = self.stack.pop()
-				i = i[1]
-				while i >= 1:
+				an = self.stack[-(i[1]+1):][0]
+				self.heap[an] = NInd(a)				
+			elif i[0] == Code.POP:
+				for a in range(i[1]):
 					self.stack.pop()
-					i -= 1
-				self.stack.append(a)					
 			else:
 				raise Exception('unknown instruction: ' + str(i))
 			self.stats.step()

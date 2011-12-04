@@ -1,1 +1,2 @@
-main = twice I 3
+id = S K K;
+main = twice twice id 3

@@ -27,8 +27,9 @@ class Code:
 	PUSH_GLOBAL = 2
 	PUSH_INT = 3
 	UNWIND = 4
-	SLIDE = 5
-	APPLY = 6
+	APPLY = 5
+	UPDATE = 6
+	POP = 7
 
 	def __init__(self):
 		self.combinators = {}
@@ -50,17 +51,22 @@ class Code:
 			str = "PUSHI %s" % (instr[1])
 		if instr[0] == self.UNWIND:
 			str = "UNWIND"
-		if instr[0] == self.SLIDE:
-			str = "SLIDE %s" % (instr[1])
+		if instr[0] == self.UPDATE:
+			str = "UPDATE %s" % (instr[1])
+		if instr[0] == self.POP:
+			str = "POP %s" % (instr[1])
 		if instr[0] == self.APPLY:
 			str = "APPLY"
 		return "%s" % (str)
 
+	def Update(self, value):
+		self.instructions.append((Code.UPDATE, int(value)))
+
+	def Pop(self, value):
+		self.instructions.append((Code.POP, int(value)))
+
 	def Apply(self):
 		self.instructions.append((Code.APPLY,))
-
-	def Slide(self, value):
-		self.instructions.append((Code.SLIDE, value))
 
 	def Unwind(self):
 		self.instructions.append((Code.UNWIND,))

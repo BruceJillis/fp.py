@@ -18,7 +18,8 @@ start[info, code]
 combinator[info, code]
 	:	{ env = Environment() }
 		^(COMBINATOR n=ID (i=ID { env.add($i.text) } )* expression[info, env, code]) {
-		code.Slide(env.count() + 1)
+		code.Update(env.count())
+		code.Pop(env.count())
 		code.Unwind()
 		code.store($n.text, env)
 	}
