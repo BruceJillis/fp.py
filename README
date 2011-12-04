@@ -41,7 +41,7 @@ Here is an example Core program, which evaluates to 42:
 
 A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double. Supercombinators can have local definitions, using the let construct of the Core language:
    
-   main = quadruple 20 ;
+   main = quadruple 20;
    quadruple x = let twice_x = x+x in twice_x + twice_x
 
 Here twice_x is defined locally within the body of quadruple to be x+x, and quadruple returns twice_x + twice_x. A let expression is non-recursive. For recursive definitions, the Core language uses the letrec construct, which is exactly like let except that its definitions can be recursive. For example:
@@ -52,9 +52,9 @@ The reason that we distinguish let from letrec in the Core language (rather than
 
 It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
 
-   double_list xs = map (\ x. 2*x) xs
+   double_list xs = map (\x. 2*x) xs
 
-the lambda abstraction (\ x. 2*x) denotes the function which doubles its argument.
+the lambda abstraction (\x. 2*x) denotes the function which doubles its argument.
 
 A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. The Core language provides a single family of constructors:
    
@@ -80,9 +80,9 @@ expressions have a very simple operational interpretation, rather like a multi-w
    precedence | associativity | operator
    -------------------------------------
        6      | left          | application
-       5      | left          | / *  
-       4      | left          | + -
-       3      | left          | < <= == != >= >
+       5      | left          | /, *  
+       4      | left          | +, -
+       3      | left          | <, <=, ==, !=, >=, >
        2      | left          | &
        1      | left          | |
 
@@ -99,22 +99,22 @@ The next program requires a couple more steps before returning 3.
 
 This one makes quite a few applications of id (how many? (ans: 187)).
 
-   id = S  K K ;
+   id = S K K;
    main = twice twice twice id 3
 
 This program should show up the difference between a system which does updating and one which does not. If updating occurs, the evaluation of (I I I) should take place only once; without updating it will take place twice.
 
    main = twice (I I I) 3
 
-This example uses a functional representation of lists (see Section 2.8.3) to build an infinite list of 4’s, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
+This example uses a functional representation of lists (see Section 2.8.3) to build an infinite list of 4's, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
 
-   cons a b cc cn = cc a b ;
-   nil cc cn = cn ;
-   hd list = list K abort ;
-   tl list = list K1 abort ;
+   cons a b cc cn = cc a b;
+   nil cc cn = cn;
+   hd list = list K abort;
+   tl list = list K1 abort;
    abort = abort;
 
-   infinite x = cons x (infinite x) ;
+   infinite x = cons x (infinite x);
    main = hd (tl (infinite 4))
 
 If updating is implemented, then this program will execute in fewer steps than if not, because the evaluation of id1 is shared.
@@ -126,9 +126,9 @@ We should test nested let expressions too:
    oct g x = let h = twice g in let k = twice h in k (k x);
    main = oct I 4
 
-The next program tests letrecs, using ‘functional lists’ based on the earlier definitions of cons, nil, etc.
+The next program tests letrecs, using 'functional lists' based on the earlier definitions of cons, nil, etc.
    
-   infinite x = letrec xs = cons x xs in xs ;
+   infinite x = letrec xs = cons x xs in xs;
    main = hd (tl (tl (infinite 4)))
 
 We begin with simple tests which do not require the conditional.
@@ -146,17 +146,17 @@ Using functional lists again, we can write a length function:
    length1 x xs = 1 + (length xs);
    main = length (cons 3 (cons 3 (cons 3 nil)))
 
-Once we have conditionals we can at last write ‘interesting’ programs. For example, factorial:
+Once we have conditionals we can at last write 'interesting' programs. For example, factorial:
    
    fac n = if (n==0) 1 (n * fac (n-1)) ;
    main = fac 5
 
-The next program computes the greatest common divisor of two integers, using Euclid’s algorithm:
+The next program computes the greatest common divisor of two integers, using Euclid's algorithm:
    
    gcd a b = if (a==b) a if (a<b) (gcd b a) (gcd b (a-b));
    main = gcd 6 10
 
-The nfib function is interesting because its result (an integer) gives a count of how many function calls were made during its execution. So the result divided by the execution time gives a performance measure in function calls per second. As a result, nfib is quite widely used as a benchmark. The ‘nfib-number’ for a particular implementation needs to be taken with an enormous dose of salt, however, because it is critically dependent on various rather specialised optimisations.
+The nfib function is interesting because its result (an integer) gives a count of how many function calls were made during its execution. So the result divided by the execution time gives a performance measure in function calls per second. As a result, nfib is quite widely used as a benchmark. The 'nfib-number' for a particular implementation needs to be taken with an enormous dose of salt, however, because it is critically dependent on various rather specialised optimisations.
    
    nfib n = if (n==0) 1 (1 + nfib (n-1) + nfib (n-2));
    main = nfib 4
@@ -171,18 +171,18 @@ The next program implements the Sieve of Eratosthenes to generate the infinite l
    main = take 3 (sieve (from 2)) ;
    from n = cons n (from (n+1)) ;
    sieve xs = case xs of
-      <1> -> nil ;
+      <1> -> nil;
       <2> p ps -> cons p (sieve (filter (nonMultiple p) ps));
    
    filter predicate xs = case xs of
-         <1> -> nil ;
+         <1> -> nil;
          <2> p ps -> let rest = filter predicate ps
       in
          if (predicate p) (cons p rest) rest;
 
-   nonMultiple p n = ((n/p)*p) ˜= n ;
+   nonMultiple p n = ((n/p)*p) != n ;
    take n xs = if (n==0) nil (case xs of
-      <1> -> nil ;
+      <1> -> nil;
       <2> p ps -> cons p (take (n-1) ps))
 
 Sources
