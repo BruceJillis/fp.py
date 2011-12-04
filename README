@@ -1,8 +1,16 @@
-NOTE! Large parts of this README have been taken verbatim from it's 
-sources.
+Usage
+-----
+To compile (and evaluate) a Core program, just supply it's name to the compiler like so:
 
+	python fpjs.py core\examples\fac.cor
+
+Use the command line option -h to obtain more information on available switches.
+	
 Core
 ----
+		
+		NOTE! Large parts of this section have been taken verbatim from it's sources.
+
 The core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
 
 Here is an example Core program, which evaluates to 42:
@@ -10,9 +18,7 @@ Here is an example Core program, which evaluates to 42:
 	main = double 21
 	double x = x + x
 
-A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double.
-
-Supercombinators can have local definitions, using the let construct of the Core language:
+A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double. Supercombinators can have local definitions, using the let construct of the Core language:
 	
 	main = quadruple 20 ;
 	quadruple x = let twice_x = x+x in twice_x + twice_x
@@ -21,9 +27,7 @@ Here twice_x is defined locally within the body of quadruple to be x+x, and quad
 	
 	infinite n = letrec ns = cons n ns in ns
 
-The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code.
-
-The left-hand side of a let or letrec binding must always be a simple variable.
+The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code. The left-hand side of a let or letrec binding must always be a simple variable.
 
 It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
 
@@ -31,9 +35,7 @@ It is sometimes convenient to be able to denote functions using explicit lambda 
 
 the lambda abstraction (\ x. 2*x) denotes the function which doubles its argument.
 
-A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. 
-
-The Core language provides a single family of constructors:
+A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. The Core language provides a single family of constructors:
 	
 	Pack{tag, arity}
 
@@ -65,5 +67,4 @@ expressions have a very simple operational interpretation, rather like a multi-w
 
 Sources
 -------
-[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton 
-Jones & David R. Lester
+[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester
