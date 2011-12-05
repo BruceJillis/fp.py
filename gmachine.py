@@ -129,17 +129,18 @@ class GMachine:
 			result.append("<%s:%s>" % (str(addr), str(self.heap[addr])))
 		print '\n'.join(result)
 
-	def run(self):
+	def run(self, verbose = False):
 		self.stats.start()
 		while len(self.code) > 0:
-			print "-------\nstep", self.stats.steps
-			print "code :",
-			self.print_code()
-			print "stack:",			
-			self.print_stack()
-			print "heap:"		
-			self.print_heap()
-			print '=======\n'
+			if verbose:
+				print "-------\nstep", self.stats.steps
+				print "code :",
+				self.print_code()
+				print "stack:",			
+				self.print_stack()
+				print "heap:"		
+				self.print_heap()
+				print '=======\n'
 			i, self.code = self.code[:1][0], self.code[1:]
 			if i[0] == Code.PUSH_GLOBAL:
 				a = self.globals[i[1]]
@@ -162,7 +163,6 @@ class GMachine:
 			elif i[0] == Code.UNWIND:
 				a = self.stack[-1:][0]
 				o = self.heap[a]
-				print a,o
 				if o.__class__ == NGlobal:
 					aas = []
 					for n in range(o.n + 1):

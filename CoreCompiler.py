@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/CoreCompiler.g 2011-12-05 00:06:28
+# $ANTLR 3.4 grammars/CoreCompiler.g 2011-12-05 01:10:32
 
 import sys
 from antlr3 import *
@@ -283,7 +283,7 @@ class CoreCompiler(TreeParser):
                     #action start
                           
                     n = 0
-                    tmp = Environment()
+                    tmp = env.increment(0)
                        
                     #action end
 
@@ -329,8 +329,10 @@ class CoreCompiler(TreeParser):
                                  
                     n -= 1
                     nn = n + 1
-                    env2 = env.increment(n)
+                    env2 = env.increment(n + 1)
                     for m in tmp.mapping:
+                       if m in env.mapping:
+                          continue;
                        env2.addat(m, n)
                        n -= 1
                                 
@@ -354,7 +356,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 2:
-                    # grammars/CoreCompiler.g:46:6: ^( LETREC ( definition[info, env2, code, False] )+ expression[info, env2, code] )
+                    # grammars/CoreCompiler.g:48:6: ^( LETREC ( definition[info, env2, code, False] )+ expression[info, env2, code] )
                     pass 
                     #action start
                          
@@ -376,7 +378,7 @@ class CoreCompiler(TreeParser):
                     self.match(self.input, LETREC, self.FOLLOW_LETREC_in_expression218)
 
                     self.match(self.input, DOWN, None)
-                    # grammars/CoreCompiler.g:60:10: ( definition[info, env2, code, False] )+
+                    # grammars/CoreCompiler.g:62:10: ( definition[info, env2, code, False] )+
                     cnt4 = 0
                     while True: #loop4
                         alt4 = 2
@@ -387,7 +389,7 @@ class CoreCompiler(TreeParser):
 
 
                         if alt4 == 1:
-                            # grammars/CoreCompiler.g:60:11: definition[info, env2, code, False]
+                            # grammars/CoreCompiler.g:62:11: definition[info, env2, code, False]
                             pass 
                             self._state.following.append(self.FOLLOW_definition_in_expression231)
                             self.definition(info, env2, code, False)
@@ -427,7 +429,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 3:
-                    # grammars/CoreCompiler.g:65:6: ^( CASE expression[info, env, code] ( alternative )+ )
+                    # grammars/CoreCompiler.g:67:6: ^( CASE expression[info, env, code] ( alternative )+ )
                     pass 
                     self.match(self.input, CASE, self.FOLLOW_CASE_in_expression268)
 
@@ -437,7 +439,7 @@ class CoreCompiler(TreeParser):
 
                     self._state.following.pop()
 
-                    # grammars/CoreCompiler.g:65:41: ( alternative )+
+                    # grammars/CoreCompiler.g:67:41: ( alternative )+
                     cnt5 = 0
                     while True: #loop5
                         alt5 = 2
@@ -448,7 +450,7 @@ class CoreCompiler(TreeParser):
 
 
                         if alt5 == 1:
-                            # grammars/CoreCompiler.g:65:41: alternative
+                            # grammars/CoreCompiler.g:67:41: alternative
                             pass 
                             self._state.following.append(self.FOLLOW_alternative_in_expression273)
                             self.alternative()
@@ -471,12 +473,12 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 4:
-                    # grammars/CoreCompiler.g:66:6: ^( LAMBDA ( ID )+ expression[info, env, code] )
+                    # grammars/CoreCompiler.g:68:6: ^( LAMBDA ( ID )+ expression[info, env, code] )
                     pass 
                     self.match(self.input, LAMBDA, self.FOLLOW_LAMBDA_in_expression283)
 
                     self.match(self.input, DOWN, None)
-                    # grammars/CoreCompiler.g:66:15: ( ID )+
+                    # grammars/CoreCompiler.g:68:15: ( ID )+
                     cnt6 = 0
                     while True: #loop6
                         alt6 = 2
@@ -492,7 +494,7 @@ class CoreCompiler(TreeParser):
 
 
                         if alt6 == 1:
-                            # grammars/CoreCompiler.g:66:15: ID
+                            # grammars/CoreCompiler.g:68:15: ID
                             pass 
                             self.match(self.input, ID, self.FOLLOW_ID_in_expression285)
 
@@ -517,7 +519,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 5:
-                    # grammars/CoreCompiler.g:67:6: ^( MUL expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:69:6: ^( MUL expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, MUL, self.FOLLOW_MUL_in_expression298)
 
@@ -537,7 +539,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 6:
-                    # grammars/CoreCompiler.g:68:6: ^( DIV expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:70:6: ^( DIV expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, DIV, self.FOLLOW_DIV_in_expression313)
 
@@ -557,7 +559,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 7:
-                    # grammars/CoreCompiler.g:69:6: ^( ADD expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:71:6: ^( ADD expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, ADD, self.FOLLOW_ADD_in_expression328)
 
@@ -577,7 +579,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 8:
-                    # grammars/CoreCompiler.g:70:6: ^( MIN expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:72:6: ^( MIN expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, MIN, self.FOLLOW_MIN_in_expression343)
 
@@ -597,7 +599,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 9:
-                    # grammars/CoreCompiler.g:71:6: ^( AND expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:73:6: ^( AND expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, AND, self.FOLLOW_AND_in_expression358)
 
@@ -617,7 +619,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 10:
-                    # grammars/CoreCompiler.g:72:6: ^( OR expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:74:6: ^( OR expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, OR, self.FOLLOW_OR_in_expression373)
 
@@ -637,7 +639,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 11:
-                    # grammars/CoreCompiler.g:73:6: ^( EQ expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:75:6: ^( EQ expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, EQ, self.FOLLOW_EQ_in_expression388)
 
@@ -657,7 +659,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 12:
-                    # grammars/CoreCompiler.g:74:6: ^( NEQ expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:76:6: ^( NEQ expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, NEQ, self.FOLLOW_NEQ_in_expression403)
 
@@ -677,7 +679,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 13:
-                    # grammars/CoreCompiler.g:75:6: ^( LT expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:77:6: ^( LT expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, LT, self.FOLLOW_LT_in_expression418)
 
@@ -697,7 +699,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 14:
-                    # grammars/CoreCompiler.g:76:6: ^( LTE expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:78:6: ^( LTE expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, LTE, self.FOLLOW_LTE_in_expression433)
 
@@ -717,7 +719,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 15:
-                    # grammars/CoreCompiler.g:77:6: ^( GT expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:79:6: ^( GT expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, GT, self.FOLLOW_GT_in_expression448)
 
@@ -737,7 +739,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 16:
-                    # grammars/CoreCompiler.g:78:6: ^( GTE expression[info, env, code] expression[info, env, code] )
+                    # grammars/CoreCompiler.g:80:6: ^( GTE expression[info, env, code] expression[info, env, code] )
                     pass 
                     self.match(self.input, GTE, self.FOLLOW_GTE_in_expression463)
 
@@ -757,7 +759,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 17:
-                    # grammars/CoreCompiler.g:79:6: ^( APPLICATION expression[info, env, code] expression[info, env.increment(), code] )
+                    # grammars/CoreCompiler.g:81:6: ^( APPLICATION expression[info, env, code] expression[info, env.increment(), code] )
                     pass 
                     self.match(self.input, APPLICATION, self.FOLLOW_APPLICATION_in_expression478)
 
@@ -784,7 +786,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt7 == 18:
-                    # grammars/CoreCompiler.g:82:6: basic[info, env, code]
+                    # grammars/CoreCompiler.g:84:6: basic[info, env, code]
                     pass 
                     self._state.following.append(self.FOLLOW_basic_in_expression494)
                     self.basic(info, env, code)
@@ -806,14 +808,14 @@ class CoreCompiler(TreeParser):
 
 
     # $ANTLR start "basic"
-    # grammars/CoreCompiler.g:85:1: basic[info, env, code] : ( ID | NUMBER | ^( PACK NUMBER NUMBER ) );
+    # grammars/CoreCompiler.g:87:1: basic[info, env, code] : ( ID | NUMBER | ^( PACK NUMBER NUMBER ) );
     def basic(self, info, env, code):
         ID1 = None
         NUMBER2 = None
 
         try:
             try:
-                # grammars/CoreCompiler.g:86:4: ( ID | NUMBER | ^( PACK NUMBER NUMBER ) )
+                # grammars/CoreCompiler.g:88:4: ( ID | NUMBER | ^( PACK NUMBER NUMBER ) )
                 alt8 = 3
                 LA8 = self.input.LA(1)
                 if LA8 == ID:
@@ -829,7 +831,7 @@ class CoreCompiler(TreeParser):
 
 
                 if alt8 == 1:
-                    # grammars/CoreCompiler.g:86:6: ID
+                    # grammars/CoreCompiler.g:88:6: ID
                     pass 
                     ID1 = self.match(self.input, ID, self.FOLLOW_ID_in_basic508)
 
@@ -845,7 +847,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt8 == 2:
-                    # grammars/CoreCompiler.g:92:6: NUMBER
+                    # grammars/CoreCompiler.g:94:6: NUMBER
                     pass 
                     NUMBER2 = self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_basic517)
 
@@ -858,7 +860,7 @@ class CoreCompiler(TreeParser):
 
 
                 elif alt8 == 3:
-                    # grammars/CoreCompiler.g:95:6: ^( PACK NUMBER NUMBER )
+                    # grammars/CoreCompiler.g:97:6: ^( PACK NUMBER NUMBER )
                     pass 
                     self.match(self.input, PACK, self.FOLLOW_PACK_in_basic527)
 
@@ -885,12 +887,12 @@ class CoreCompiler(TreeParser):
 
 
     # $ANTLR start "alternative"
-    # grammars/CoreCompiler.g:98:1: alternative : ^( ARROW NUMBER expression[info, env, code] ) ;
+    # grammars/CoreCompiler.g:100:1: alternative : ^( ARROW NUMBER expression[info, env, code] ) ;
     def alternative(self, ):
         try:
             try:
-                # grammars/CoreCompiler.g:99:4: ( ^( ARROW NUMBER expression[info, env, code] ) )
-                # grammars/CoreCompiler.g:99:6: ^( ARROW NUMBER expression[info, env, code] )
+                # grammars/CoreCompiler.g:101:4: ( ^( ARROW NUMBER expression[info, env, code] ) )
+                # grammars/CoreCompiler.g:101:6: ^( ARROW NUMBER expression[info, env, code] )
                 pass 
                 self.match(self.input, ARROW, self.FOLLOW_ARROW_in_alternative545)
 
@@ -921,14 +923,14 @@ class CoreCompiler(TreeParser):
 
 
     # $ANTLR start "definition"
-    # grammars/CoreCompiler.g:102:1: definition[info, env, code, record] : ^( IS ID expression[info, env, code] ) ;
+    # grammars/CoreCompiler.g:104:1: definition[info, env, code, record] : ^( IS ID expression[info, env, code] ) ;
     def definition(self, info, env, code, record):
         ID3 = None
 
         try:
             try:
-                # grammars/CoreCompiler.g:103:4: ( ^( IS ID expression[info, env, code] ) )
-                # grammars/CoreCompiler.g:103:6: ^( IS ID expression[info, env, code] )
+                # grammars/CoreCompiler.g:105:4: ( ^( IS ID expression[info, env, code] ) )
+                # grammars/CoreCompiler.g:105:6: ^( IS ID expression[info, env, code] )
                 pass 
                 self.match(self.input, IS, self.FOLLOW_IS_in_definition565)
 

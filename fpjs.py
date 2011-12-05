@@ -52,6 +52,7 @@ parser.add_argument('-r', '--recursive', action='store_true', dest="recursive", 
 parser.add_argument('-m', '--minimize', action='store_true', dest="minimize", help="minimize all generated .js files.")
 parser.add_argument('-b', '--bundle', action='store_true', dest="bundle", help="bundle all .js files.")
 parser.add_argument('-c', '--core', action='store_const', const='core', dest="language", default="core", help="set compiler to expect Core input (default).")
+parser.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the system.")
 args = parser.parse_args()
 
 if len(args.files) == 0:
@@ -67,12 +68,17 @@ for filename in files(args.include, '*.cor'):
 for filename in args.files:
 	process(filename, info, code)
 
+def printcode(code, name):
+	c = code.combinators[name][0]
+	result = []
+	for instr in c:
+		result.append(code.to_str(instr))
+	print ', '.join(result)
+
 # evaluate the generated code
-print code.combinators['Y'][0]
-result = []
-for instr in code.combinators['Y'][0]:
-	result.append(code.to_str(instr))
-print ', '.join(result)
+printcode(code, 'Y')
 gm = GMachine(code)
-print gm.run()
+print gm.run(args.verbose)
+
+print
 print gm.stats

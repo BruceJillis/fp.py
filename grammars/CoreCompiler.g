@@ -28,15 +28,17 @@ combinator[info, code]
 expression[info, env, code]
    : { 
       n = 0
-      tmp = Environment()
+      tmp = env.increment(0)
    } 
       ^(LET 
             (definition[info, tmp, code, True] { n += 1; tmp = tmp.increment() })+ 
             { 
                n -= 1
                nn = n + 1
-               env2 = env.increment(n)
+               env2 = env.increment(n + 1)
                for m in tmp.mapping:
+                  if m in env.mapping:
+                     continue;
                   env2.addat(m, n)
                   n -= 1
             }

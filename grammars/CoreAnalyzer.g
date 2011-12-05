@@ -12,17 +12,14 @@ start[info]
 ;
 
 combinator[info]
-   : ^(COMBINATOR n=ID {info.current = $n.text} (p+=ID)* expression[info]) {
+   : ^(COMBINATOR n=ID (p+=ID)* expression[info]) {
       info.combinator($n.text, $p)
    }
 ;
 
 expression[info]
    : ^(LET definition[info, None]+ expression[info])
-   | {
-      index = self.input.index()
-      print index
-   }
+   | {index = self.input.index()}
      ^(LETREC (definition[info, index])+ expression[info])
    | ^(CASE expression[info] alternative[info]+)
    | ^(LAMBDA ID+ expression[info])

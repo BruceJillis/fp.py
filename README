@@ -97,7 +97,7 @@ The next program requires a couple more steps before returning 3.
    id = S K K;
    main = id 3
 
-This one makes quite a few applications of id (how many? (ans: 187)).
+This one makes quite a few applications of id (how many? (ans: 687)).
 
    id = S K K;
    main = twice twice twice id 3

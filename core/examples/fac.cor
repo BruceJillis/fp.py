@@ -1,2 +1,4 @@
 Y f = letrec x = f x in x;
-main = let id1 = I I I in id1 id1 3
+oct g x = let h = twice g in let z = twice h in z (z x);
+main = oct I 4
+# main = let id1 = I I I in id1 id1 3
