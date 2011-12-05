@@ -69,6 +69,8 @@ for filename in args.files:
 	process(filename, info, code)
 
 def printcode(code, name):
+	if not name in code.combinators:
+		return
 	c = code.combinators[name][0]
 	result = []
 	for instr in c:
