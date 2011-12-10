@@ -3,7 +3,6 @@ grammar Core;
 options {
    language     = Python;
    output       = AST;
-   ASTLabelType = CommonTree;
    backtrack    = true;
    memoize      = true;
 }
@@ -43,54 +42,76 @@ tokens {
    RCURLY = '}';
    CASE   = 'case';
    OF     = 'of';
-
+   
+   PROGRAM = '<program>';
    COMBINATOR = '<combinator>';
    APPLICATION = '<application>';
+   ALTERNATIVE = '<alternative>';
+   DEFINITION = '<definition>';
 }
 
-start: (COMMENT | combinator) (SCOLON! combinator | COMMENT)* SCOLON!? EOF!;
+@header {
+   from common import *
+}
 
-combinator: i=ID ID* IS expression -> ^(COMBINATOR[i] ID ID* expression);
+program!
+   : (COMMENT | combinator) (SCOLON combinator | COMMENT)* SCOLON? EOF
+     -> ^(PROGRAM<ProgramNode> combinator+)
+;
 
-expression: LET^ definitions IN! expression
-          | LETREC^ definitions IN! expression
-          | CASE^ expression OF! alternatives
-          | LAMBDA^ ID+ DOT! expression
-          | expr1
-          ;
+combinator!
+   : ID ID* IS expression 
+     -> ^(COMBINATOR<CombinatorNode> ID ID* expression)
+;
+
+expression!
+   : LET definitions IN expression
+     -> ^(LET<LetNode> definitions expression)
+   | LETREC definitions IN expression
+     -> ^(LETREC<LetRecNode> definitions expression)
+   | CASE expression OF alternatives
+     -> ^(CASE<CaseNode> expression alternatives)
+   | LAMBDA ID+ DOT expression
+     -> ^(LAMBDA<LambdaNode> ID+ expression)
+   | expr1
+;
 
 alternatives: alternative (SCOLON! alternative)*;
-alternative: LT! NUMBER GT! ARROW^ expression;
+alternative!
+   : LT NUMBER GT ARROW expression
+     -> ^(ALTERNATIVE<AlternativeNode> NUMBER expression)
+;
 
 definitions: definition (SCOLON! definition)*;
-definition: ID IS^ expression;
+definition!
+   : ID IS expression
+     -> ^(DEFINITION<DefinitionNode> ID expression)
+;
 
-expr1: expr2 (OR^ expr1)*
-     ;
+expr1: expr2 (OR<OrNode>^ expr1)*;
 
-expr2: expr3 (AND^ expr2)*
-     ;
+expr2: expr3 (AND<AndNode>^ expr2)*;
 
-expr3: expr4 (relop^ expr4)*
-     ;
+expr3: expr4 (relop^ expr4)*;
 
-expr4: expr5 ((ADD^|MIN^) expr4)*
-     ;
+expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expr4)*;
 
-expr5: expr6 ((DIV^|MUL^) expr6)*
-     ;
+expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expr6)*;
 
 expr6: (lst+=aexpr!)+ {
+      # format linear list as application spine
       if len(list_lst) >= 2:
          chain = self._adaptor.nil()
-         b = self._adaptor.createFromType(APPLICATION, "APPLICATION")
+         # b = self._adaptor.createFromType(APPLICATION, "APPLICATION")
+         b = ApplicationNode(APPLICATION)
          list_lst.reverse()
          item = list_lst.pop()
-         b.addChild(list_lst.pop())
          b.addChild(item)
+         b.addChild(list_lst.pop())         
          chain = self._adaptor.becomeRoot(b, chain)
          while len(list_lst) > 0:
-            a = self._adaptor.createFromType(APPLICATION, "APPLICATION")
+            # a = self._adaptor.createFromType(APPLICATION, "APPLICATION")
+            a = ApplicationNode(APPLICATION)
             a.addChild(list_lst.pop())
             a.addChild(chain)
             chain = a
@@ -100,13 +121,18 @@ expr6: (lst+=aexpr!)+ {
    }
 ;
 
-aexpr: ID
-     | NUMBER
-     | PACK^ LCURLY! NUMBER COMMA! NUMBER RCURLY!
-     | LPAREN! expr1 RPAREN!
-     ;
+aexpr!
+   : ID
+     -> ^(ID<IdentifierNode> ID)
+   | NUMBER
+     -> ^(NUMBER<NumberNode> NUMBER)
+   | PACK LCURLY NUMBER COMMA NUMBER RCURLY
+     -> ^(PACK<ConstructorNode> NUMBER NUMBER)
+   | LPAREN expr1 RPAREN
+     -> expr1
+;
 
-relop: LT | LTE | EQ | NEQ | GTE | GT;
+relop: LT<LessThanNode> | LTE<LessThanEqualNode> | EQ<EqualNode> | NEQ<NotEqualNode> | GTE<GreaterThanEqualNode> | GT<GreaterThanNode>;
 
 NUMBER: ('0'..'9')+;
 

@@ -2,4 +2,6 @@
 *.tokens
 Thumbs.db
 
+_*
+
 etc/antlr-3.4/**/*

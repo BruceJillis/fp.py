@@ -1,127 +1,89 @@
-class	Environment:
-	def	__init__(self):
-		self.mapping	=	{}
-		self.index	=	0
+from antlr3.tree import CommonTree, CommonToken, INVALID_TOKEN_TYPE;
 
-	def	add(self,	param):
-		self.mapping[param] = self.index
-		self.index	+= 1
+class Node(CommonTree):
+	def __init__(self, payload):
+		if type(payload) == int:
+			CommonTree.__init__(self, CommonToken(type=payload, text=self.spelling))
+		else:
+			CommonTree.__init__(self, payload)
 
-	def	addat(self,	param, at):
-		self.mapping[param] = at
+class ProgramNode(Node):
+	spelling = 'PROGRAM'
 
-	def	get(self,	param):
-		if	not	param	in self.mapping:
-			exit('unknown local var: %s ' % (param))
-		return	self.mapping[param]
+class CombinatorNode(Node):
+	spelling = 'COMBINATOR'
 
-	def	count(self):
-		return len(self.mapping.keys())
+class LambdaNode(Node):
+	spelling = 'LAMDA'
 
-	def increment(self, amount = 1):
-		result = Environment()
-		result.index = self.index
-		for k in self.mapping:
-			result.mapping[k] = self.mapping[k] + amount
-		return result
+# local definitions
+class LetNode(Node):
+	spelling = 'LET'
 
-class Code:
-	PUSH = 1
-	PUSH_GLOBAL = 2
-	PUSH_INT = 3
-	UNWIND = 4
-	APPLY = 5
-	UPDATE = 6
-	POP = 7
-	SLIDE = 8
-	ALLOC = 9
+class LetRecNode(Node):
+	spelling = 'LETREC'
 
-	def __init__(self):
-		self.combinators = {}
-		self.instructions = []
+class DefinitionNode(Node):
+	spelling = 'DEFINITION'
 
-	def store(self, name, env):
-		if name in self.combinators:
-			raise Exception('duplicate combinator names: ' + name)
-		self.combinators[name] = (self.instructions, env)
-		self.instructions = []
+# function application
+class ApplicationNode(Node):
+	spelling = 'APPLICATION'
 
-	def to_str(self, instr):
-		str = None
-		if instr[0] == self.PUSH:
-			str = "PUSH %s" % (instr[1])
-		if instr[0] == self.PUSH_GLOBAL:
-			str = "PUSHG %s" % (instr[1])
-		if instr[0] == self.PUSH_INT:
-			str = "PUSHI %s" % (instr[1])
-		if instr[0] == self.UNWIND:
-			str = "UNWIND"
-		if instr[0] == self.UPDATE:
-			str = "UPDATE %s" % (instr[1])
-		if instr[0] == self.POP:
-			str = "POP %s" % (instr[1])
-		if instr[0] == self.SLIDE:
-			str = "SLIDE %s" % (instr[1])
-		if instr[0] == self.ALLOC:
-			str = "ALLOC %s" % (instr[1])
-		if instr[0] == self.APPLY:
-			str = "APPLY"
-		return "%s" % (str)
+# algebraic data types
+class CaseNode(Node):
+	spelling = 'CASE'
 
-	def Alloc(self, value):
-		self.instructions.append((Code.ALLOC, int(value)))
+class AlternativeNode(Node):
+	spelling = 'ALTERNATIVE'
 
-	def Slide(self, value):
-		self.instructions.append((Code.SLIDE, int(value)))
+class ConstructorNode(Node):
+	spelling = 'PACK'
 
-	def Update(self, value):
-		self.instructions.append((Code.UPDATE, int(value)))
+# basic values (id's and numeric constants)
+class BasicNode(Node):
+	def toStringTree(self):
+		return self.toString()
 
-	def Pop(self, value):
-		self.instructions.append((Code.POP, int(value)))
+class IdentifierNode(BasicNode):
+	spelling = 'ID'
 
-	def Apply(self):
-		self.instructions.append((Code.APPLY,))
+class NumberNode(BasicNode):
+	spelling = 'NUMBER'
 
-	def Unwind(self):
-		self.instructions.append((Code.UNWIND,))
+# operators
+class OrNode(Node):
+	spelling = 'OR'
 
-	def Push(self, index, name):
-		self.instructions.append((Code.PUSH, index))
+class AndNode(Node):
+	spelling = 'AND'
 
-	def PushInt(self, value):
-		self.instructions.append((Code.PUSH_INT, int(value)))
+class LessThanNode(Node):
+	spelling = 'LT'
 
-	def PushGlobal(self, name):
-		self.instructions.append((Code.PUSH_GLOBAL, name))
+class LessThanEqualNode(Node):
+	spelling = 'LTE'
 
-	def __str__(self):
-		result = ''
-		for i in self.instructions:
-			result += '%s\n' % (str(i))
-		return result
+class GreaterThanNode(Node):
+	spelling = 'LT'
 
-class Information:
-	def __init__(self):
-		self.current = None
-		self.combinators = {}
-		self.letrecs = {}
-	
-	def combinator(self, name, params):
-		if name in self.combinators:
-			raise Exception('duplicate combinator name: %s ' % (name))
-		if params == None:
-			params = []
-		self.combinators[name] = params
-	
-	def params(self, name):
-		if not name in self.combinators:
-			raise Exception('unknown combinator: %s' % (name) )
-		return self.combinators[name]
+class GreaterThanEqualNode(Node):
+	spelling = 'GTE'
 
-	def letrec(self, name, param = None):
-		if param == None:
-			return self.letrecs[name]
-		if not name in self.letrecs:
-			self.letrecs[name] = []
-		self.letrecs[name].append(param)
+class EqualNode(Node):
+	spelling = 'EQ'
+
+class NotEqualNode(Node):
+	spelling = 'NEQ'
+
+class AddNode(Node):
+	spelling = 'ADD'
+
+class MinNode(Node):
+	spelling = 'MIN'
+
+class DivNode(Node):
+	spelling = 'DIV'
+
+class MulNode(Node):
+	spelling = 'MUL'

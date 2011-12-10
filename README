@@ -187,4 +187,4 @@ The next program implements the Sieve of Eratosthenes to generate the infinite l
 
 Sources
 -------
-[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester
+[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)

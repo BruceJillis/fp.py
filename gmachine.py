@@ -105,9 +105,10 @@ class Statistics:
 class GMachine:
 	def __init__(self, code):
 		self._code = code
-		self.code = [(Code.PUSH_GLOBAL, 'main'), (Code.UNWIND,)]
+		self.code = [(Code.PUSH_GLOBAL, 'main'), (Code.EVAL,)]
 		self.stack = []
 		self.globals = Globals()
+		self.dump = [] # stack of stacks
 		self.heap = Heap(code, self.globals)
 		self.stats = Statistics(self)
 
@@ -129,6 +130,12 @@ class GMachine:
 			result.append("<%s:%s>" % (str(addr), str(self.heap[addr])))
 		print '\n'.join(result)
 
+	def print_dump(self):
+		result = []
+		for (i,s) in self.dump:
+			result.append("<%s:%s>" % (str(i), str(s)))
+		print '\n'.join(result)
+
 	def run(self, verbose = False):
 		self.stats.start()
 		while len(self.code) > 0:
@@ -140,6 +147,8 @@ class GMachine:
 				self.print_stack()
 				print "heap:"		
 				self.print_heap()
+				print "dump:"		
+				self.print_dump()
 				print '=======\n'
 			i, self.code = self.code[:1][0], self.code[1:]
 			if i[0] == Code.PUSH_GLOBAL:
@@ -164,6 +173,7 @@ class GMachine:
 				a = self.stack[-1:][0]
 				o = self.heap[a]
 				if o.__class__ == NGlobal:
+					# UNWIND a:NGlobal
 					aas = []
 					for n in range(o.n + 1):
 						an = self.stack.pop()
@@ -174,16 +184,24 @@ class GMachine:
 					self.stack += aas
 					self.code = o.code
 				elif o.__class__ == NApply:
+					# UNWIND a:NApply
 					self.stack.append(o.a1)
 					self.code = [i] + self.code
 				elif o.__class__ == NInd:
+					# UNWIND a:NInd
 					self.stack.pop()
 					self.stack.append(o.a)
 					self.code = [i] + self.code
 				elif o.__class__ == NNum:
-					self.code = []
-					self.stack.append(o)
-					break
+					# UNWIND a:NNum
+					if len(self.dump) == 0:
+						# machine has terminated
+						self.stack.append(o)
+						break
+					else:
+						di, self.dump = self.dump[:1][0], self.dump[1:]
+						self.code = di[0]
+						self.stack = di[1] + [a]
 			elif i[0] == Code.UPDATE:
 				a = self.stack.pop()
 				an = self.stack[-(i[1]+1):][0]
@@ -199,6 +217,55 @@ class GMachine:
 					i -= 1
 				self.stack.append(a)
 			elif i[0] == Code.ALLOC:
+				a = []
+				for i in range(i[1]):
+					a.append(self.heap.alloc(NInd(None)))
+				a.reverse()
+				for aa in a:
+					self.stack.append(a);
+			elif i[0] == Code.EVAL:
+				a = self.stack.pop()
+				self.dump.append((self.code, self.stack))
+				self.code, self.stack = [(Code.UNWIND,)], [a]
+			elif i[0] == Code.ADD or i[0] == Code.SUB or i[0] == Code.MUL or i[0] == Code.DIV or i[0] == Code.EQ or i[0] == Code.NEQ or i[0] == Code.LT or i[0] == Code.LTE or i[0] == Code.GT or i[0] == Code.GTE:
+				a0 = self.stack.pop()
+				n0 = self.heap[a0]
+				a1 = self.stack.pop()
+				n1 = self.heap[a1]
+				result = None
+
+				def tobool(n):
+					if n: return 1
+					return 0
+
+				if i[0] == code.ADD:
+					result = n0 + n1
+				elif i[0] == code.SUB:
+					result = n0 - n1
+				elif i[0] == code.MUL:
+					result = n0 * n1
+				elif i[0] == code.DIV:
+					result = n0 / n1
+				elif i[0] == code.EQ:
+					result = tobool(n0 == n1)
+				elif i[0] == code.NEQ:
+					result = tobool(n0 != n1)
+				elif i[0] == code.LT:
+					result = tobool(n0 < n1)
+				elif i[0] == code.LTE:
+					result = tobool(n0 <= n1)
+				elif i[0] == code.GT:
+					result = tobool(n0 > n1)
+				elif i[0] == code.GTE:
+					result = tobool(n0 >= n1)
+				a = self.heap.alloc(NNum(result))
+				self.stack.append(a)
+			elif i[0] == Code.NEG:
+				a = self.stack.pop()
+				n = self.heap[a]
+				a = self.heap.alloc(NNum(-n))
+				self.stack.append(a)
+			elif i[0] == Code.COND:
 				pass
 			else:
 				raise Exception('unknown instruction: ' + str(i))

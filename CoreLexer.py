@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-05 01:10:28
+# $ANTLR 3.4 grammars/Core.g 2011-12-10 15:11:40
 
 import sys
 from antlr3 import *
@@ -12,41 +12,44 @@ HIDDEN = BaseRecognizer.HIDDEN
 # token types
 EOF=-1
 ADD=4
-AND=5
-APPLICATION=6
-ARROW=7
-CASE=8
-COLON=9
-COMBINATOR=10
-COMMA=11
-COMMENT=12
-DIV=13
-DOT=14
-EQ=15
-GT=16
-GTE=17
-ID=18
-IN=19
-IS=20
-LAMBDA=21
-LCURLY=22
-LET=23
-LETREC=24
-LPAREN=25
-LT=26
-LTE=27
-MIN=28
-MUL=29
-NEQ=30
-NOT=31
-NUMBER=32
-OF=33
-OR=34
-PACK=35
-RCURLY=36
-RPAREN=37
-SCOLON=38
-WHITESPACE=39
+ALTERNATIVE=5
+AND=6
+APPLICATION=7
+ARROW=8
+CASE=9
+COLON=10
+COMBINATOR=11
+COMMA=12
+COMMENT=13
+DEFINITION=14
+DIV=15
+DOT=16
+EQ=17
+GT=18
+GTE=19
+ID=20
+IN=21
+IS=22
+LAMBDA=23
+LCURLY=24
+LET=25
+LETREC=26
+LPAREN=27
+LT=28
+LTE=29
+MIN=30
+MUL=31
+NEQ=32
+NOT=33
+NUMBER=34
+OF=35
+OR=36
+PACK=37
+PROGRAM=38
+RCURLY=39
+RPAREN=40
+SCOLON=41
+WHITESPACE=42
 
 
 class CoreLexer(Lexer):
@@ -99,14 +102,37 @@ class CoreLexer(Lexer):
 
 
 
+    # $ANTLR start "ALTERNATIVE"
+    def mALTERNATIVE(self, ):
+        try:
+            _type = ALTERNATIVE
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Core.g:8:13: ( '<alternative>' )
+            # grammars/Core.g:8:15: '<alternative>'
+            pass 
+            self.match("<alternative>")
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "ALTERNATIVE"
+
+
+
     # $ANTLR start "AND"
     def mAND(self, ):
         try:
             _type = AND
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:8:5: ( '&' )
-            # grammars/Core.g:8:7: '&'
+            # grammars/Core.g:9:5: ( '&' )
+            # grammars/Core.g:9:7: '&'
             pass 
             self.match(38)
 
@@ -127,8 +153,8 @@ class CoreLexer(Lexer):
             _type = APPLICATION
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:9:13: ( '<application>' )
-            # grammars/Core.g:9:15: '<application>'
+            # grammars/Core.g:10:13: ( '<application>' )
+            # grammars/Core.g:10:15: '<application>'
             pass 
             self.match("<application>")
 
@@ -150,8 +176,8 @@ class CoreLexer(Lexer):
             _type = ARROW
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:10:7: ( '->' )
-            # grammars/Core.g:10:9: '->'
+            # grammars/Core.g:11:7: ( '->' )
+            # grammars/Core.g:11:9: '->'
             pass 
             self.match("->")
 
@@ -173,8 +199,8 @@ class CoreLexer(Lexer):
             _type = CASE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:11:6: ( 'case' )
-            # grammars/Core.g:11:8: 'case'
+            # grammars/Core.g:12:6: ( 'case' )
+            # grammars/Core.g:12:8: 'case'
             pass 
             self.match("case")
 
@@ -196,8 +222,8 @@ class CoreLexer(Lexer):
             _type = COLON
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:12:7: ( ':' )
-            # grammars/Core.g:12:9: ':'
+            # grammars/Core.g:13:7: ( ':' )
+            # grammars/Core.g:13:9: ':'
             pass 
             self.match(58)
 
@@ -218,8 +244,8 @@ class CoreLexer(Lexer):
             _type = COMBINATOR
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:13:12: ( '<combinator>' )
-            # grammars/Core.g:13:14: '<combinator>'
+            # grammars/Core.g:14:12: ( '<combinator>' )
+            # grammars/Core.g:14:14: '<combinator>'
             pass 
             self.match("<combinator>")
 
@@ -241,8 +267,8 @@ class CoreLexer(Lexer):
             _type = COMMA
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:14:7: ( ',' )
-            # grammars/Core.g:14:9: ','
+            # grammars/Core.g:15:7: ( ',' )
+            # grammars/Core.g:15:9: ','
             pass 
             self.match(44)
 
@@ -257,14 +283,37 @@ class CoreLexer(Lexer):
 
 
 
+    # $ANTLR start "DEFINITION"
+    def mDEFINITION(self, ):
+        try:
+            _type = DEFINITION
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Core.g:16:12: ( '<definition>' )
+            # grammars/Core.g:16:14: '<definition>'
+            pass 
+            self.match("<definition>")
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "DEFINITION"
+
+
+
     # $ANTLR start "DIV"
     def mDIV(self, ):
         try:
             _type = DIV
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:15:5: ( '/' )
-            # grammars/Core.g:15:7: '/'
+            # grammars/Core.g:17:5: ( '/' )
+            # grammars/Core.g:17:7: '/'
             pass 
             self.match(47)
 
@@ -285,8 +334,8 @@ class CoreLexer(Lexer):
             _type = DOT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:16:5: ( '.' )
-            # grammars/Core.g:16:7: '.'
+            # grammars/Core.g:18:5: ( '.' )
+            # grammars/Core.g:18:7: '.'
             pass 
             self.match(46)
 
@@ -307,8 +356,8 @@ class CoreLexer(Lexer):
             _type = EQ
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:17:4: ( '==' )
-            # grammars/Core.g:17:6: '=='
+            # grammars/Core.g:19:4: ( '==' )
+            # grammars/Core.g:19:6: '=='
             pass 
             self.match("==")
 
@@ -330,8 +379,8 @@ class CoreLexer(Lexer):
             _type = GT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:18:4: ( '>' )
-            # grammars/Core.g:18:6: '>'
+            # grammars/Core.g:20:4: ( '>' )
+            # grammars/Core.g:20:6: '>'
             pass 
             self.match(62)
 
@@ -352,8 +401,8 @@ class CoreLexer(Lexer):
             _type = GTE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:19:5: ( '>=' )
-            # grammars/Core.g:19:7: '>='
+            # grammars/Core.g:21:5: ( '>=' )
+            # grammars/Core.g:21:7: '>='
             pass 
             self.match(">=")
 
@@ -375,8 +424,8 @@ class CoreLexer(Lexer):
             _type = IN
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:20:4: ( 'in' )
-            # grammars/Core.g:20:6: 'in'
+            # grammars/Core.g:22:4: ( 'in' )
+            # grammars/Core.g:22:6: 'in'
             pass 
             self.match("in")
 
@@ -398,8 +447,8 @@ class CoreLexer(Lexer):
             _type = IS
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:21:4: ( '=' )
-            # grammars/Core.g:21:6: '='
+            # grammars/Core.g:23:4: ( '=' )
+            # grammars/Core.g:23:6: '='
             pass 
             self.match(61)
 
@@ -420,8 +469,8 @@ class CoreLexer(Lexer):
             _type = LAMBDA
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:22:8: ( '\\\\' )
-            # grammars/Core.g:22:10: '\\\\'
+            # grammars/Core.g:24:8: ( '\\\\' )
+            # grammars/Core.g:24:10: '\\\\'
             pass 
             self.match(92)
 
@@ -442,8 +491,8 @@ class CoreLexer(Lexer):
             _type = LCURLY
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:23:8: ( '{' )
-            # grammars/Core.g:23:10: '{'
+            # grammars/Core.g:25:8: ( '{' )
+            # grammars/Core.g:25:10: '{'
             pass 
             self.match(123)
 
@@ -464,8 +513,8 @@ class CoreLexer(Lexer):
             _type = LET
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:24:5: ( 'let' )
-            # grammars/Core.g:24:7: 'let'
+            # grammars/Core.g:26:5: ( 'let' )
+            # grammars/Core.g:26:7: 'let'
             pass 
             self.match("let")
 
@@ -487,8 +536,8 @@ class CoreLexer(Lexer):
             _type = LETREC
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:25:8: ( 'letrec' )
-            # grammars/Core.g:25:10: 'letrec'
+            # grammars/Core.g:27:8: ( 'letrec' )
+            # grammars/Core.g:27:10: 'letrec'
             pass 
             self.match("letrec")
 
@@ -510,8 +559,8 @@ class CoreLexer(Lexer):
             _type = LPAREN
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:26:8: ( '(' )
-            # grammars/Core.g:26:10: '('
+            # grammars/Core.g:28:8: ( '(' )
+            # grammars/Core.g:28:10: '('
             pass 
             self.match(40)
 
@@ -532,8 +581,8 @@ class CoreLexer(Lexer):
             _type = LT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:27:4: ( '<' )
-            # grammars/Core.g:27:6: '<'
+            # grammars/Core.g:29:4: ( '<' )
+            # grammars/Core.g:29:6: '<'
             pass 
             self.match(60)
 
@@ -554,8 +603,8 @@ class CoreLexer(Lexer):
             _type = LTE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:28:5: ( '<=' )
-            # grammars/Core.g:28:7: '<='
+            # grammars/Core.g:30:5: ( '<=' )
+            # grammars/Core.g:30:7: '<='
             pass 
             self.match("<=")
 
@@ -577,8 +626,8 @@ class CoreLexer(Lexer):
             _type = MIN
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:29:5: ( '-' )
-            # grammars/Core.g:29:7: '-'
+            # grammars/Core.g:31:5: ( '-' )
+            # grammars/Core.g:31:7: '-'
             pass 
             self.match(45)
 
@@ -599,8 +648,8 @@ class CoreLexer(Lexer):
             _type = MUL
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:30:5: ( '*' )
-            # grammars/Core.g:30:7: '*'
+            # grammars/Core.g:32:5: ( '*' )
+            # grammars/Core.g:32:7: '*'
             pass 
             self.match(42)
 
@@ -621,8 +670,8 @@ class CoreLexer(Lexer):
             _type = NEQ
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:31:5: ( '!=' )
-            # grammars/Core.g:31:7: '!='
+            # grammars/Core.g:33:5: ( '!=' )
+            # grammars/Core.g:33:7: '!='
             pass 
             self.match("!=")
 
@@ -644,8 +693,8 @@ class CoreLexer(Lexer):
             _type = NOT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:32:5: ( '!' )
-            # grammars/Core.g:32:7: '!'
+            # grammars/Core.g:34:5: ( '!' )
+            # grammars/Core.g:34:7: '!'
             pass 
             self.match(33)
 
@@ -666,8 +715,8 @@ class CoreLexer(Lexer):
             _type = OF
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:33:4: ( 'of' )
-            # grammars/Core.g:33:6: 'of'
+            # grammars/Core.g:35:4: ( 'of' )
+            # grammars/Core.g:35:6: 'of'
             pass 
             self.match("of")
 
@@ -689,8 +738,8 @@ class CoreLexer(Lexer):
             _type = OR
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:34:4: ( '|' )
-            # grammars/Core.g:34:6: '|'
+            # grammars/Core.g:36:4: ( '|' )
+            # grammars/Core.g:36:6: '|'
             pass 
             self.match(124)
 
@@ -711,8 +760,8 @@ class CoreLexer(Lexer):
             _type = PACK
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:35:6: ( 'pack' )
-            # grammars/Core.g:35:8: 'pack'
+            # grammars/Core.g:37:6: ( 'pack' )
+            # grammars/Core.g:37:8: 'pack'
             pass 
             self.match("pack")
 
@@ -728,14 +777,37 @@ class CoreLexer(Lexer):
 
 
 
+    # $ANTLR start "PROGRAM"
+    def mPROGRAM(self, ):
+        try:
+            _type = PROGRAM
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Core.g:38:9: ( '<program>' )
+            # grammars/Core.g:38:11: '<program>'
+            pass 
+            self.match("<program>")
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "PROGRAM"
+
+
+
     # $ANTLR start "RCURLY"
     def mRCURLY(self, ):
         try:
             _type = RCURLY
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:36:8: ( '}' )
-            # grammars/Core.g:36:10: '}'
+            # grammars/Core.g:39:8: ( '}' )
+            # grammars/Core.g:39:10: '}'
             pass 
             self.match(125)
 
@@ -756,8 +828,8 @@ class CoreLexer(Lexer):
             _type = RPAREN
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:37:8: ( ')' )
-            # grammars/Core.g:37:10: ')'
+            # grammars/Core.g:40:8: ( ')' )
+            # grammars/Core.g:40:10: ')'
             pass 
             self.match(41)
 
@@ -778,8 +850,8 @@ class CoreLexer(Lexer):
             _type = SCOLON
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:38:8: ( ';' )
-            # grammars/Core.g:38:10: ';'
+            # grammars/Core.g:41:8: ( ';' )
+            # grammars/Core.g:41:10: ';'
             pass 
             self.match(59)
 
@@ -800,10 +872,10 @@ class CoreLexer(Lexer):
             _type = NUMBER
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:111:7: ( ( '0' .. '9' )+ )
-            # grammars/Core.g:111:9: ( '0' .. '9' )+
+            # grammars/Core.g:137:7: ( ( '0' .. '9' )+ )
+            # grammars/Core.g:137:9: ( '0' .. '9' )+
             pass 
-            # grammars/Core.g:111:9: ( '0' .. '9' )+
+            # grammars/Core.g:137:9: ( '0' .. '9' )+
             cnt1 = 0
             while True: #loop1
                 alt1 = 2
@@ -853,8 +925,8 @@ class CoreLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:113:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
-            # grammars/Core.g:113:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
+            # grammars/Core.g:139:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
+            # grammars/Core.g:139:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
             pass 
             if (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -865,7 +937,7 @@ class CoreLexer(Lexer):
 
 
 
-            # grammars/Core.g:113:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            # grammars/Core.g:139:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             while True: #loop2
                 alt2 = 2
                 LA2_0 = self.input.LA(1)
@@ -891,7 +963,7 @@ class CoreLexer(Lexer):
                     break #loop2
 
 
-            # grammars/Core.g:113:63: ( '?' | '!' )?
+            # grammars/Core.g:139:63: ( '?' | '!' )?
             alt3 = 2
             LA3_0 = self.input.LA(1)
 
@@ -929,10 +1001,10 @@ class CoreLexer(Lexer):
             _type = WHITESPACE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:115:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            # grammars/Core.g:115:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:141:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            # grammars/Core.g:141:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             pass 
-            # grammars/Core.g:115:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:141:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             cnt4 = 0
             while True: #loop4
                 alt4 = 2
@@ -987,12 +1059,12 @@ class CoreLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:119:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
-            # grammars/Core.g:119:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:145:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
+            # grammars/Core.g:145:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
             pass 
             self.match(35)
 
-            # grammars/Core.g:119:14: (~ ( '\\n' | '\\r' ) )*
+            # grammars/Core.g:145:14: (~ ( '\\n' | '\\r' ) )*
             while True: #loop5
                 alt5 = 2
                 LA5_0 = self.input.LA(1)
@@ -1018,7 +1090,7 @@ class CoreLexer(Lexer):
                     break #loop5
 
 
-            # grammars/Core.g:119:32: ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:145:32: ( ( '\\r' )? '\\n' | EOF )
             alt7 = 2
             LA7_0 = self.input.LA(1)
 
@@ -1028,16 +1100,16 @@ class CoreLexer(Lexer):
                 alt7 = 2
 
             if alt7 == 1:
-                # grammars/Core.g:119:33: ( '\\r' )? '\\n'
+                # grammars/Core.g:145:33: ( '\\r' )? '\\n'
                 pass 
-                # grammars/Core.g:119:33: ( '\\r' )?
+                # grammars/Core.g:145:33: ( '\\r' )?
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
 
                 if (LA6_0 == 13) :
                     alt6 = 1
                 if alt6 == 1:
-                    # grammars/Core.g:119:33: '\\r'
+                    # grammars/Core.g:145:33: '\\r'
                     pass 
                     self.match(13)
 
@@ -1048,7 +1120,7 @@ class CoreLexer(Lexer):
 
 
             elif alt7 == 2:
-                # grammars/Core.g:119:46: EOF
+                # grammars/Core.g:145:46: EOF
                 pass 
                 self.match(EOF)
 
@@ -1073,8 +1145,8 @@ class CoreLexer(Lexer):
 
 
     def mTokens(self):
-        # grammars/Core.g:1:8: ( ADD | AND | APPLICATION | ARROW | CASE | COLON | COMBINATOR | COMMA | DIV | DOT | EQ | GT | GTE | IN | IS | LAMBDA | LCURLY | LET | LETREC | LPAREN | LT | LTE | MIN | MUL | NEQ | NOT | OF | OR | PACK | RCURLY | RPAREN | SCOLON | NUMBER | ID | WHITESPACE | COMMENT )
-        alt8 = 36
+        # grammars/Core.g:1:8: ( ADD | ALTERNATIVE | AND | APPLICATION | ARROW | CASE | COLON | COMBINATOR | COMMA | DEFINITION | DIV | DOT | EQ | GT | GTE | IN | IS | LAMBDA | LCURLY | LET | LETREC | LPAREN | LT | LTE | MIN | MUL | NEQ | NOT | OF | OR | PACK | PROGRAM | RCURLY | RPAREN | SCOLON | NUMBER | ID | WHITESPACE | COMMENT )
+        alt8 = 39
         alt8 = self.dfa8.predict(self.input)
         if alt8 == 1:
             # grammars/Core.g:1:10: ADD
@@ -1084,245 +1156,266 @@ class CoreLexer(Lexer):
 
 
         elif alt8 == 2:
-            # grammars/Core.g:1:14: AND
+            # grammars/Core.g:1:14: ALTERNATIVE
+            pass 
+            self.mALTERNATIVE()
+
+
+
+        elif alt8 == 3:
+            # grammars/Core.g:1:26: AND
             pass 
             self.mAND()
 
 
 
-        elif alt8 == 3:
-            # grammars/Core.g:1:18: APPLICATION
+        elif alt8 == 4:
+            # grammars/Core.g:1:30: APPLICATION
             pass 
             self.mAPPLICATION()
 
 
 
-        elif alt8 == 4:
-            # grammars/Core.g:1:30: ARROW
+        elif alt8 == 5:
+            # grammars/Core.g:1:42: ARROW
             pass 
             self.mARROW()
 
 
 
-        elif alt8 == 5:
-            # grammars/Core.g:1:36: CASE
+        elif alt8 == 6:
+            # grammars/Core.g:1:48: CASE
             pass 
             self.mCASE()
 
 
 
-        elif alt8 == 6:
-            # grammars/Core.g:1:41: COLON
+        elif alt8 == 7:
+            # grammars/Core.g:1:53: COLON
             pass 
             self.mCOLON()
 
 
 
-        elif alt8 == 7:
-            # grammars/Core.g:1:47: COMBINATOR
+        elif alt8 == 8:
+            # grammars/Core.g:1:59: COMBINATOR
             pass 
             self.mCOMBINATOR()
 
 
 
-        elif alt8 == 8:
-            # grammars/Core.g:1:58: COMMA
+        elif alt8 == 9:
+            # grammars/Core.g:1:70: COMMA
             pass 
             self.mCOMMA()
 
 
 
-        elif alt8 == 9:
-            # grammars/Core.g:1:64: DIV
+        elif alt8 == 10:
+            # grammars/Core.g:1:76: DEFINITION
+            pass 
+            self.mDEFINITION()
+
+
+
+        elif alt8 == 11:
+            # grammars/Core.g:1:87: DIV
             pass 
             self.mDIV()
 
 
 
-        elif alt8 == 10:
-            # grammars/Core.g:1:68: DOT
+        elif alt8 == 12:
+            # grammars/Core.g:1:91: DOT
             pass 
             self.mDOT()
 
 
 
-        elif alt8 == 11:
-            # grammars/Core.g:1:72: EQ
+        elif alt8 == 13:
+            # grammars/Core.g:1:95: EQ
             pass 
             self.mEQ()
 
 
 
-        elif alt8 == 12:
-            # grammars/Core.g:1:75: GT
+        elif alt8 == 14:
+            # grammars/Core.g:1:98: GT
             pass 
             self.mGT()
 
 
 
-        elif alt8 == 13:
-            # grammars/Core.g:1:78: GTE
+        elif alt8 == 15:
+            # grammars/Core.g:1:101: GTE
             pass 
             self.mGTE()
 
 
 
-        elif alt8 == 14:
-            # grammars/Core.g:1:82: IN
+        elif alt8 == 16:
+            # grammars/Core.g:1:105: IN
             pass 
             self.mIN()
 
 
 
-        elif alt8 == 15:
-            # grammars/Core.g:1:85: IS
+        elif alt8 == 17:
+            # grammars/Core.g:1:108: IS
             pass 
             self.mIS()
 
 
 
-        elif alt8 == 16:
-            # grammars/Core.g:1:88: LAMBDA
+        elif alt8 == 18:
+            # grammars/Core.g:1:111: LAMBDA
             pass 
             self.mLAMBDA()
 
 
 
-        elif alt8 == 17:
-            # grammars/Core.g:1:95: LCURLY
+        elif alt8 == 19:
+            # grammars/Core.g:1:118: LCURLY
             pass 
             self.mLCURLY()
 
 
 
-        elif alt8 == 18:
-            # grammars/Core.g:1:102: LET
+        elif alt8 == 20:
+            # grammars/Core.g:1:125: LET
             pass 
             self.mLET()
 
 
 
-        elif alt8 == 19:
-            # grammars/Core.g:1:106: LETREC
+        elif alt8 == 21:
+            # grammars/Core.g:1:129: LETREC
             pass 
             self.mLETREC()
 
 
 
-        elif alt8 == 20:
-            # grammars/Core.g:1:113: LPAREN
+        elif alt8 == 22:
+            # grammars/Core.g:1:136: LPAREN
             pass 
             self.mLPAREN()
 
 
 
-        elif alt8 == 21:
-            # grammars/Core.g:1:120: LT
+        elif alt8 == 23:
+            # grammars/Core.g:1:143: LT
             pass 
             self.mLT()
 
 
 
-        elif alt8 == 22:
-            # grammars/Core.g:1:123: LTE
+        elif alt8 == 24:
+            # grammars/Core.g:1:146: LTE
             pass 
             self.mLTE()
 
 
 
-        elif alt8 == 23:
-            # grammars/Core.g:1:127: MIN
+        elif alt8 == 25:
+            # grammars/Core.g:1:150: MIN
             pass 
             self.mMIN()
 
 
 
-        elif alt8 == 24:
-            # grammars/Core.g:1:131: MUL
+        elif alt8 == 26:
+            # grammars/Core.g:1:154: MUL
             pass 
             self.mMUL()
 
 
 
-        elif alt8 == 25:
-            # grammars/Core.g:1:135: NEQ
+        elif alt8 == 27:
+            # grammars/Core.g:1:158: NEQ
             pass 
             self.mNEQ()
 
 
 
-        elif alt8 == 26:
-            # grammars/Core.g:1:139: NOT
+        elif alt8 == 28:
+            # grammars/Core.g:1:162: NOT
             pass 
             self.mNOT()
 
 
 
-        elif alt8 == 27:
-            # grammars/Core.g:1:143: OF
+        elif alt8 == 29:
+            # grammars/Core.g:1:166: OF
             pass 
             self.mOF()
 
 
 
-        elif alt8 == 28:
-            # grammars/Core.g:1:146: OR
+        elif alt8 == 30:
+            # grammars/Core.g:1:169: OR
             pass 
             self.mOR()
 
 
 
-        elif alt8 == 29:
-            # grammars/Core.g:1:149: PACK
+        elif alt8 == 31:
+            # grammars/Core.g:1:172: PACK
             pass 
             self.mPACK()
 
 
 
-        elif alt8 == 30:
-            # grammars/Core.g:1:154: RCURLY
+        elif alt8 == 32:
+            # grammars/Core.g:1:177: PROGRAM
+            pass 
+            self.mPROGRAM()
+
+
+
+        elif alt8 == 33:
+            # grammars/Core.g:1:185: RCURLY
             pass 
             self.mRCURLY()
 
 
 
-        elif alt8 == 31:
-            # grammars/Core.g:1:161: RPAREN
+        elif alt8 == 34:
+            # grammars/Core.g:1:192: RPAREN
             pass 
             self.mRPAREN()
 
 
 
-        elif alt8 == 32:
-            # grammars/Core.g:1:168: SCOLON
+        elif alt8 == 35:
+            # grammars/Core.g:1:199: SCOLON
             pass 
             self.mSCOLON()
 
 
 
-        elif alt8 == 33:
-            # grammars/Core.g:1:175: NUMBER
+        elif alt8 == 36:
+            # grammars/Core.g:1:206: NUMBER
             pass 
             self.mNUMBER()
 
 
 
-        elif alt8 == 34:
-            # grammars/Core.g:1:182: ID
+        elif alt8 == 37:
+            # grammars/Core.g:1:213: ID
             pass 
             self.mID()
 
 
 
-        elif alt8 == 35:
-            # grammars/Core.g:1:185: WHITESPACE
+        elif alt8 == 38:
+            # grammars/Core.g:1:216: WHITESPACE
             pass 
             self.mWHITESPACE()
 
 
 
-        elif alt8 == 36:
-            # grammars/Core.g:1:196: COMMENT
+        elif alt8 == 39:
+            # grammars/Core.g:1:227: COMMENT
             pass 
             self.mCOMMENT()
 
@@ -1336,109 +1429,116 @@ class CoreLexer(Lexer):
     # lookup tables for DFA #8
 
     DFA8_eot = DFA.unpack(
-        u"\3\uffff\1\40\1\42\1\32\4\uffff\1\45\1\47\1\32\2\uffff\1\32\2\uffff"
-        u"\1\53\1\32\1\uffff\1\32\15\uffff\1\32\4\uffff\1\57\1\32\2\uffff"
-        u"\1\61\2\32\1\uffff\1\65\1\uffff\1\32\1\67\1\32\1\uffff\1\71\1\uffff"
-        u"\1\32\1\uffff\1\73\1\uffff"
+        u"\2\uffff\1\42\1\uffff\1\44\1\32\4\uffff\1\47\1\51\1\32\2\uffff"
+        u"\1\32\2\uffff\1\55\1\32\1\uffff\1\32\17\uffff\1\32\4\uffff\1\63"
+        u"\1\32\2\uffff\1\65\1\32\2\uffff\1\32\1\uffff\1\71\1\uffff\1\32"
+        u"\1\73\1\32\1\uffff\1\75\1\uffff\1\32\1\uffff\1\77\1\uffff"
         )
 
     DFA8_eof = DFA.unpack(
-        u"\74\uffff"
+        u"\100\uffff"
         )
 
     DFA8_min = DFA.unpack(
-        u"\1\11\2\uffff\1\75\1\76\1\141\4\uffff\2\75\1\156\2\uffff\1\145"
-        u"\2\uffff\1\75\1\146\1\uffff\1\141\15\uffff\1\163\4\uffff\1\41\1"
-        u"\164\2\uffff\1\41\1\143\1\145\1\uffff\1\41\1\uffff\1\153\1\41\1"
-        u"\145\1\uffff\1\41\1\uffff\1\143\1\uffff\1\41\1\uffff"
+        u"\1\11\1\uffff\1\75\1\uffff\1\76\1\141\4\uffff\2\75\1\156\2\uffff"
+        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\7\uffff\1\154\7\uffff\1"
+        u"\163\4\uffff\1\41\1\164\2\uffff\1\41\1\143\2\uffff\1\145\1\uffff"
+        u"\1\41\1\uffff\1\153\1\41\1\145\1\uffff\1\41\1\uffff\1\143\1\uffff"
+        u"\1\41\1\uffff"
         )
 
     DFA8_max = DFA.unpack(
-        u"\1\175\2\uffff\1\143\1\76\1\141\4\uffff\2\75\1\156\2\uffff\1\145"
-        u"\2\uffff\1\75\1\146\1\uffff\1\141\15\uffff\1\163\4\uffff\1\172"
-        u"\1\164\2\uffff\1\172\1\143\1\145\1\uffff\1\172\1\uffff\1\153\1"
-        u"\172\1\145\1\uffff\1\172\1\uffff\1\143\1\uffff\1\172\1\uffff"
+        u"\1\175\1\uffff\1\160\1\uffff\1\76\1\141\4\uffff\2\75\1\156\2\uffff"
+        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\7\uffff\1\160\7\uffff\1"
+        u"\163\4\uffff\1\172\1\164\2\uffff\1\172\1\143\2\uffff\1\145\1\uffff"
+        u"\1\172\1\uffff\1\153\1\172\1\145\1\uffff\1\172\1\uffff\1\143\1"
+        u"\uffff\1\172\1\uffff"
         )
 
     DFA8_accept = DFA.unpack(
-        u"\1\uffff\1\1\1\2\3\uffff\1\6\1\10\1\11\1\12\3\uffff\1\20\1\21\1"
-        u"\uffff\1\24\1\30\2\uffff\1\34\1\uffff\1\36\1\37\1\40\1\41\1\42"
-        u"\1\43\1\44\1\3\1\7\1\26\1\25\1\4\1\27\1\uffff\1\13\1\17\1\15\1"
-        u"\14\2\uffff\1\31\1\32\3\uffff\1\16\1\uffff\1\33\3\uffff\1\22\1"
-        u"\uffff\1\5\1\uffff\1\35\1\uffff\1\23"
+        u"\1\uffff\1\1\1\uffff\1\3\2\uffff\1\7\1\11\1\13\1\14\3\uffff\1\22"
+        u"\1\23\1\uffff\1\26\1\32\2\uffff\1\36\1\uffff\1\41\1\42\1\43\1\44"
+        u"\1\45\1\46\1\47\1\uffff\1\10\1\12\1\30\1\40\1\27\1\5\1\31\1\uffff"
+        u"\1\15\1\21\1\17\1\16\2\uffff\1\33\1\34\2\uffff\1\2\1\4\1\uffff"
+        u"\1\20\1\uffff\1\35\3\uffff\1\24\1\uffff\1\6\1\uffff\1\37\1\uffff"
+        u"\1\25"
         )
 
     DFA8_special = DFA.unpack(
-        u"\74\uffff"
+        u"\100\uffff"
         )
 
 
     DFA8_transition = [
         DFA.unpack(u"\2\33\2\uffff\1\33\22\uffff\1\33\1\22\1\uffff\1\34\2"
-        u"\uffff\1\2\1\uffff\1\20\1\27\1\21\1\1\1\7\1\4\1\11\1\10\12\31\1"
-        u"\6\1\30\1\3\1\12\1\13\2\uffff\32\32\1\uffff\1\15\4\uffff\2\32\1"
+        u"\uffff\1\3\1\uffff\1\20\1\27\1\21\1\1\1\7\1\4\1\11\1\10\12\31\1"
+        u"\6\1\30\1\2\1\12\1\13\2\uffff\32\32\1\uffff\1\15\4\uffff\2\32\1"
         u"\5\5\32\1\14\2\32\1\17\2\32\1\23\1\25\12\32\1\16\1\24\1\26"),
         DFA.unpack(u""),
+        DFA.unpack(u"\1\40\43\uffff\1\35\1\uffff\1\36\1\37\13\uffff\1\41"),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\37\43\uffff\1\35\1\uffff\1\36"),
-        DFA.unpack(u"\1\41"),
         DFA.unpack(u"\1\43"),
+        DFA.unpack(u"\1\45"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\44"),
         DFA.unpack(u"\1\46"),
         DFA.unpack(u"\1\50"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\51"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\52"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\53"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u"\1\54"),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\55"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\56"),
         DFA.unpack(u""),
+        DFA.unpack(u"\1\57"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\32\32"),
-        DFA.unpack(u"\1\60"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\32\32"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\60\3\uffff\1\61"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u"\1\62"),
-        DFA.unpack(u"\1\63"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\21\32\1\64\10\32"),
+        u"\32\32"),
+        DFA.unpack(u"\1\64"),
         DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
+        u"\32\32"),
         DFA.unpack(u"\1\66"),
-        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\32\32"),
-        DFA.unpack(u"\1\70"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\67"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\32\32"),
+        u"\21\32\1\70\10\32"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\72"),
+        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
+        u"\32\32"),
+        DFA.unpack(u"\1\74"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
+        u"\32\32"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\76"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
         u"\32\32"),

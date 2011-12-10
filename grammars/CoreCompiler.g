@@ -68,7 +68,9 @@ expression[info, env, code]
    | ^(LAMBDA ID+ expression[info, env, code])
    | ^(MUL expression[info, env, code] expression[info, env, code])
    | ^(DIV expression[info, env, code] expression[info, env, code])
-   | ^(ADD expression[info, env, code] expression[info, env, code])
+   | ^(ADD expression[info, env, code] expression[info, env.increment(), code]) {
+		$code.Add()
+	}
    | ^(MIN expression[info, env, code] expression[info, env, code])
    | ^(AND expression[info, env, code] expression[info, env, code])
    | ^(OR expression[info, env, code] expression[info, env, code])
