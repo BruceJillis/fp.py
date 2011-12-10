@@ -9,6 +9,7 @@ from gmachine import State, Stats, run
 
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
 parser.add_argument('file', nargs='+', help='.core file to compile and evaluate')
+parser.add_argument('-i', '--include', action='store_true', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories.")
 
 parser.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the system.")
 args = parser.parse_args()
@@ -50,14 +51,20 @@ stats = Stats()
 identification = Identification(symtab)
 codegeneration = CodeGeneration(symtab)
 
-# do actual work, compile all the supplied files including the include directories (recursively if necessary)
-for filename in args.file:
+def printcode(name):
+	'small helper function to easily print the gmachine code for a combinator'
+	print '%s = %s' % (name, str(symtab[name][SymbolTable.CODE]))
+
+def process(filename):
 	ast = parse(filename)
 	identification.visit(ast)
 	codegeneration.visit(ast)
 
-def printcode(name):
-	print name, str(symtab[name]['__code__'])
+# do actual work, compile all the supplied files including the include directories (recursively if necessary)
+for filename in files(args.include, '*.core'):
+	process(filename)
+for filename in args.file:
+	process(filename)
 
 state = State(symtab, stats)
 print	run(state, args.verbose)
