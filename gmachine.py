@@ -1,4 +1,5 @@
 from common import SymbolTable
+import time
 
 # Code
 class Code:
@@ -129,13 +130,13 @@ def code_to_str(instr):
 
 class State:
 	"State represents a G-machine state"
-	def __init__(self, symtab, stats):
+	def __init__(self, symtab):
 		self.symtab = symtab
 		self.code = [(Code.PUSHG, 'main'), (Code.UNWIND,)]
 		self.stack = Stack(self)
 		self.heap = Heap(self)
 		self.globals = Globals(self, symtab)
-		self.stats = stats
+		self.stats = Stats(self)
 	
 	def result(self):
 		return self.stack.pop()
@@ -143,7 +144,27 @@ class State:
 # State Components
 
 class Stats:
-	pass
+	def __init__(self, state):
+		self.state = state
+		self._steps = 0
+		self._start = 0
+		self._stop = 0
+	
+	def step(self):
+		self._steps += 1
+
+	def start(self):
+		self._start = time.time()
+	
+	def stop(self):
+		self._stop = time.time()
+	
+	def __str__(self):
+		result = "";
+		result += 'steps: %s \n' % (self._steps)
+		result += 'time : %2.2f sec \n' % (self._stop - self._start)
+		result += 'heap : %s cells \n' % (self.state.heap.size())
+		return result
 
 class Globals:
 	def __init__(self, state, symtab):
@@ -175,6 +196,9 @@ class Heap:
 		self.data[index] = value
 		self.index += 1
 		return index
+	
+	def size(self):
+		return len(self.data.keys())
 
 	def __getitem__(self, name):
 		return self.data[name]

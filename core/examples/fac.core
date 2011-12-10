@@ -1,1 +1,2 @@
-main = K (I I I 3) (I I I 10)
+id = S K K;
+main = id 30

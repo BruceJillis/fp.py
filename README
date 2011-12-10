@@ -1,23 +1,6 @@
 FPJS
 ----
-FPJS is a experimental functional language that compiles to javascript and python. It offers seamless integration with imperative code. It is built using ANTLR 3.
-
-Project Plan
-------------
-Stage 1: getting core language running in python.
-   75%
-Stage 2: refactor file handling and finish, make retargetable to js, refactor commandline interface
-Stage 3: implement lazy lambda lifter
-Stage 4: implement desugarer / type checker / parser for a higher level miranda like functional language
-
-Status
-------
-   feature     | completion%
-   -------------------------
-   functions   | 100%
-   updating    | 100%
-   let/letrec  | 100%
-   arithmetic  | 0%
+FPJS is an experimental functional language that compiles to javascript and python. It offers seamless integration with imperative code. It is built using ANTLR 3.
 
 Usage
 -----
