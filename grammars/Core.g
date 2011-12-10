@@ -3,6 +3,7 @@ grammar Core;
 options {
    language     = Python;
    output       = AST;
+	ASTLabelType = Node;
    backtrack    = true;
    memoize      = true;
 }
@@ -61,7 +62,7 @@ program!
 
 combinator!
    : ID ID* IS expression 
-     -> ^(COMBINATOR<CombinatorNode> ID ID* expression)
+     -> ^(COMBINATOR<CombinatorNode> ID<IdentifierNode> ID<IdentifierNode>* expression)
 ;
 
 expression!
@@ -72,20 +73,20 @@ expression!
    | CASE expression OF alternatives
      -> ^(CASE<CaseNode> expression alternatives)
    | LAMBDA ID+ DOT expression
-     -> ^(LAMBDA<LambdaNode> ID+ expression)
+     -> ^(LAMBDA<LambdaNode> ID<IdentifierNode>+ expression)
    | expr1
 ;
 
 alternatives: alternative (SCOLON! alternative)*;
 alternative!
    : LT NUMBER GT ARROW expression
-     -> ^(ALTERNATIVE<AlternativeNode> NUMBER expression)
+     -> ^(ALTERNATIVE<AlternativeNode> NUMBER<NumberNode> expression)
 ;
 
-definitions: definition (SCOLON! definition)*;
+definitions: definition (COMMA! definition)*;
 definition!
    : ID IS expression
-     -> ^(DEFINITION<DefinitionNode> ID expression)
+     -> ^(DEFINITION<DefinitionNode> ID<IdentifierNode> expression)
 ;
 
 expr1: expr2 (OR<OrNode>^ expr1)*;
@@ -102,7 +103,6 @@ expr6: (lst+=aexpr!)+ {
       # format linear list as application spine
       if len(list_lst) >= 2:
          chain = self._adaptor.nil()
-         # b = self._adaptor.createFromType(APPLICATION, "APPLICATION")
          b = ApplicationNode(APPLICATION)
          list_lst.reverse()
          item = list_lst.pop()
@@ -110,7 +110,6 @@ expr6: (lst+=aexpr!)+ {
          b.addChild(list_lst.pop())         
          chain = self._adaptor.becomeRoot(b, chain)
          while len(list_lst) > 0:
-            # a = self._adaptor.createFromType(APPLICATION, "APPLICATION")
             a = ApplicationNode(APPLICATION)
             a.addChild(list_lst.pop())
             a.addChild(chain)
@@ -125,9 +124,9 @@ aexpr!
    : ID
      -> ^(ID<IdentifierNode> ID)
    | NUMBER
-     -> ^(NUMBER<NumberNode> NUMBER)
+     -> ^(NUMBER<NumberNode> NUMBER<NumberNode>)
    | PACK LCURLY NUMBER COMMA NUMBER RCURLY
-     -> ^(PACK<ConstructorNode> NUMBER NUMBER)
+     -> ^(PACK<ConstructorNode> NUMBER<NumberNode> NUMBER<NumberNode>)
    | LPAREN expr1 RPAREN
      -> expr1
 ;

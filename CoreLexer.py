@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-10 15:11:40
+# $ANTLR 3.4 grammars/Core.g 2011-12-10 21:38:58
 
 import sys
 from antlr3 import *
@@ -872,10 +872,10 @@ class CoreLexer(Lexer):
             _type = NUMBER
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:137:7: ( ( '0' .. '9' )+ )
-            # grammars/Core.g:137:9: ( '0' .. '9' )+
+            # grammars/Core.g:136:7: ( ( '0' .. '9' )+ )
+            # grammars/Core.g:136:9: ( '0' .. '9' )+
             pass 
-            # grammars/Core.g:137:9: ( '0' .. '9' )+
+            # grammars/Core.g:136:9: ( '0' .. '9' )+
             cnt1 = 0
             while True: #loop1
                 alt1 = 2
@@ -925,8 +925,8 @@ class CoreLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:139:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
-            # grammars/Core.g:139:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
+            # grammars/Core.g:138:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
+            # grammars/Core.g:138:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
             pass 
             if (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -937,7 +937,7 @@ class CoreLexer(Lexer):
 
 
 
-            # grammars/Core.g:139:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            # grammars/Core.g:138:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             while True: #loop2
                 alt2 = 2
                 LA2_0 = self.input.LA(1)
@@ -963,7 +963,7 @@ class CoreLexer(Lexer):
                     break #loop2
 
 
-            # grammars/Core.g:139:63: ( '?' | '!' )?
+            # grammars/Core.g:138:63: ( '?' | '!' )?
             alt3 = 2
             LA3_0 = self.input.LA(1)
 
@@ -1001,10 +1001,10 @@ class CoreLexer(Lexer):
             _type = WHITESPACE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:141:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            # grammars/Core.g:141:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:140:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            # grammars/Core.g:140:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             pass 
-            # grammars/Core.g:141:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:140:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             cnt4 = 0
             while True: #loop4
                 alt4 = 2
@@ -1059,12 +1059,12 @@ class CoreLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:145:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
-            # grammars/Core.g:145:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:144:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
+            # grammars/Core.g:144:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
             pass 
             self.match(35)
 
-            # grammars/Core.g:145:14: (~ ( '\\n' | '\\r' ) )*
+            # grammars/Core.g:144:14: (~ ( '\\n' | '\\r' ) )*
             while True: #loop5
                 alt5 = 2
                 LA5_0 = self.input.LA(1)
@@ -1090,7 +1090,7 @@ class CoreLexer(Lexer):
                     break #loop5
 
 
-            # grammars/Core.g:145:32: ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:144:32: ( ( '\\r' )? '\\n' | EOF )
             alt7 = 2
             LA7_0 = self.input.LA(1)
 
@@ -1100,16 +1100,16 @@ class CoreLexer(Lexer):
                 alt7 = 2
 
             if alt7 == 1:
-                # grammars/Core.g:145:33: ( '\\r' )? '\\n'
+                # grammars/Core.g:144:33: ( '\\r' )? '\\n'
                 pass 
-                # grammars/Core.g:145:33: ( '\\r' )?
+                # grammars/Core.g:144:33: ( '\\r' )?
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
 
                 if (LA6_0 == 13) :
                     alt6 = 1
                 if alt6 == 1:
-                    # grammars/Core.g:145:33: '\\r'
+                    # grammars/Core.g:144:33: '\\r'
                     pass 
                     self.match(13)
 
@@ -1120,7 +1120,7 @@ class CoreLexer(Lexer):
 
 
             elif alt7 == 2:
-                # grammars/Core.g:145:46: EOF
+                # grammars/Core.g:144:46: EOF
                 pass 
                 self.match(EOF)
 

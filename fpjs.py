@@ -3,6 +3,8 @@ import argparse, os, glob
 import antlr3
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
+from common import SymbolTable
+from visitors import *
 
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
 parser.add_argument('file', nargs='+', help='.core file to compile and evaluate')
@@ -20,7 +22,7 @@ def files(paths, pattern, recursive = False):
 			# yield all filenames corresponding to pattern
 			yield filename
 		if recursive:
-			# find all immediate subpaths and append them to the list of path to scan
+			# find all immediate subpaths and append them to the list of paths to scan
 			for subpath in os.listdir(path):
 				if os.path.isdir(os.path.join(path, subpath)):
 					paths.append(os.path.join(path, subpath))
@@ -37,6 +39,17 @@ def parse(filename):
 		ast = parser.program()
 		return ast.tree
 
+# symbol table for global registration of info 
+symtab = SymbolTable();
+
+# phases of the compiler
+identification = Identification(symtab)
+codegeneration = CodeGeneration(symtab)
+
 # do actual work, compile all the supplied files including the include directories (recursively if necessary)
 for filename in args.file:
 	ast = parse(filename)
+	identification.visit(ast)
+	codegeneration.visit(ast)
+
+print symtab

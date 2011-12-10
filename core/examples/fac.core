@@ -1,1 +1,2 @@
-main = f 1 2 3
+K x y = x;
+f g x = K (g x)
