@@ -63,7 +63,6 @@ class Identification(Visitor):
 
 class CodeGeneration(Visitor):
 	"generate GMachine code for the supplied program."
-	debug = True
 
 	# inner class Environment is only used during code generation to maintain stack indices
 	class	Environment:
@@ -106,9 +105,10 @@ class CodeGeneration(Visitor):
 		self.symtab.enter(combinator.name())
 		for parameter in combinator.children[1:-1]:
 			self.env.add(str(parameter))
-		n = self.env.index
+		d = self.env.index
 		self.visit(combinator.children[-1])
-		self.code.Slide(n + 1)
+		self.code.Update(d)
+		self.code.Pop(d)
 		self.code.Unwind()
 		self.symtab[SymbolTable.CODE] = self.code
 		self.symtab.leave()

@@ -4,7 +4,7 @@ import antlr3
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from common import SymbolTable
-from visitors import *
+from visitors import Identification, CodeGeneration
 from gmachine import State, run
 
 # define the command line parser

@@ -200,6 +200,9 @@ class Heap:
 	def size(self):
 		return len(self.data.keys())
 
+	def __setitem__(self, address, value):
+		self.data[address] = value
+
 	def __getitem__(self, name):
 		return self.data[name]
 
@@ -229,7 +232,7 @@ class Stack:
 	def __str__(self):
 		result = ''
 		for a in self.stack:
-			result += ', ' + str(self.state.heap[a])
+			result += ', %s:%s' % (a, str(self.state.heap[a]))
 		return 'stack: [' + result[2:] + ']'
 
 # Nodes
@@ -274,6 +277,7 @@ class NInd(Node):
 		return 'NInd(%s)' % (self.a)
 
 def run(state, verbose=False):
+	state.stats.start()
 	while len(state.code) > 0:
 		i, state.code = state.code[:1][0], state.code[1:]
 		if verbose:
@@ -317,6 +321,17 @@ def run(state, verbose=False):
 			for _ in range(1, i[1] + 1):
 				a = state.stack.pop()
 			state.stack.push(a0)
+		
+		# POP
+		elif i[0] == Code.POP:
+			for j in range(0, i[1]):
+				state.stack.pop()
+
+		# UPDATE
+		elif i[0] == Code.UPDATE:
+			a = state.stack.pop()
+			an = state.stack.peek(i[1])
+			state.heap[an] = NInd(a)
 
 		# UNWIND
 		elif i[0] == Code.UNWIND:
@@ -325,11 +340,19 @@ def run(state, verbose=False):
 			c = n.__class__
 			if c == NGlobal:
 				state.code = n.code.instructions
-			if c == NApply:
+			elif c == NApply:
 				state.stack.push(n.a1)
 				state.code.append((Code.UNWIND,))
-			if c == NNum:
+			elif c == NInd:
+				state.stack.pop()
+				state.stack.push(n.a)
+				state.code.append((Code.UNWIND,))
+			elif c == NNum:
 				state.code = []
 				break
 
+		else:
+			pass; # raise Exception('unknown instruction')
+		state.stats.step()
+	state.stats.stop()
 	return state.heap[state.result()]

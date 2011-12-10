@@ -1,2 +1,2 @@
-id = S K K;
-main = id 30
+id x = x;
+main = twice twice twice id 30
