@@ -154,7 +154,10 @@ class Globals:
 				symbol = symtab.root[name]
 				count, code = symbol[SymbolTable.COUNT], symbol[SymbolTable.CODE]
 				self.data[name] = state.heap.store(NGlobal(count, code, name))
-	
+
+	def __setitem__(self, name, address):
+		self.data[name] = address
+
 	def __getitem__(self, name):
 		return self.data[name]
 
@@ -269,7 +272,12 @@ def run(state, verbose=False):
 		
 		# PUSHI
 		elif i[0] == Code.PUSHI:
-			a = state.heap.store(NNum(i[1]))
+			key = str(i[1])
+			if not key in state.globals:
+				a = state.heap.store(NNum(i[1]))
+				state.globals[key] = a
+			else:
+				a = state.globals[key]
 			state.stack.push(a)
 
 		# APPLY
