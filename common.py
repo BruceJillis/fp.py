@@ -4,8 +4,14 @@ from antlr3.tree import CommonTree, CommonToken, INVALID_TOKEN_TYPE;
 
 class SymbolTable:
 	"the symbol table maintains a tree of scope's such that we can re-enter scopes in different phases of the compiler and enrich the information present."
+	# reserved field names
+
 	# name of the field containing the back pointer to the parent, None for the root node
 	PARENT = '__parent__'
+	# name of the field containing code for combinators
+	CODE = '__code__'
+	# contains a count
+	COUNT = '__count__'
 
 	def __init__(self):
 		self.tree = {}
@@ -31,7 +37,14 @@ class SymbolTable:
 		self.tree[key] = value
 
 	def __getitem__(self, key):
-		return self.tree[key]
+		if key in self.tree:
+			return self.tree[key]
+		tree = self.tree[SymbolTable.PARENT]
+		while tree != None:
+			if key in tree:
+				return tree[key]
+			tree = tree[SymbolTable.PARENT]
+		raise KeyError(key)
 
 	def __contains__(self, key):
 		"return True if this or a parent scope contains key"
@@ -60,123 +73,6 @@ class SymbolTable:
 
 	def __str__(self):
 		return self.prettyprint(self.root)
-
-class Code:
-	PUSH = 1
-	PUSH_GLOBAL = 2
-	PUSH_INT = 3
-	UNWIND = 4
-	APPLY = 5
-	UPDATE = 6
-	POP = 7
-	SLIDE = 8
-	ALLOC = 9
-	EVAL = 10
-
-	ADD = 11
-	SUB = 12
-	MUL = 13
-	DIV = 14
-	NEG = 15
-
-	EQ = 16
-	NEQ = 17
-	LT = 18
-	LTE = 19
-	GT = 20
-	GTE = 21
-	
-	COND = 22
-
-	def __init__(self):
-		self.instructions = []
-
-	def to_str(self, instr):
-		str = None
-		if instr[0] == self.PUSH:
-			str = "PUSH %s" % (instr[1])
-		if instr[0] == self.PUSH_GLOBAL:
-			str = "PUSHG %s" % (instr[1])
-		if instr[0] == self.PUSH_INT:
-			str = "PUSHI %s" % (instr[1])
-		if instr[0] == self.UNWIND:
-			str = "UNWIND"
-		if instr[0] == self.UPDATE:
-			str = "UPDATE %s" % (instr[1])
-		if instr[0] == self.POP:
-			str = "POP %s" % (instr[1])
-		if instr[0] == self.SLIDE:
-			str = "SLIDE %s" % (instr[1])
-		if instr[0] == self.ALLOC:
-			str = "ALLOC %s" % (instr[1])
-		if instr[0] == self.APPLY:
-			str = "APPLY"
-		if instr[0] == self.EVAL:
-			str = "EVAL"
-		if instr[0] == self.ADD:
-			str = "ADD"
-		if instr[0] == self.SUB:
-			str = "SUB"
-		if instr[0] == self.MUL:
-			str = "MUL"
-		if instr[0] == self.DIV:
-			str = "DIV"
-		if instr[0] == self.NEG:
-			str = "NEG"
-		if instr[0] == self.EQ:
-			str = "EQ"
-		if instr[0] == self.NEQ:
-			str = "NEQ"
-		if instr[0] == self.LT:
-			str = "LT"
-		if instr[0] == self.LTE:
-			str = "LTE"
-		if instr[0] == self.GT:
-			str = "GT"
-		if instr[0] == self.GTE:
-			str = "GTE"
-		if instr[0] == self.COND:
-			str = "COND %s %s" % (instr[1], instr[2])
-		return "%s" % (str)
-
-	def Alloc(self, value):
-		self.instructions.append((Code.ALLOC, int(value)))
-
-	def Slide(self, value):
-		self.instructions.append((Code.SLIDE, int(value)))
-
-	def Update(self, value):
-		self.instructions.append((Code.UPDATE, int(value)))
-
-	def Pop(self, value):
-		self.instructions.append((Code.POP, int(value)))
-
-	def Apply(self):
-		self.instructions.append((Code.APPLY,))
-
-	def Unwind(self):
-		self.instructions.append((Code.UNWIND,))
-
-	def Eval(self):
-		self.instructions.append((Code.EVAL,))
-
-	def Add(self):
-		self.instructions.append((Code.UNWIND,))
-
-	def Push(self, index, name = ''):
-		self.instructions.append((Code.PUSH, index))
-
-	def PushInt(self, value):
-		self.instructions.append((Code.PUSH_INT, int(value)))
-
-	def PushGlobal(self, name):
-		self.instructions.append((Code.PUSH_GLOBAL, name))
-
-	def __str__(self):
-		result = ''
-		for i in self.instructions:
-			result += '%s\n' % (str(i))
-		return result
 
 # AST Nodes
 
@@ -252,6 +148,9 @@ class IdentifierNode(BasicNode):
 
 class NumberNode(BasicNode):
 	spelling = 'NUMBER'
+
+	def value(self):
+		return int(self.toString())
 
 # operators
 

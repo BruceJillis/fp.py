@@ -5,9 +5,12 @@ from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from common import SymbolTable
 from visitors import *
+from gmachine import State, Stats, run
 
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
 parser.add_argument('file', nargs='+', help='.core file to compile and evaluate')
+
+parser.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the system.")
 args = parser.parse_args()
 
 if len(args.file) == 0:
@@ -40,7 +43,8 @@ def parse(filename):
 		return ast.tree
 
 # symbol table for global registration of info 
-symtab = SymbolTable();
+symtab = SymbolTable()
+stats = Stats()
 
 # phases of the compiler
 identification = Identification(symtab)
@@ -52,4 +56,8 @@ for filename in args.file:
 	identification.visit(ast)
 	codegeneration.visit(ast)
 
-print symtab
+def printcode(name):
+	print name, str(symtab[name]['__code__'])
+
+state = State(symtab, stats)
+print	run(state, args.verbose)

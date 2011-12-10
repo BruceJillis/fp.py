@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-10 21:38:56
+# $ANTLR 3.4 grammars/Core.g 2011-12-10 23:48:13
 
 import sys
 from antlr3 import *
@@ -2177,8 +2177,8 @@ class CoreParser(Parser):
                        b = ApplicationNode(APPLICATION)
                        list_lst.reverse()
                        item = list_lst.pop()
-                       b.addChild(item)
                        b.addChild(list_lst.pop())         
+                       b.addChild(item)
                        chain = self._adaptor.becomeRoot(b, chain)
                        while len(list_lst) > 0:
                           a = ApplicationNode(APPLICATION)

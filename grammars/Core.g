@@ -106,8 +106,8 @@ expr6: (lst+=aexpr!)+ {
          b = ApplicationNode(APPLICATION)
          list_lst.reverse()
          item = list_lst.pop()
-         b.addChild(item)
          b.addChild(list_lst.pop())         
+         b.addChild(item)
          chain = self._adaptor.becomeRoot(b, chain)
          while len(list_lst) > 0:
             a = ApplicationNode(APPLICATION)
