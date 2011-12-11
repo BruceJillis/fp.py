@@ -1,6 +1,2 @@
-id x = x;
-Y f = letrec x = f x in x;
-lots x = twice twice id x;
-SK x y z = lots x;
-main = let z = 3, y = let x = 2 in x, x = 1 in SK x y z
-# main = id 1
+oct g x = let h = twice g in let k = twice h in k (k x);
+main = oct I 41

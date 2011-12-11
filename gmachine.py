@@ -345,6 +345,13 @@ def run(state, verbose=False):
 			for j in range(0, i[1]):
 				state.stack.pop()
 
+		# ALLOC
+		elif i[0] == Code.ALLOC:
+			for j in range(i[1]):
+				print i, i[1]
+				ai = state.heap.store(NInd(null))
+				state.stack.push(ai)
+
 		# UPDATE
 		elif i[0] == Code.UPDATE:
 			a = state.stack.pop()

@@ -71,9 +71,9 @@ for filename in args.file:
 	process(filename)
 # construct initial state and run the resulting program
 state = State(symtab)
-printcode('Y')
-printcode('K')
-printcode('main')
+#printcode('Y')
+#printcode('K')
+#printcode('main')
 print	run(state, args.verbose)
 
 # output stats for the execution of the program

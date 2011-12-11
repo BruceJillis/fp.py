@@ -153,7 +153,6 @@ class CodeGeneration(Visitor):
 			n += 1
 		u = self.symtab[SymbolTable.COUNT] - 1
 		for definition in letrec.children[0:-1]:
-			print env.mapping
 			self.visit(definition.children[-1], env = env)
 			self.code.Update(u)
 			u -= 1
@@ -162,10 +161,8 @@ class CodeGeneration(Visitor):
 		self.symtab.leave()
 
 	def visit_ApplicationNode(self, application, **kwargs):
-		print kwargs['env'].mapping, application.children[0].toStringTree()
 		self.visit(application.children[1], env = kwargs['env'])
 		env = kwargs['env'].increment(1)
-		print env.mapping, application.children[1].toStringTree()
 		self.visit(application.children[0], env = env)
 		self.code.Apply()
 
