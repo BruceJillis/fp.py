@@ -1,2 +1,1 @@
-oct g x = let h = twice g in let k = twice h in k (k x);
-main = oct I 41
+main = 3+4*5

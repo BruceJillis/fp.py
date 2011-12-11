@@ -3,9 +3,8 @@ import argparse, os, glob
 import antlr3
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
-from common import SymbolTable
 from visitors import Identification, CodeGeneration
-from gmachine import State, run
+from gmachine import State, SymbolTable, run
 
 # define the command line parser
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
@@ -50,6 +49,7 @@ def parse(filename):
 def process(filename):
 	'small helper function that defines the compiler stages. parse the file, process the ast'
 	ast = parse(filename)
+	print ast.toStringTree()
 	identification.visit(ast)
 	codegeneration.visit(ast)
 
@@ -73,7 +73,7 @@ for filename in args.file:
 state = State(symtab)
 #printcode('Y')
 #printcode('K')
-#printcode('main')
+printcode('main')
 print	run(state, args.verbose)
 
 # output stats for the execution of the program

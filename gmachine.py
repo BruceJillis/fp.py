@@ -1,6 +1,109 @@
-from common import SymbolTable
 from collections import defaultdict
 import time
+
+# Symbol Table
+class SymbolTable:
+	"the symbol table maintains a tree of scope's such that we can re-enter scopes in different phases of the compiler and enrich the information present."
+	# reserved field names
+
+	# name of the field containing the back pointer to the parent, None for the root node
+	PARENT = '__parent__'
+	# name of the field containing code for combinators
+	CODE = '__code__'
+	# contains a count
+	COUNT = '__count__'
+
+	def __init__(self):
+		self.tree = {}
+		self.root = self.tree
+		self.tree[SymbolTable.PARENT] = None
+		self.precompiled()
+	
+	def precompiled(self):
+		# '+'
+		c = Code()
+		c.Push(1)
+		c.Eval()
+		c.Push(1)
+		c.Eval()
+		c.Add()
+		c.Update(2)
+		c.Pop(2)
+		c.Unwind()
+		self.root['+'] = {
+			SymbolTable.COUNT: 2,
+			SymbolTable.CODE: c,
+		}
+		# '*'
+		c = Code()
+		c.Push(1)
+		c.Eval()
+		c.Push(1)
+		c.Eval()
+		c.Mul()
+		c.Update(2)
+		c.Pop(2)
+		c.Unwind()
+		self.root['*'] = {
+			SymbolTable.COUNT: 2,
+			SymbolTable.CODE: c,
+		}
+	
+	def enter(self, context):
+		'enter a new scope'
+		key = str(context)
+		if not key in self.tree:
+			self.tree[key] = {}
+		parent = self.tree
+		self.tree = self.tree[key]
+		self.tree[SymbolTable.PARENT] = parent
+
+	def leave(self):
+		'leave current scope'
+		if self.tree[SymbolTable.PARENT] == None:
+			raise Error('cannot pop root scope!')
+		self.tree = self.tree[SymbolTable.PARENT]
+
+	def __setitem__(self, key, value):
+		self.tree[key] = value
+
+	def __getitem__(self, key):
+		if key in self.tree:
+			return self.tree[key]
+		tree = self.tree[SymbolTable.PARENT]
+		while tree != None:
+			if key in tree:
+				return tree[key]
+			tree = tree[SymbolTable.PARENT]
+		raise KeyError(key)
+
+	def __contains__(self, key):
+		"return True if this or a parent scope contains key"
+		if key in self.tree:
+			return True
+		tree = self.tree[SymbolTable.PARENT]
+		while tree != None:
+			if key in tree:
+				return True
+			tree = tree[SymbolTable.PARENT]
+		return False
+
+	def __len__(self, key):
+		return len(self.tree.keys())
+	
+	def prettyprint(self, tree, indent = 0):
+		"prettyprint the tree"
+		try:
+			result = '\n'
+			for k in tree:
+				if k != SymbolTable.PARENT:
+					result += (indent * '   ') + '%s = %s\n' % (k, self.prettyprint(tree[k], indent+1))
+			return result
+		except:
+			return str(tree)
+
+	def __str__(self):
+		return self.prettyprint(self.root)
 
 # Code
 class Code:
@@ -34,7 +137,7 @@ class Code:
 
 	def __init__(self):
 		self.instructions = []
-	
+		
 	# factory functions for all instructions
 
 	def Alloc(self, value):
@@ -60,6 +163,9 @@ class Code:
 
 	def Add(self):
 		self.instructions.append((Code.ADD,))
+
+	def Mul(self):
+		self.instructions.append((Code.MUL,))
 
 	def Push(self, index, name = ''):
 		self.instructions.append((Code.PUSH, index))
@@ -133,12 +239,13 @@ def code_to_str(instr):
 class State:
 	"State represents a G-machine state"
 	def __init__(self, symtab):
-		self.stats = Stats(self)
 		self.symtab = symtab
-		self.code = [(Code.PUSHG, 'main'), (Code.UNWIND,)]
+		self.stats = Stats(self)
+		self.code = [(Code.PUSHG, 'main'), (Code.EVAL,)]
 		self.stack = Stack(self)
 		self.heap = Heap(self)
 		self.globals = Globals(self, symtab)
+		self.dump = Dump(self)
 	
 	def result(self):
 		return self.stack.pop()
@@ -226,7 +333,7 @@ class Heap:
 		result = ''
 		for a in self.data:
 			result += '  %s = ' % a + str(self.state.heap[a]) + ',\n'
-		return 'heap: [\n' + result[0:-2] + '\n]'
+		return result[0:-2]
 
 class Stack:
 	def __init__(self, state):
@@ -234,25 +341,57 @@ class Stack:
 		self.stack = []
 
 	def push(self, obj):
-		self.state.stats.count('push')
+		self.state.stats.count('stack.push')
 		self.stack.append(obj)
 
 	def pop(self):
-		self.state.stats.count('pop')
+		self.state.stats.count('stack.pop')
 		return self.stack.pop()
 
 	def peek(self, n = 0):
-		self.state.stats.count('peek')
+		self.state.stats.count('stack.peek')
 		return self.stack[-(n+1)]
 	
 	def append(self, list):
 		self.stack += list
 
+	def empty(self):
+		return len(self.stack) == 0
+
 	def __str__(self):
 		result = ''
 		for a in self.stack:
 			result += ', %s:%s' % (a, str(self.state.heap[a]))
-		return 'stack: [' + result[2:] + ']'
+		return result[2:]
+
+class Dump:
+	def __init__(self, state):
+		self.state = state
+		self.stack = []
+
+	def push(self, obj):
+		self.state.stats.count('dump.push')
+		self.stack.append(obj)
+
+	def pop(self):
+		self.state.stats.count('dump.pop')
+		return self.stack.pop()
+
+	def peek(self, n = 0):
+		self.state.stats.count('dump.peek')
+		return self.stack[-(n+1)]
+	
+	def append(self, list):
+		self.stack += list
+
+	def empty(self):
+		return len(self.stack) == 0
+
+	def __str__(self):
+		result = ''
+		for o in self.stack:
+			result += ', (%s, %s)' % ('stack', 'code')
+		return result[2:]
 
 # Nodes
 
@@ -296,15 +435,25 @@ class NInd(Node):
 		return 'NInd(%s)' % (self.a)
 
 def run(state, verbose=False):
+	def cache(n):
+		key = str(n)
+		if not key in state.globals:
+			a = state.heap.store(NNum(n))
+			state.globals[key] = a
+		else:
+			a = state.globals[key]
+		return a
+
 	state.stats.start()
 	while len(state.code) > 0:
 		i, state.code = state.code[:1][0], state.code[1:]
 		if verbose:
 			print '--'
 			print code_to_str(i)
-			# print 'code: ' + str(map(code_to_str, state.code))
-			print state.stack
-			print state.heap
+			# print 'code  : ' + str(map(code_to_str, state.code))
+			print 'stack : [%s]' % state.stack
+			print 'dump  : [%s]' % state.dump
+			print 'heap  :  [\n%s\n]' % state.heap
 
 		# PUSH
 		if i[0] == Code.PUSH:
@@ -318,13 +467,8 @@ def run(state, verbose=False):
 		
 		# PUSHI
 		elif i[0] == Code.PUSHI:
-			key = str(i[1])
-			if not key in state.globals:
-				a = state.heap.store(NNum(i[1]))
-				state.globals[key] = a
-			else:
-				a = state.globals[key]
-			state.stack.push(a)
+			#state.stack.push(a)
+			state.stack.push(cache(i[1]))
 
 		# APPLY
 		elif i[0] == Code.APPLY:
@@ -358,6 +502,24 @@ def run(state, verbose=False):
 			an = state.stack.peek(i[1])
 			state.heap[an] = NInd(a)
 
+		# DYADIC
+		elif i[0] in [Code.ADD, Code.SUB]:
+			a0 = state.stack.pop() 
+			a1 = state.stack.pop()
+			if i[0] == Code.ADD:
+				n = state.heap[a0].value + state.heap[a1].value
+			elif i[0] == Code.MUL:
+				n = state.heap[a0].value * state.heap[a1].value
+			state.stack.push(cache(n))
+
+		# EVAL
+		elif i[0] == Code.EVAL:
+			a = state.stack.pop()
+			state.dump.push((state.stack, state.code))
+			state.stack = Stack(state)
+			state.stack.push(a)
+			state.code = [(Code.UNWIND,)]
+
 		# UNWIND
 		elif i[0] == Code.UNWIND:
 			a = state.stack.peek()
@@ -380,9 +542,16 @@ def run(state, verbose=False):
 				state.stack.push(n.a)
 				state.code.append((Code.UNWIND,))
 			elif c == NNum:
-				state.code = []
-				break
-
+				if state.dump.empty():
+					# we are done, return
+					state.code = []
+					break
+				else:
+					# top of the stack is in WHNF so restore old context
+					item = state.dump.pop()
+					state.stack = item[0]
+					state.stack.push(a)
+					state.code = item[1]
 		else:
 			pass; # raise Exception('unknown instruction')
 		state.stats.step()

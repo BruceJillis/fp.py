@@ -1,5 +1,5 @@
 from common import *
-from gmachine import Code
+from gmachine import Code, SymbolTable
 
 class Visitor(object):
 	debug = False
@@ -164,6 +164,20 @@ class CodeGeneration(Visitor):
 		self.visit(application.children[1], env = kwargs['env'])
 		env = kwargs['env'].increment(1)
 		self.visit(application.children[0], env = env)
+		self.code.Apply()
+
+	def visit_AddNode(self, node, *args, **kwargs):
+		self.visit(node.children[1], *args, **kwargs)
+		self.visit(node.children[0], *args, **kwargs)
+		self.code.PushGlobal('+')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_MulNode(self, node, *args, **kwargs):
+		self.visit(node.children[1], *args, **kwargs)
+		self.visit(node.children[0], *args, **kwargs)
+		self.code.PushGlobal('*')
+		self.code.Apply()
 		self.code.Apply()
 
 	def visit_IdentifierNode(self, identifier, **kwargs):
