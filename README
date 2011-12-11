@@ -4,17 +4,15 @@ FPJS is an experimental functional language that compiles to javascript and pyth
 
 Usage
 -----
-To compile (and evaluate) a Core program, just supply it's name to the compiler like so:
+To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler like so:
 
-   python fpjs.py core\examples\fac.cor
+   python fpjs.py core\examples\fac.core
 
 Use the command line option -h to obtain more information on available switches.
    
 Core
 ----
       
-      NOTE! Large parts of this section have been taken verbatim from it's sources.
-
 The core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
 
 Here is an example Core program, which evaluates to 42:
@@ -71,7 +69,7 @@ expressions have a very simple operational interpretation, rather like a multi-w
 
 Basic programs
 --------------
-The programs in this section require only integer constants and function application. This program should return the value 3 rather quickly!
+The programs in this section require only integer constants and function application. The following and first program should return the value 3 rather quickly:
    
    main = I 3
 
@@ -80,7 +78,7 @@ The next program requires a couple more steps before returning 3.
    id = S K K;
    main = id 3
 
-This one makes quite a few applications of id (how many? (ans: 687)).
+This one makes quite a few applications of id.
 
    id = S K K;
    main = twice twice twice id 3
@@ -89,7 +87,7 @@ This program should show up the difference between a system which does updating 
 
    main = twice (I I I) 3
 
-This example uses a functional representation of lists (see Section 2.8.3) to build an infinite list of 4's, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
+This example uses a functional representation of lists to build an infinite list of 4's, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
 
    cons a b cc cn = cc a b;
    nil cc cn = cn;
@@ -168,6 +166,4 @@ The next program implements the Sieve of Eratosthenes to generate the infinite l
       <1> -> nil;
       <2> p ps -> cons p (take (n-1) ps))
 
-Sources
--------
-[1]: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)
+NOTE! Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)

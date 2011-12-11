@@ -15,14 +15,14 @@ class Visitor(object):
 			method = self.fallback
 		return method(node, *args, **kwargs)
 
-	def fallback(self, node, *args, **kwargs):		
+	def fallback(self, node, *args, **kwargs):
 		'generic method to direct a visitor over the children of the current node if the children property is present. prints node name if debug is set to True'
 		if self.debug:
 			print 'fallback ' + node.__class__.__name__
 			print node.toStringTree()
 		if hasattr(node, 'children'):
 			for child in node.children:
-				self.visit(child)
+				self.visit(child, *args, **kwargs)
 
 class Identification(Visitor):
 	"identify variables, check if program is obeys all scoping rules."
@@ -39,6 +39,10 @@ class Identification(Visitor):
 		self.visit(combinator.children[-1])
 		self.symtab.leave()
 
+	def visit_ApplicationNode(self, application, *args, **kwargs):
+		self.visit(application.children[1])
+		self.visit(application.children[0])
+
 	def visit_IdentifierNode(self, identifier):
 		if not str(identifier) in self.symtab:
 			raise SyntaxError('"%s" is not defined' % identifier)
@@ -48,6 +52,7 @@ class Identification(Visitor):
 		for definition in let.children[0:-1]:
 			self.symtab[definition.name()] = definition
 			self.visit(definition.children[-1])
+		self.symtab[SymbolTable.COUNT] = len(let.children[0:-1])
 		self.visit(let.children[-1])
 		self.symtab.leave()
 
@@ -57,6 +62,7 @@ class Identification(Visitor):
 			self.symtab[definition.name()] = definition
 		for definition in letrec.children[0:-1]:
 			self.visit(definition.children[-1])
+		self.symtab[SymbolTable.COUNT] = len(letrec.children[0:-1])
 		self.visit(letrec.children[-1])
 		self.symtab.leave()
 
@@ -74,7 +80,7 @@ class CodeGeneration(Visitor):
 			self.mapping[param] = self.index
 			self.index	+= 1
 
-		def	addat(self,	param, at):
+		def	add_at(self,	param, at):
 			self.mapping[param] = at
 
 		def	get(self,	param):
@@ -84,13 +90,27 @@ class CodeGeneration(Visitor):
 
 		def	count(self):
 			return len(self.mapping.keys())
+		
+		def merge_from(self, env, frm):
+			for m in env.mapping:
+				self.add_at(m, frm)
+				frm -= 1
 
 		def increment(self, amount = 1):
+			"clone and increment this environment"
 			result = CodeGeneration.Environment()
 			result.index = self.index
 			for k in self.mapping:
 				result.mapping[k] = self.mapping[k] + amount
 			return result
+
+		def clone(self):
+			"clone this environment so changes wont affect the master environment"
+			result = CodeGeneration.Environment()
+			result.index = self.index
+			for k in self.mapping:
+				result.mapping[k] = self.mapping[k]
+			return result		
 
 	def __init__(self, symtab):
 		self.symtab = symtab
@@ -101,33 +121,61 @@ class CodeGeneration(Visitor):
 
 	def visit_CombinatorNode(self, combinator):
 		self.code = Code()
-		self.env = CodeGeneration.Environment()
+		env = CodeGeneration.Environment()
 		self.symtab.enter(combinator.name())
 		for parameter in combinator.children[1:-1]:
-			self.env.add(str(parameter))
-		d = self.env.index
-		self.visit(combinator.children[-1])
+			env.add(str(parameter))
+		d = env.index
+		self.visit(combinator.children[-1], env = env)
 		self.code.Update(d)
 		self.code.Pop(d)
 		self.code.Unwind()
 		self.symtab[SymbolTable.CODE] = self.code
 		self.symtab.leave()
 
-	def visit_ApplicationNode(self, application):
-		self.visit(application.children[1])
-		env = self.env
-		self.env = self.env.increment(1)
-		self.visit(application.children[0])
-		self.env = env
+	def visit_LetNode(self, let, **kwargs):
+		self.symtab.enter(let)
+		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		for definition in let.children[0:-1]:
+			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			_env, n = kwargs['env'].increment(n), n + 1
+			self.visit(definition.children[1], env = _env)
+		self.visit(let.children[-1], env = env)
+		self.code.Slide(self.symtab[SymbolTable.COUNT])
+		self.symtab.leave()
+
+	def visit_LetRecNode(self, letrec, **kwargs):
+		self.symtab.enter(letrec)
+		self.code.Alloc(self.symtab[SymbolTable.COUNT])
+		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		for definition in letrec.children[0:-1]:
+			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			n += 1
+		u = self.symtab[SymbolTable.COUNT] - 1
+		for definition in letrec.children[0:-1]:
+			print env.mapping
+			self.visit(definition.children[-1], env = env)
+			self.code.Update(u)
+			u -= 1
+		self.visit(letrec.children[-1], env = env)
+		self.code.Slide(self.symtab[SymbolTable.COUNT])
+		self.symtab.leave()
+
+	def visit_ApplicationNode(self, application, **kwargs):
+		print kwargs['env'].mapping, application.children[0].toStringTree()
+		self.visit(application.children[1], env = kwargs['env'])
+		env = kwargs['env'].increment(1)
+		print env.mapping, application.children[1].toStringTree()
+		self.visit(application.children[0], env = env)
 		self.code.Apply()
 
-	def visit_IdentifierNode(self, identifier):
+	def visit_IdentifierNode(self, identifier, **kwargs):
 		name = str(identifier)
 		node = self.symtab[name]
-		if type(node) == IdentifierNode:
-			self.code.Push(self.env.get(name))
+		if isinstance(node, ASTNode):
+			self.code.Push(kwargs['env'].get(name))
 		else:
 			self.code.PushGlobal(name)
 
-	def visit_NumberNode(self, number):
+	def visit_NumberNode(self, number, **kwargs):
 		self.code.PushInt(number.value())

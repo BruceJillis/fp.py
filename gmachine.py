@@ -1,4 +1,5 @@
 from common import SymbolTable
+from collections import defaultdict
 import time
 
 # Code
@@ -79,6 +80,7 @@ class Code:
 		return result
 
 def code_to_str(instr):
+	"small helper function to prettyprint a instruction without needing a Code instance"
 	str = None
 	if instr[0] == Code.PUSH:
 		str = "PUSH %s" % (instr[1])
@@ -131,12 +133,12 @@ def code_to_str(instr):
 class State:
 	"State represents a G-machine state"
 	def __init__(self, symtab):
+		self.stats = Stats(self)
 		self.symtab = symtab
 		self.code = [(Code.PUSHG, 'main'), (Code.UNWIND,)]
 		self.stack = Stack(self)
 		self.heap = Heap(self)
 		self.globals = Globals(self, symtab)
-		self.stats = Stats(self)
 	
 	def result(self):
 		return self.stack.pop()
@@ -149,6 +151,7 @@ class Stats:
 		self._steps = 0
 		self._start = 0
 		self._stop = 0
+		self._counts = defaultdict(int)
 	
 	def step(self):
 		self._steps += 1
@@ -159,11 +162,18 @@ class Stats:
 	def stop(self):
 		self._stop = time.time()
 	
+	def count(self, name):
+		self._counts[name] += 1
+
 	def __str__(self):
 		result = "";
-		result += 'steps: %s \n' % (self._steps)
-		result += 'time : %2.2f sec \n' % (self._stop - self._start)
-		result += 'heap : %s cells \n' % (self.state.heap.size())
+		result += 'steps  : %s \n' % (self._steps)
+		result += 'time   : %2.2f sec \n' % (self._stop - self._start)
+		result += 'heap   : %s cells \n' % (self.state.heap.size())
+		result += 'counts : '
+		for count in self._counts:
+			result += '%s = %s, ' % (count, self._counts[count])
+		result = result[0:-2]
 		return result
 
 class Globals:
@@ -172,11 +182,13 @@ class Globals:
 		self.data = {}
 		for name in symtab.root:
 			if name != SymbolTable.PARENT:
+				self.state.stats.count('globals')
 				symbol = symtab.root[name]
 				count, code = symbol[SymbolTable.COUNT], symbol[SymbolTable.CODE]
 				self.data[name] = state.heap.store(NGlobal(count, code, name))
 
 	def __setitem__(self, name, address):
+		self.state.stats.count('globals')
 		self.data[name] = address
 
 	def __getitem__(self, name):
@@ -192,6 +204,7 @@ class Heap:
 		self.index = 0
 	
 	def store(self, value):
+		self.state.stats.count('store')
 		index = self.index
 		self.data[index] = value
 		self.index += 1
@@ -221,14 +234,20 @@ class Stack:
 		self.stack = []
 
 	def push(self, obj):
+		self.state.stats.count('push')
 		self.stack.append(obj)
 
 	def pop(self):
+		self.state.stats.count('pop')
 		return self.stack.pop()
 
 	def peek(self, n = 0):
+		self.state.stats.count('peek')
 		return self.stack[-(n+1)]
 	
+	def append(self, list):
+		self.stack += list
+
 	def __str__(self):
 		result = ''
 		for a in self.stack:
@@ -289,9 +308,8 @@ def run(state, verbose=False):
 
 		# PUSH
 		if i[0] == Code.PUSH:
-			an1 = state.stack.peek(i[1] + 1)
-			nap = state.heap[an1]
-			state.stack.push(nap.a2)
+			an = state.stack.peek(i[1])
+			state.stack.push(an)
 
 		# PUSHG
 		elif i[0] == Code.PUSHG:
@@ -339,9 +357,16 @@ def run(state, verbose=False):
 			n = state.heap[a]
 			c = n.__class__
 			if c == NGlobal:
-				state.code = n.code.instructions
+				aa = []
+				for i in range(0,	n.n + 1):
+					ai = state.stack.pop()
+					if i > 0:
+						aa.insert(0, state.heap[ai].a1)
+				state.stack.push(ai)
+				state.stack.append(aa)
+				state.code = n.code.instructions						
 			elif c == NApply:
-				state.stack.push(n.a1)
+				state.stack.push(n.a2)
 				state.code.append((Code.UNWIND,))
 			elif c == NInd:
 				state.stack.pop()

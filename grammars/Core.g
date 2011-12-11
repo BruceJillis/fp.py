@@ -3,7 +3,7 @@ grammar Core;
 options {
    language     = Python;
    output       = AST;
-	ASTLabelType = Node;
+   ASTLabelType = Node;
    backtrack    = true;
    memoize      = true;
 }
@@ -100,24 +100,21 @@ expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expr4)*;
 expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expr6)*;
 
 expr6: (lst+=aexpr!)+ {
-      # format linear list as application spine
-      if len(list_lst) >= 2:
-         chain = self._adaptor.nil()
-         b = ApplicationNode(APPLICATION)
-         list_lst.reverse()
-         item = list_lst.pop()
-         b.addChild(list_lst.pop())         
-         b.addChild(item)
-         chain = self._adaptor.becomeRoot(b, chain)
-         while len(list_lst) > 0:
-            a = ApplicationNode(APPLICATION)
-            a.addChild(list_lst.pop())
-            a.addChild(chain)
-            chain = a
-         self._adaptor.addChild(root_0, chain)
-      else:
-         self._adaptor.addChild(root_0, list_lst[0])
-   }
+# format linear list as application spine
+if len(list_lst) >= 2:
+   chain = ApplicationNode(APPLICATION)
+   list_lst.reverse()
+   chain.addChild(list_lst.pop())         
+   chain.addChild(list_lst.pop())
+   while len(list_lst) > 0:
+      ap = ApplicationNode(APPLICATION)
+      ap.addChild(chain)
+      ap.addChild(list_lst.pop())
+      chain = ap
+   self._adaptor.addChild(root_0, chain)
+else:
+   self._adaptor.addChild(root_0, list_lst[0])
+}
 ;
 
 aexpr!
