@@ -49,7 +49,6 @@ def parse(filename):
 def process(filename):
 	'small helper function that defines the compiler stages. parse the file, process the ast'
 	ast = parse(filename)
-	print ast.toStringTree()
 	identification.visit(ast)
 	codegeneration.visit(ast)
 

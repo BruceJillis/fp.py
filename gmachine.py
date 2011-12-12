@@ -244,6 +244,14 @@ class Code:
 	def PushG(self, name):
 		self.instructions.append((Code.PUSHG, name))
 
+	def clear(self):
+		self.instructions = []
+
+	def clone(self):
+		result = Code()
+		result.instructions = [i for i in self.instructions]
+		return result
+
 	def __repr__(self):
 		return str(self)
 
@@ -423,9 +431,15 @@ class Stack:
 	
 	def append(self, list):
 		self.stack += list
+	
+	def bottom(self):
+		return self.stack[0]
 
 	def empty(self):
 		return len(self.stack) == 0
+
+	def __len__(self):
+		return len(self.stack)
 
 	def __str__(self):
 		result = ''
@@ -460,10 +474,10 @@ class Dump:
 		result = ''
 		for a in stack.stack[0:2]:
 			result += ', %s:%s' % (a, str(self.state.heap[a]))
-		return result[2:]
+		return result[2:] + ' ..'
 
 	def to_str_code(self, code):
-		return ' '.join(map(code_to_str, code[0:2]))
+		return ' '.join(map(code_to_str, code[0:2])) + ' ..'
 
 	def __str__(self):
 		result = ''
@@ -525,10 +539,10 @@ def run(state, verbose=False):
 		if verbose:
 			print '--'
 			print code_to_str(i)
-			#print 'code  : ' + ' '.join(map(code_to_str, state.code))
+			print 'code  : ' + ' '.join(map(code_to_str, state.code))
 			print 'stack : [%s]' % state.stack
-			#print 'dump  : [%s]' % state.dump
-			#print 'heap  :  [\n%s\n]' % state.heap
+			print 'dump  : [%s]' % state.dump
+			print 'heap  :  [\n%s\n]' % state.heap
 
 		# PUSH
 		if i[0] == Code.PUSH:
@@ -629,14 +643,25 @@ def run(state, verbose=False):
 			n = state.heap[a]
 			c = n.__class__
 			if c == NGlobal:
-				aa = []
-				for i in range(0,	n.n + 1):
-					ai = state.stack.pop()
-					if i > 0:
-						aa.insert(0, state.heap[ai].a1)
-				state.stack.push(ai)
-				state.stack.append(aa)
-				state.code = n.code.instructions						
+				k = len(state.stack) - 1
+				print k, n.n
+				if k >= n.n:
+					aa = []
+					for i in range(0,	n.n + 1):
+						ai = state.stack.pop()
+						if i > 0:
+							aa.insert(0, state.heap[ai].a1)
+					state.stack.push(ai)
+					state.stack.append(aa)
+					state.code = n.code.instructions
+				else:
+					# evaluate top of the stack to WHNF
+					print '-----'
+					a = state.stack.bottom()
+					item = state.dump.pop()
+					state.stack = item[0]
+					state.stack.push(a)
+					state.code = item[1]
 			elif c == NApply:
 				state.stack.push(n.a2)
 				state.code.append((Code.UNWIND,))
