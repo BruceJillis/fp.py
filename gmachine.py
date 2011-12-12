@@ -34,6 +34,20 @@ class SymbolTable:
 			SymbolTable.COUNT: 2,
 			SymbolTable.CODE: c,
 		}
+		# '-'
+		c = Code()
+		c.Push(1)
+		c.Eval()
+		c.Push(1)
+		c.Eval()
+		c.Sub()
+		c.Update(2)
+		c.Pop(2)
+		c.Unwind()
+		self.root['-'] = {
+			SymbolTable.COUNT: 2,
+			SymbolTable.CODE: c,
+		}
 		# '*'
 		c = Code()
 		c.Push(1)
@@ -48,7 +62,49 @@ class SymbolTable:
 			SymbolTable.COUNT: 2,
 			SymbolTable.CODE: c,
 		}
-	
+		# 'negate'
+		c = Code()
+		c.Push(0)
+		c.Eval()
+		c.Neg()
+		c.Update(1)
+		c.Pop(1)
+		c.Unwind()
+		self.root['negate'] = {
+			SymbolTable.COUNT: 1,
+			SymbolTable.CODE: c,
+		}
+		# 'if'
+		c = Code()
+		c.Push(0)
+		c.Eval()
+		c1 = Code()
+		c1.Push(1)
+		c2 = Code()
+		c2.Push(2)
+		c.Cond(c1, c2)
+		c.Update(3)
+		c.Pop(3)
+		c.Unwind()
+		self.root['if'] = {
+			SymbolTable.COUNT: 3,
+			SymbolTable.CODE: c,
+		}
+		# '=='
+		c = Code()
+		c.Push(1)
+		c.Eval()
+		c.Push(1)
+		c.Eval()
+		c.Eq()
+		c.Update(2)
+		c.Pop(2)
+		c.Unwind()
+		self.root['=='] = {
+			SymbolTable.COUNT: 2,
+			SymbolTable.CODE: c,
+		}
+		
 	def enter(self, context):
 		'enter a new scope'
 		key = str(context)
@@ -164,16 +220,28 @@ class Code:
 	def Add(self):
 		self.instructions.append((Code.ADD,))
 
+	def Sub(self):
+		self.instructions.append((Code.SUB,))
+
 	def Mul(self):
 		self.instructions.append((Code.MUL,))
+
+	def Neg(self):
+		self.instructions.append((Code.NEG,))
+
+	def Cond(self, c1, c2):
+		self.instructions.append((Code.COND, c1, c2))
+
+	def Eq(self):
+		self.instructions.append((Code.EQ,))
 
 	def Push(self, index, name = ''):
 		self.instructions.append((Code.PUSH, index))
 
-	def PushInt(self, value):
+	def PushI(self, value):
 		self.instructions.append((Code.PUSHI, int(value)))
 
-	def PushGlobal(self, name):
+	def PushG(self, name):
 		self.instructions.append((Code.PUSHG, name))
 
 	def __repr__(self):
@@ -189,11 +257,11 @@ def code_to_str(instr):
 	"small helper function to prettyprint a instruction without needing a Code instance"
 	str = None
 	if instr[0] == Code.PUSH:
-		str = "PUSH %s" % (instr[1])
+		str = "P %s" % (instr[1])
 	if instr[0] == Code.PUSHG:
-		str = "PUSHG %s" % (instr[1])
+		str = "PG %s" % (instr[1])
 	if instr[0] == Code.PUSHI:
-		str = "PUSHI %s" % (instr[1])
+		str = "PI %s" % (instr[1])
 	if instr[0] == Code.UNWIND:
 		str = "UNWIND"
 	if instr[0] == Code.UPDATE:
@@ -205,7 +273,7 @@ def code_to_str(instr):
 	if instr[0] == Code.ALLOC:
 		str = "ALLOC %s" % (instr[1])
 	if instr[0] == Code.APPLY:
-		str = "APPLY"
+		str = "AP"
 	if instr[0] == Code.EVAL:
 		str = "EVAL"
 	if instr[0] == Code.ADD:
@@ -231,7 +299,8 @@ def code_to_str(instr):
 	if instr[0] == Code.GTE:
 		str = "GTE"
 	if instr[0] == Code.COND:
-		str = "COND %s %s" % (instr[1], instr[2])
+		str = "[COND %s | %s]" % (instr[1], instr[2])
+		str = str.replace('\n', '')
 	return "%s" % (str)
 
 # State
@@ -387,10 +456,19 @@ class Dump:
 	def empty(self):
 		return len(self.stack) == 0
 
+	def to_str_stack(self, stack):
+		result = ''
+		for a in stack.stack[0:2]:
+			result += ', %s:%s' % (a, str(self.state.heap[a]))
+		return result[2:]
+
+	def to_str_code(self, code):
+		return ' '.join(map(code_to_str, code[0:2]))
+
 	def __str__(self):
 		result = ''
 		for o in self.stack:
-			result += ', (%s, %s)' % ('stack', 'code')
+			result += ', (%s, %s)' % (self.to_str_stack(o[0]), self.to_str_code(o[1]))
 		return result[2:]
 
 # Nodes
@@ -407,7 +485,7 @@ class NGlobal(Node):
 		self.name = name
 	
 	def __repr__(self):
-		return 'NGlobal(%s, %s)' % (self.n, self.name)
+		return 'NGlob(%s, %s)' % (self.n, self.name)
 
 class NApply(Node):
 	"represents an application of two expressions at runtime"
@@ -416,7 +494,7 @@ class NApply(Node):
 		self.a2 = a2
 
 	def __repr__(self):
-		return 'NApply(%s, %s)' % (repr(self.a1), repr(self.a2))
+		return 'NAp(%s, %s)' % (repr(self.a1), repr(self.a2))
 
 class NNum(Node):
 	"represents a number at runtime"
@@ -438,11 +516,8 @@ def run(state, verbose=False):
 	def cache(n):
 		key = str(n)
 		if not key in state.globals:
-			a = state.heap.store(NNum(n))
-			state.globals[key] = a
-		else:
-			a = state.globals[key]
-		return a
+			state.globals[key] = state.heap.store(NNum(n))
+		return state.globals[key]
 
 	state.stats.start()
 	while len(state.code) > 0:
@@ -450,10 +525,10 @@ def run(state, verbose=False):
 		if verbose:
 			print '--'
 			print code_to_str(i)
-			# print 'code  : ' + str(map(code_to_str, state.code))
+			#print 'code  : ' + ' '.join(map(code_to_str, state.code))
 			print 'stack : [%s]' % state.stack
-			print 'dump  : [%s]' % state.dump
-			print 'heap  :  [\n%s\n]' % state.heap
+			#print 'dump  : [%s]' % state.dump
+			#print 'heap  :  [\n%s\n]' % state.heap
 
 		# PUSH
 		if i[0] == Code.PUSH:
@@ -492,7 +567,6 @@ def run(state, verbose=False):
 		# ALLOC
 		elif i[0] == Code.ALLOC:
 			for j in range(i[1]):
-				print i, i[1]
 				ai = state.heap.store(NInd(null))
 				state.stack.push(ai)
 
@@ -503,13 +577,42 @@ def run(state, verbose=False):
 			state.heap[an] = NInd(a)
 
 		# DYADIC
-		elif i[0] in [Code.ADD, Code.SUB]:
+		elif i[0] in [Code.ADD, Code.SUB, Code.MUL]:
 			a0 = state.stack.pop() 
+			n0 = state.heap[a0].value
 			a1 = state.stack.pop()
+			n1 = state.heap[a1].value
 			if i[0] == Code.ADD:
-				n = state.heap[a0].value + state.heap[a1].value
+				n = n0 + n1
+			elif i[0] == Code.SUB:
+				n = n0 - n1
 			elif i[0] == Code.MUL:
-				n = state.heap[a0].value * state.heap[a1].value
+				n = n0 * n1
+			state.stack.push(cache(n))
+		
+		# NEG
+		elif i[0] == Code.NEG:
+			a = state.stack.pop()
+			state.stack.push(cache(-state.heap[a].value))
+
+		# COND
+		elif i[0] == Code.COND:
+			a = state.stack.pop()
+			if state.heap[a].value == 1:
+				state.code = i[1].instructions + state.code
+			elif state.heap[a].value == 0:
+				state.code = i[2].instructions + state.code
+
+		# BOOLEAN
+		elif i[0] in [Code.EQ]:
+			a0 = state.stack.pop() 
+			n0 = state.heap[a0].value
+			a1 = state.stack.pop()
+			n1 = state.heap[a1].value
+			n = 0
+			if i[0] == Code.EQ:
+				if n0 == n1:
+					n = 1
 			state.stack.push(cache(n))
 
 		# EVAL
@@ -549,11 +652,12 @@ def run(state, verbose=False):
 				else:
 					# top of the stack is in WHNF so restore old context
 					item = state.dump.pop()
+					a = state.stack.pop()
 					state.stack = item[0]
 					state.stack.push(a)
 					state.code = item[1]
 		else:
-			pass; # raise Exception('unknown instruction')
+			raise Exception('unknown instruction')
 		state.stats.step()
 	state.stats.stop()
 	return state.heap[state.result()]

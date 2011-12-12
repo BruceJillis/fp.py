@@ -127,9 +127,10 @@ class CodeGeneration(Visitor):
 			env.add(str(parameter))
 		d = env.index
 		self.visit(combinator.children[-1], env = env)
-		self.code.Update(d)
-		self.code.Pop(d)
-		self.code.Unwind()
+		#self.code.Update(d)
+		#self.code.Pop(d)
+		#self.code.Unwind()
+		self.code.Eval()
 		self.symtab[SymbolTable.CODE] = self.code
 		self.symtab.leave()
 
@@ -168,15 +169,34 @@ class CodeGeneration(Visitor):
 
 	def visit_AddNode(self, node, *args, **kwargs):
 		self.visit(node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit(node.children[0], env = env)
 		self.visit(node.children[0], *args, **kwargs)
-		self.code.PushGlobal('+')
+		self.code.PushG('+')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_MinNode(self, node, *args, **kwargs):
+		self.visit(node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit(node.children[0], env = env)
+		self.code.PushG('-')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_MulNode(self, node, *args, **kwargs):
 		self.visit(node.children[1], *args, **kwargs)
-		self.visit(node.children[0], *args, **kwargs)
-		self.code.PushGlobal('*')
+		env = kwargs['env'].increment(1)
+		self.visit(node.children[0], env = env)
+		self.code.PushG('*')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_EqualNode(self, node, *args, **kwargs):
+		self.visit(node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit(node.children[0], env = env)
+		self.code.PushG('==')
 		self.code.Apply()
 		self.code.Apply()
 
@@ -186,7 +206,7 @@ class CodeGeneration(Visitor):
 		if isinstance(node, ASTNode):
 			self.code.Push(kwargs['env'].get(name))
 		else:
-			self.code.PushGlobal(name)
+			self.code.PushG(name)
 
 	def visit_NumberNode(self, number, **kwargs):
-		self.code.PushInt(number.value())
+		self.code.PushI(number.value())

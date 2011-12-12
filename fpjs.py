@@ -65,14 +65,13 @@ identification = Identification(symtab)
 codegeneration = CodeGeneration(symtab)
 
 # do actual work, compile all the supplied files including the include directories (recursively if necessary)
-for filename in files(args.include, '*.core'):
-	process(filename)
+if not args.no_includes:
+	for filename in files(args.include, '*.core'):
+		process(filename)
 for filename in args.file:
 	process(filename)
 # construct initial state and run the resulting program
 state = State(symtab)
-#printcode('Y')
-#printcode('K')
 printcode('main')
 print	run(state, args.verbose)
 

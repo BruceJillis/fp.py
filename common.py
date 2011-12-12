@@ -35,6 +35,9 @@ class CombinatorNode(ASTNode):
 class LambdaNode(ASTNode):
 	spelling = 'LAMDA'
 
+class IfNode(ASTNode):
+	spelling = 'IF'
+
 # local definitions
 class LetNode(ASTNode):
 	spelling = 'LET'
