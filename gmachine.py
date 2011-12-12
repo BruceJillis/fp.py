@@ -644,7 +644,6 @@ def run(state, verbose=False):
 			c = n.__class__
 			if c == NGlobal:
 				k = len(state.stack) - 1
-				print k, n.n
 				if k >= n.n:
 					aa = []
 					for i in range(0,	n.n + 1):
@@ -656,7 +655,6 @@ def run(state, verbose=False):
 					state.code = n.code.instructions
 				else:
 					# evaluate top of the stack to WHNF
-					print '-----'
 					a = state.stack.bottom()
 					item = state.dump.pop()
 					state.stack = item[0]

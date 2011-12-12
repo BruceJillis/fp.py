@@ -231,6 +231,10 @@ class CompileE(CompilationScheme):
 		self.visit('E', node.children[0], env = env)
 		self.code.Eq();
 
+	def visit_NegateNode(self, node, *args, **kwargs):
+		self.visit('E', node.children[0], *args, **kwargs)
+		self.code.Neg()
+
 	def visit_NumberNode(self, number, **kwargs):
 		self.code.PushI(number.value())
 
@@ -240,7 +244,6 @@ class CompileE(CompilationScheme):
 
 class CompileC(CompilationScheme):
 	"generates code which constructs the graph of e in environment env, leaving a pointer to it on top of the stack."
-
 	def visit_LetNode(self, let, **kwargs):
 		self.symtab.enter(let)
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
@@ -313,6 +316,11 @@ class CompileC(CompilationScheme):
 			self.code.Push(kwargs['env'].get(name))
 		else:
 			self.code.PushG(name)
+
+	def visit_NegateNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[0], *args, **kwargs)
+		self.code.PushG('negate')
+		self.code.Apply()
 
 	def visit_NumberNode(self, number, **kwargs):
 		self.code.PushI(number.value())

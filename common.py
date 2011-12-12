@@ -51,6 +51,9 @@ class DefinitionNode(ASTNode):
 	def name(self):
 		return str(self.children[0])
 
+class IfNode(ASTNode):
+	spelling = 'IF'
+
 # function application
 class ApplicationNode(ASTNode):
 	spelling = 'APPLICATION'
@@ -80,6 +83,9 @@ class NumberNode(BasicNode):
 
 	def value(self):
 		return int(self.toString())
+
+class NegateNode(ASTNode):
+	spelling = 'NEG'
 
 # operators
 

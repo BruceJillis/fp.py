@@ -4,8 +4,8 @@ options {
    language     = Python;
    output       = AST;
    ASTLabelType = Node;
-   backtrack    = true;
-   memoize      = true;
+	memoize      = true;
+	backtrack    = true;
 }
 
 tokens {
@@ -119,9 +119,9 @@ else:
 
 aexpr!
    : ID
-     -> ^(ID<IdentifierNode> ID)
+     -> ^(ID<IdentifierNode>)
    | NUMBER
-     -> ^(NUMBER<NumberNode> NUMBER<NumberNode>)
+     -> ^(NUMBER<NumberNode>)
    | PACK LCURLY NUMBER COMMA NUMBER RCURLY
      -> ^(PACK<ConstructorNode> NUMBER<NumberNode> NUMBER<NumberNode>)
    | LPAREN expr1 RPAREN
