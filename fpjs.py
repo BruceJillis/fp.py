@@ -47,7 +47,7 @@ def parse(filename):
 		return ast.tree
 
 def process(filename):
-	'small helper function that defines the compiler stages. parse the file, process the ast'
+	'deprecated: small helper function that defines the compiler stages. parse the file, process the ast'
 	ast = parse(filename)
 	identification.visit(ast)
 	codegeneration.visit(ast)
@@ -63,15 +63,26 @@ symtab = SymbolTable()
 identification = Identification(symtab)
 codegeneration = CodeGeneration(symtab)
 
-# do actual work, compile all the supplied files including the include directories (recursively if necessary)
+# do actual work: compile all the supplied files including the include directories (recursively if necessary)
+# do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
+# across files) before we start compilation
+asts = []
 if not args.no_includes:
 	for filename in files(args.include, '*.core'):
-		process(filename)
+		ast = parse(filename)
+		identification.visit(ast)
+		asts.append(ast)
 for filename in args.file:
-	process(filename)
+	ast = parse(filename)
+	identification.visit(ast)
+	asts.append(ast)
+# compile all the asts (files)
+for ast in asts:
+	# print ast.toStringTree()
+	codegeneration.visit(ast)
 # construct initial state and run the resulting program
 state = State(symtab)
-printcode('main')
+# printcode('main')
 print	run(state, args.verbose)
 
 # output stats for the execution of the program

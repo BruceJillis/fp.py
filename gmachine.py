@@ -19,49 +19,33 @@ class SymbolTable:
 		self.tree[SymbolTable.PARENT] = None
 		self.precompiled()
 	
+	def binary(self, symbol, field):
+		c = Code()
+		c.Push(1)
+		c.Eval()
+		c.Push(1)
+		c.Eval()
+		if not hasattr(c, field):
+			raise Exception('binary operator %s instruction not found on Code: %s' % (symbol, field))
+		m = getattr(c, field)
+		m()
+		c.Update(2)
+		c.Pop(2)
+		c.Unwind()
+		self.root[symbol] = {
+			SymbolTable.COUNT: 2,
+			SymbolTable.CODE: c,
+		}
+
 	def precompiled(self):
-		# '+'
-		c = Code()
-		c.Push(1)
-		c.Eval()
-		c.Push(1)
-		c.Eval()
-		c.Add()
-		c.Update(2)
-		c.Pop(2)
-		c.Unwind()
-		self.root['+'] = {
-			SymbolTable.COUNT: 2,
-			SymbolTable.CODE: c,
-		}
-		# '-'
-		c = Code()
-		c.Push(1)
-		c.Eval()
-		c.Push(1)
-		c.Eval()
-		c.Sub()
-		c.Update(2)
-		c.Pop(2)
-		c.Unwind()
-		self.root['-'] = {
-			SymbolTable.COUNT: 2,
-			SymbolTable.CODE: c,
-		}
-		# '*'
-		c = Code()
-		c.Push(1)
-		c.Eval()
-		c.Push(1)
-		c.Eval()
-		c.Mul()
-		c.Update(2)
-		c.Pop(2)
-		c.Unwind()
-		self.root['*'] = {
-			SymbolTable.COUNT: 2,
-			SymbolTable.CODE: c,
-		}
+		self.binary('+', 'Add')
+		self.binary('-', 'Sub')
+		self.binary('*', 'Mul')
+		self.binary('==', 'Eq')
+		self.binary('<', 'Lt')
+		self.binary('<=', 'Lte')
+		self.binary('>', 'Gt')
+		self.binary('>=', 'Gte')
 		# 'negate'
 		c = Code()
 		c.Push(0)
@@ -88,20 +72,6 @@ class SymbolTable:
 		c.Unwind()
 		self.root['if'] = {
 			SymbolTable.COUNT: 3,
-			SymbolTable.CODE: c,
-		}
-		# '=='
-		c = Code()
-		c.Push(1)
-		c.Eval()
-		c.Push(1)
-		c.Eval()
-		c.Eq()
-		c.Update(2)
-		c.Pop(2)
-		c.Unwind()
-		self.root['=='] = {
-			SymbolTable.COUNT: 2,
 			SymbolTable.CODE: c,
 		}
 		
@@ -234,6 +204,18 @@ class Code:
 
 	def Eq(self):
 		self.instructions.append((Code.EQ,))
+
+	def Lt(self):
+		self.instructions.append((Code.LT,))
+
+	def Lte(self):
+		self.instructions.append((Code.LTE,))
+
+	def Gt(self):
+		self.instructions.append((Code.GT,))
+
+	def Gte(self):
+		self.instructions.append((Code.GTE,))
 
 	def Push(self, index, name = ''):
 		self.instructions.append((Code.PUSH, index))
@@ -618,7 +600,7 @@ def run(state, verbose=False):
 				state.code = i[2].instructions + state.code
 
 		# BOOLEAN
-		elif i[0] in [Code.EQ]:
+		elif i[0] in [Code.EQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
 			a0 = state.stack.pop() 
 			n0 = state.heap[a0].value
 			a1 = state.stack.pop()
@@ -626,6 +608,18 @@ def run(state, verbose=False):
 			n = 0
 			if i[0] == Code.EQ:
 				if n0 == n1:
+					n = 1
+			elif i[0] == Code.LT:
+				if n0 < n1:
+					n = 1
+			elif i[0] == Code.LTE:
+				if n0 <= n1:
+					n = 1
+			elif i[0] == Code.GT:
+				if n0 > n1:
+					n = 1
+			elif i[0] == Code.GTE:
+				if n0 >= n1:
 					n = 1
 			state.stack.push(cache(n))
 

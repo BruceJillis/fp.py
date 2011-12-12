@@ -1,2 +1,4 @@
-fac n = if (n == 0) 1 (n * (fac (n - 1)));
-main = fac 100
+# ubiquitous factorial function
+
+fac n = if (n==0) 1 (n * fac (n-1));
+main = fac 1000

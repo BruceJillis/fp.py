@@ -44,10 +44,6 @@ class Identification(Visitor):
 		self.visit(application.children[1])
 		self.visit(application.children[0])
 
-	def visit_IdentifierNode(self, identifier):
-		if not str(identifier) in self.symtab:
-			raise SyntaxError('"%s" is not defined' % identifier)
-
 	def visit_LetNode(self, let):
 		self.symtab.enter(let)
 		for definition in let.children[0:-1]:
@@ -306,6 +302,38 @@ class CompileC(CompilationScheme):
 		env = kwargs['env'].increment(1)
 		self.visit('C', node.children[0], env = env)
 		self.code.PushG('==')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_LessThanNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('<')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_LessThanEqualNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('<=')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_GreaterThanNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('>')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_GreaterThanEqualNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('>=')
 		self.code.Apply()
 		self.code.Apply()
 

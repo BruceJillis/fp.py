@@ -1,0 +1,9 @@
+cons a b cc cn = cc a b;
+nil cc cn = cn;
+hd list = list K abort;
+tl list = list K1 abort;
+abort = abort;
+
+downfrom n = if (n == 0) nil (cons n (downfrom (n-1)));
+list = (downfrom 4);
+main = hd (tl (tl list))

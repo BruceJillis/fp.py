@@ -4,8 +4,8 @@ options {
    language     = Python;
    output       = AST;
    ASTLabelType = Node;
-	memoize      = true;
-	backtrack    = true;
+   memoize      = true;
+   backtrack    = true;
 }
 
 tokens {
@@ -103,6 +103,7 @@ expr6: (lst+=aexpr!)+ {
 # format linear list as application spine
 if len(list_lst) >= 2:
    chain = ApplicationNode(APPLICATION)
+   # print list_lst 
    list_lst.reverse()
    chain.addChild(list_lst.pop())         
    chain.addChild(list_lst.pop())
