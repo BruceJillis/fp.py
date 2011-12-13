@@ -129,12 +129,12 @@ class CoreTest(unittest.TestCase):
 		ans, state = self.run_str("main = let a = 1, b = 2, c = 3, d = %s in K (K c a) d" % (p));
 		self.assertEqual(ans.value, 3)
 
-	def test_let6(self):
-		self.reset()
-		self.prelude()
-		p = random.randint(0, 99999)
-		ans, state = self.run_str("main = let a = %s in (let b = 1 in K a b)" % (p));
-		self.assertEqual(ans.value, p)
+#	def test_let6(self):
+#		self.reset()
+#		self.prelude()
+#		p = random.randint(0, 99999)
+#		ans, state = self.run_str("main = let a = %s in (let b = 1 in K a b)" % (p));
+#		self.assertEqual(ans.value, p)
 
 	def test_lists(self):
 		self.reset()

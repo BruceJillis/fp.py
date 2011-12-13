@@ -9,17 +9,11 @@ class ASTNode(CommonTree):
 		else:
 			CommonTree.__init__(self, payload)
 	
-	def analyze(self, info):
-		raise NotImplementedError
-	
 	def __repr__(self):
 		return self.toString()
 
 class ProgramNode(ASTNode):
 	spelling = 'PROGRAM'
-
-	def analyze(self, info):
-		raise NotImplementedError
 
 class CombinatorNode(ASTNode):
 	spelling = 'COMBINATOR'
