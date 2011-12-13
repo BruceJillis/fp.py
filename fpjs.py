@@ -1,6 +1,4 @@
-import argparse, os, glob
-
-import antlr3
+import argparse, os, glob, antlr3, unittest, sys
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from visitors import Identification, CodeGeneration
@@ -8,14 +6,19 @@ from gmachine import State, SymbolTable, run
 
 # define the command line parser
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
-parser.add_argument('file', nargs='+', help='.core file to compile and evaluate')
-parser.add_argument('-i', '--include', action='append', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories.")
-parser.add_argument('-n', '--no-includes', action='store_true', dest="no_includes", default=False, help="override including external files (usefull for debugging).")
-parser.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the system.")
-parser.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc).")
+parser.add_argument('file', nargs='*', help='.core file to compile and evaluate')
+parser.add_argument('-i', '--include', action='append', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories (default: core/runtime/*.core)")
+debug = parser.add_argument_group('debug', 'commandline options used during development on FPJS itself')
+debug.add_argument('--test', action='store_true', dest="test", default=False, help="run testsuite and report results")
+debug.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)")
+debug.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the systems")
+debug.add_argument('-n', '--no-includes', action='store_true', dest="no_includes", default=False, help="override including external files (usefull for debugging)")
 args = parser.parse_args()
 
-# we need at least 1 file to be supplied
+if args.test:
+	# run test suite and exit
+	unittest.main('CoreTest', 'CoreTest', sys.argv[1:])
+
 if len(args.file) == 0:
 	parser.error();
 

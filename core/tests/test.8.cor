@@ -1,3 +1,0 @@
-id x =  x;
-f p = (id p) * p;
-main = f (sqrt 4)
