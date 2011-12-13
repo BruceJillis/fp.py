@@ -314,8 +314,49 @@ class State:
 		self.globals = Globals(self, symtab)
 		self.dump = Dump(self)
 	
+	def gc(self):
+		"mark and scan garbage collector"
+		roots = []
+		# identify all the roots
+		for addr in self.stack.stack:
+			roots.append(addr)
+		for addr in self.globals.data:
+			roots.append(self.globals[addr])
+		for item in self.dump.stack:
+			for addr in item[0].stack:
+				roots.append(addr)
+		# start marking
+		for addr in roots:
+			self.mark(addr)
+		# free all unmarked nodes
+		self.free()
+		
+	def mark(self, addr):
+		"mark an address recursively (look through apply/indirection nodes)"
+		addrs = [addr]
+		while len(addrs) > 0:
+			addr, addrs = addrs[:1][0], addrs[1:]
+			node = self.heap[addr]
+			if node.mark:
+				continue
+			node.mark = True
+			if node.__class__ == NApply:
+				addrs.append(node.a1)
+				addrs.append(node.a2)
+			if node.__class__ == NInd:
+				addrs.append(node.a)
+	
+	def free(self):
+		"free no longer referenced memory after marking it, reset mark to False"
+		for addr in self.heap.data.keys():
+			if not self.heap[addr].mark:
+				self.heap.free(addr)
+			else:
+				self.heap[addr].mark = False
+				
 	def result(self):
-		return self.stack.pop()
+		"return the node at the top of the stack"
+		return self.heap[self.stack.peek()]
 
 # State Components
 
@@ -384,6 +425,9 @@ class Heap:
 		self.index += 1
 		return index
 	
+	def free(self, addr):
+		del self.data[addr]
+
 	def size(self):
 		return len(self.data.keys())
 
@@ -479,7 +523,7 @@ class Dump:
 
 class Node:
 	"base node for all runtime value representations"
-	pass
+	mark = False
 
 class NGlobal(Node):
 	"represents an combinator at runtime"
@@ -690,6 +734,9 @@ def run(state, verbose=False):
 					state.code = item[1]
 		else:
 			raise Exception('unknown instruction')
+		if (state.stats._steps % 20000) == 0:
+			# run the gc every x steps
+			state.gc()
 		state.stats.step()
 	state.stats.stop()
-	return state.heap[state.result()]
+	return state.result()
