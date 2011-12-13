@@ -89,15 +89,15 @@ definition!
      -> ^(DEFINITION<DefinitionNode> ID<IdentifierNode> expression)
 ;
 
-expr1: expr2 (OR<OrNode>^ expr1)*;
+expr1: expr2 (OR<OrNode>^ expression)*;
 
-expr2: expr3 (AND<AndNode>^ expr2)*;
+expr2: expr3 (AND<AndNode>^ expression)*;
 
-expr3: expr4 (relop^ expr4)*;
+expr3: expr4 (relop^ expression)*;
 
-expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expr4)*;
+expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
 
-expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expr6)*;
+expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
 
 expr6: (lst+=aexpr!)+ {
 # format linear list as application spine
@@ -125,8 +125,8 @@ aexpr!
      -> ^(NUMBER<NumberNode>)
    | PACK LCURLY NUMBER COMMA NUMBER RCURLY
      -> ^(PACK<ConstructorNode> NUMBER<NumberNode> NUMBER<NumberNode>)
-   | LPAREN expr1 RPAREN
-     -> expr1
+   | LPAREN expression RPAREN
+     -> expression
 ;
 
 relop: LT<LessThanNode> | LTE<LessThanEqualNode> | EQ<EqualNode> | NEQ<NotEqualNode> | GTE<GreaterThanEqualNode> | GT<GreaterThanNode>;

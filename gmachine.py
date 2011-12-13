@@ -41,7 +41,9 @@ class SymbolTable:
 		self.binary('+', 'Add')
 		self.binary('-', 'Sub')
 		self.binary('*', 'Mul')
+		self.binary('/', 'Div')
 		self.binary('==', 'Eq')
+		self.binary('!=', 'Neq')
 		self.binary('<', 'Lt')
 		self.binary('<=', 'Lte')
 		self.binary('>', 'Gt')
@@ -196,6 +198,9 @@ class Code:
 	def Mul(self):
 		self.instructions.append((Code.MUL,))
 
+	def Div(self):
+		self.instructions.append((Code.DIV,))
+
 	def Neg(self):
 		self.instructions.append((Code.NEG,))
 
@@ -204,6 +209,9 @@ class Code:
 
 	def Eq(self):
 		self.instructions.append((Code.EQ,))
+
+	def Neq(self):
+		self.instructions.append((Code.NEQ,))
 
 	def Lt(self):
 		self.instructions.append((Code.LT,))
@@ -503,7 +511,9 @@ class NNum(Node):
 class NInd(Node):
 	"represents an indirection at runtime"
 	def __init__(self, a):
-		self.a = int(a)
+		self.a = None
+		if a != None:
+			self.a = int(a)
 
 	def __repr__(self):
 		return 'NInd(%s)' % (self.a)
@@ -563,7 +573,7 @@ def run(state, verbose=False):
 		# ALLOC
 		elif i[0] == Code.ALLOC:
 			for j in range(i[1]):
-				ai = state.heap.store(NInd(null))
+				ai = state.heap.store(NInd(None))
 				state.stack.push(ai)
 
 		# UPDATE
@@ -573,7 +583,7 @@ def run(state, verbose=False):
 			state.heap[an] = NInd(a)
 
 		# DYADIC
-		elif i[0] in [Code.ADD, Code.SUB, Code.MUL]:
+		elif i[0] in [Code.ADD, Code.SUB, Code.MUL, Code.DIV]:
 			a0 = state.stack.pop() 
 			n0 = state.heap[a0].value
 			a1 = state.stack.pop()
@@ -584,6 +594,8 @@ def run(state, verbose=False):
 				n = n0 - n1
 			elif i[0] == Code.MUL:
 				n = n0 * n1
+			elif i[0] == Code.DIV:
+				n = n0 / n1
 			state.stack.push(cache(n))
 		
 		# NEG
@@ -600,7 +612,7 @@ def run(state, verbose=False):
 				state.code = i[2].instructions + state.code
 
 		# BOOLEAN
-		elif i[0] in [Code.EQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
+		elif i[0] in [Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
 			a0 = state.stack.pop() 
 			n0 = state.heap[a0].value
 			a1 = state.stack.pop()
@@ -608,6 +620,9 @@ def run(state, verbose=False):
 			n = 0
 			if i[0] == Code.EQ:
 				if n0 == n1:
+					n = 1
+			elif i[0] == Code.NEQ:
+				if n0 != n1:
 					n = 1
 			elif i[0] == Code.LT:
 				if n0 < n1:

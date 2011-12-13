@@ -221,11 +221,23 @@ class CompileE(CompilationScheme):
 		self.visit('E', node.children[0], env = env)
 		self.code.Mul()
 
+	def visit_DivNode(self, node, *args, **kwargs):
+		self.visit('E', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('E', node.children[0], env = env)
+		self.code.Div()
+
 	def visit_EqualNode(self, node, *args, **kwargs):
 		self.visit('E', node.children[1], *args, **kwargs)
 		env = kwargs['env'].increment(1)
 		self.visit('E', node.children[0], env = env)
 		self.code.Eq();
+
+	def visit_NotEqualNode(self, node, *args, **kwargs):
+		self.visit('E', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('E', node.children[0], env = env)
+		self.code.Neq();
 
 	def visit_NegateNode(self, node, *args, **kwargs):
 		self.visit('E', node.children[0], *args, **kwargs)
@@ -297,11 +309,27 @@ class CompileC(CompilationScheme):
 		self.code.Apply()
 		self.code.Apply()
 
+	def visit_DivNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('/')
+		self.code.Apply()
+		self.code.Apply()
+
 	def visit_EqualNode(self, node, *args, **kwargs):
 		self.visit('C', node.children[1], *args, **kwargs)
 		env = kwargs['env'].increment(1)
 		self.visit('C', node.children[0], env = env)
 		self.code.PushG('==')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_NotEqualNode(self, node, *args, **kwargs):
+		self.visit('C', node.children[1], *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.children[0], env = env)
+		self.code.PushG('!=')
 		self.code.Apply()
 		self.code.Apply()
 

@@ -94,6 +94,165 @@ class CoreTest(unittest.TestCase):
 		ans, state = self.run_str("main = twice (I I I) %s" % (p));
 		self.assertEqual(ans.value, p)
 
+	def test_add1(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = 10 + %s" % (p));
+
+	def test_add2(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = %s + 10" % (p));
+		self.assertEqual(ans.value, 10 + p)
+
+	def test_mul1(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = 10 * %s" % (p));
+		self.assertEqual(ans.value, 10 * p)
+
+	def test_mul3(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = %s * 10" % (p));
+		self.assertEqual(ans.value, 10 * p)
+
+	def test_div1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 / 2");
+		self.assertEqual(ans.value, 5)
+
+	def test_div2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 20 / 10");
+		self.assertEqual(ans.value, 2)
+
+	def test_eq1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 == 20");
+		self.assertEqual(ans.value, 0)
+
+	def test_eq2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 == 10");
+		self.assertEqual(ans.value, 1)
+
+	def test_neq1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 != 20");
+		self.assertEqual(ans.value, 1)
+
+	def test_neq2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 != 10");
+		self.assertEqual(ans.value, 0)
+
+	def test_lt1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 < 20");
+		self.assertEqual(ans.value, 1)
+
+	def test_lt2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 < 10");
+		self.assertEqual(ans.value, 0)
+
+	def test_lte1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 <= 20");
+		self.assertEqual(ans.value, 1)
+
+	def test_lte2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 <= 10");
+		self.assertEqual(ans.value, 1)
+
+	def test_lte3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 <= 1");
+		self.assertEqual(ans.value, 0)
+
+	def test_gt1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 > 20");
+		self.assertEqual(ans.value, 0)
+
+	def test_gt2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 > 1");
+		self.assertEqual(ans.value, 1)
+
+	def test_gte1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 >= 20");
+		self.assertEqual(ans.value, 0)
+
+	def test_gte2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 >= 10");
+		self.assertEqual(ans.value, 1)
+
+	def test_gte3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 10 >= 1");
+		self.assertEqual(ans.value, 1)
+
+	def test_eq3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = 20 == 10");
+		self.assertEqual(ans.value, 0)
+
+	def test_if1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = if 0 1 2");
+		self.assertEqual(ans.value, 2)
+
+	def test_if2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = if 1 1 2");
+		self.assertEqual(ans.value, 1)
+
+	def test_if3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = if (5 == 5) 10 2");
+		self.assertEqual(ans.value, 10)
+
+	def test_if4(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = if (6 == 5) 10 2");
+		self.assertEqual(ans.value, 2)
+
+	def test_if5(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = if ((2 - 2) == 0) (K 4 5) (K1 4 5)");
+		self.assertEqual(ans.value, 4)
+
 	def test_let1(self):
 		self.reset()
 		self.prelude()
@@ -129,18 +288,16 @@ class CoreTest(unittest.TestCase):
 		ans, state = self.run_str("main = let a = 1, b = 2, c = 3, d = %s in K (K c a) d" % (p));
 		self.assertEqual(ans.value, 3)
 
-#	def test_let6(self):
-#		self.reset()
-#		self.prelude()
-#		p = random.randint(0, 99999)
-#		ans, state = self.run_str("main = let a = %s in (let b = 1 in K a b)" % (p));
-#		self.assertEqual(ans.value, p)
+	def test_let6(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = let a = %s in (let b = 1 in K a b)" % (p));
+		self.assertEqual(ans.value, p)
 
 	def test_lists(self):
 		self.reset()
 		self.load("core\\tests\\lists.core")
-		self.assertEqual(len(self.symtab.root), 16)
-		self.assertEqual(self.symtab.root.keys(), ['<=', '>=', 'nil', 'abort', '==', '+', '*', '-', 'tl', 'cons', 'hd', 'negate','if', '<', '__parent__', '>'])
 		self.assertEqual(self.symtab.root['tl'][SymbolTable.COUNT], 1)
 		self.assertEqual(self.symtab.root['hd'][SymbolTable.COUNT], 1)
 		self.assertEqual(self.symtab.root['nil'][SymbolTable.COUNT], 2)
@@ -158,14 +315,13 @@ main = hd (tl (tl (infinite %s)))
 		self.assertEqual(self.symtab.root['infinite'][SymbolTable.COUNT], 1)
 		self.assertEqual(ans.value, p)
 
-#	def test_infinite2(self):
-#		pass
-#		self.reset()
-#		self.lists()
-#		p = random.randint(0, 99999)
-#		ans = self.run_str("""
-#infinite x = letrec xs = cons x xs in xs;
-#main = hd (tl (tl (infinite %s)))
-#""" % (p))
-#		self.assertEqual(self.symtab.root['infinite'][SymbolTable.COUNT], 1)
-#		self.assertEqual(ans.value, p)
+	def test_infinite2(self):
+		self.reset()
+		self.lists()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("""
+infinite x = letrec xs = cons x xs in xs;
+main = hd (tl (tl (infinite %s)))
+""" % (p))
+		self.assertEqual(self.symtab.root['infinite'][SymbolTable.COUNT], 1)
+		self.assertEqual(ans.value, p)
