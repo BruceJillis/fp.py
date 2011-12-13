@@ -9,14 +9,14 @@ from gmachine import State, SymbolTable, run
 # define the command line parser
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
 parser.add_argument('file', nargs='*', help='.core file to compile and evaluate')
-parser.add_argument('-i', '--include', action='append', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories (default: core/runtime/*.core)")
+parser.add_argument('--include', action='append', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories (default: core/runtime/*.core)")
 debug = parser.add_argument_group('debug', 'commandline options used during development on FPJS itself')
-debug.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)")
 debug.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the systems")
-debug.add_argument('-n', '--no-includes', action='store_true', dest="no_includes", default=False, help="override including external files (usefull for debugging)")
-debug.add_argument('-t', '--test', action='store_true', dest="test", default=False, help="run testsuite and report results")
-debug.add_argument('-c', '--coverage', action='store_true', dest="coverage", default=False, help="run test, and record code coverage. report results")
-debug.add_argument('--show-missing', action='store_true', dest="show_missing", default=False, help="show line numbers that were not covered by the testsuite in the report")
+debug.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)")
+debug.add_argument('--test', action='store_true', dest="test", default=False, help="run testsuite and report results")
+debug.add_argument('--coverage', action='store_true', dest="coverage", default=False, help="run test, and record code coverage. report results")
+debug.add_argument('--show-missing', action='store_true', dest="show_missing", default=False, help="show line numbers that were not covered by the testsuite in the --coverage report")
+debug.add_argument('--no-includes', action='store_true', dest="no_includes", default=False, help="do not include any external files (--include) except those supplied on the commandline")
 args = parser.parse_args()
 
 if args.coverage:
