@@ -317,6 +317,7 @@ class State:
 	def gc(self):
 		"mark and scan garbage collector"
 		roots = []
+		self.stats.count('gc.collections')
 		# identify all the roots
 		for addr in self.stack.stack:
 			roots.append(addr)
@@ -426,6 +427,7 @@ class Heap:
 		return index
 	
 	def free(self, addr):
+		self.state.stats.count('free')
 		del self.data[addr]
 
 	def size(self):
@@ -734,7 +736,7 @@ def run(state, verbose=False):
 					state.code = item[1]
 		else:
 			raise Exception('unknown instruction')
-		if (state.stats._steps % 20000) == 0:
+		if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
 			# run the gc every x steps
 			state.gc()
 		state.stats.step()

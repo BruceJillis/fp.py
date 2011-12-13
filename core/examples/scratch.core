@@ -1,2 +1,1 @@
-fac n = if (n==0) 1 (n * fac (n-1));
-main = let x = fac 500 in (K x 1) + 2
+main = twice negate 3

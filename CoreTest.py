@@ -94,6 +94,20 @@ class CoreTest(unittest.TestCase):
 		ans, state = self.run_str("main = twice (I I I) %s" % (p));
 		self.assertEqual(ans.value, p)
 
+	def test_negate1(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = negate %s" % (p));
+		self.assertEqual(ans.value, -p)
+
+	def test_negate2(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("main = twice negate %s" % (p));
+		self.assertEqual(ans.value,	p)
+
 	def test_add1(self):
 		self.reset()
 		self.prelude()
@@ -113,6 +127,16 @@ class CoreTest(unittest.TestCase):
 		p = random.randint(0, 99999)
 		ans, state = self.run_str("main = 10 * %s" % (p));
 		self.assertEqual(ans.value, 10 * p)
+
+	def test_mul2(self):
+		self.reset()
+		self.prelude()
+		p = random.randint(0, 99999)
+		ans, state = self.run_str("""
+square x = x * x ;
+main = square (square %s)
+""" % p)
+		self.assertEqual(ans.value, (p * p) * (p * p))
 
 	def test_mul3(self):
 		self.reset()
