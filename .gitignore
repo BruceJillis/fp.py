@@ -2,6 +2,7 @@
 *.pyo
 *.tokens
 Thumbs.db
+.coverage
 
 _*
 
