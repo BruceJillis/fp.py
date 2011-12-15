@@ -1,3 +1,12 @@
+true = Pack{1,0};
+false = Pack{2,0};
+if c t f = case c of	<1> -> t, <2> -> f;
+
+cons h t = Pack{3,2} h t;
+nil = Pack{4,0};
+hd a = case a of <3> h t -> h;
+tl a = case a of <3> h t -> t;
+
 I x = x;
 K x y = x;
 K1 x y = y;

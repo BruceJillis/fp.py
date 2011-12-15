@@ -91,15 +91,15 @@ if not args.no_includes:
 		asts.append(ast)
 for filename in args.file:
 	ast = parse(filename)
+	print ast.toStringTree()
 	identification.visit(ast)
 	asts.append(ast)
 # compile all the asts (files)
 for ast in asts:
-	# print ast.toStringTree()
 	codegeneration.visit(ast)
 # construct initial state and run the resulting program
 state = State(symtab)
-# printcode('main')
+printcode('main')
 print	run(state, args.verbose)
 
 # output stats for the execution of the program

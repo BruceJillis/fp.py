@@ -1,1 +1,1 @@
-main = twice negate 3
+main = if false 10 20

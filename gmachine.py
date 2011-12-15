@@ -61,21 +61,21 @@ class SymbolTable:
 			SymbolTable.CODE: c,
 		}
 		# 'if'
-		c = Code()
-		c.Push(0)
-		c.Eval()
-		c1 = Code()
-		c1.Push(1)
-		c2 = Code()
-		c2.Push(2)
-		c.Cond(c1, c2)
-		c.Update(3)
-		c.Pop(3)
-		c.Unwind()
-		self.root['if'] = {
-			SymbolTable.COUNT: 3,
-			SymbolTable.CODE: c,
-		}
+#		c = Code()
+#		c.Push(0)
+#		c.Eval()
+#		c1 = Code()
+#		c1.Push(1)
+#		c2 = Code()
+#		c2.Push(2)
+#		c.Cond(c1, c2)
+#		c.Update(3)
+#		c.Pop(3)
+#		c.Unwind()
+#		self.root['if'] = {
+#			SymbolTable.COUNT: 3,
+#			SymbolTable.CODE: c,
+#		}
 		
 	def enter(self, context):
 		'enter a new scope'
@@ -163,10 +163,23 @@ class Code:
 	
 	COND = 22
 
+	PACK = 23
+	CASE = 24
+	SPLIT = 25
+
+
 	def __init__(self):
 		self.instructions = []
 		
 	# factory functions for all instructions
+	def Pack(self, tag, arity):
+		self.instructions.append((Code.PACK, int(tag), int(arity)))
+
+	def Case(self, cases):
+		self.instructions.append((Code.CASE, cases))
+
+	def Split(self, n):
+		self.instructions.append((Code.SPLIT, int(n)))
 
 	def Alloc(self, value):
 		self.instructions.append((Code.ALLOC, int(value)))
@@ -256,47 +269,56 @@ def code_to_str(instr):
 	str = None
 	if instr[0] == Code.PUSH:
 		str = "P %s" % (instr[1])
-	if instr[0] == Code.PUSHG:
+	elif instr[0] == Code.PUSHG:
 		str = "PG %s" % (instr[1])
-	if instr[0] == Code.PUSHI:
+	elif instr[0] == Code.PUSHI:
 		str = "PI %s" % (instr[1])
-	if instr[0] == Code.UNWIND:
+	elif instr[0] == Code.UNWIND:
 		str = "UNWIND"
-	if instr[0] == Code.UPDATE:
+	elif instr[0] == Code.UPDATE:
 		str = "UPDATE %s" % (instr[1])
-	if instr[0] == Code.POP:
+	elif instr[0] == Code.POP:
 		str = "POP %s" % (instr[1])
-	if instr[0] == Code.SLIDE:
+	elif instr[0] == Code.SLIDE:
 		str = "SLIDE %s" % (instr[1])
-	if instr[0] == Code.ALLOC:
+	elif instr[0] == Code.ALLOC:
 		str = "ALLOC %s" % (instr[1])
-	if instr[0] == Code.APPLY:
+	elif instr[0] == Code.APPLY:
 		str = "AP"
-	if instr[0] == Code.EVAL:
+	elif instr[0] == Code.PACK:
+		str = "PACK %s %s" % (instr[1], instr[2])
+	elif instr[0] == Code.CASE:
+		str = "CASE [\n" 
+		for c in instr[1]:
+			str += '   ' + ', '.join(map(code_to_str, instr[1][c].instructions)) + ',\n'
+		str = str[0:-2] + '\n]'
+	elif instr[0] == Code.SPLIT:
+		str = "SPLIT %s" % (instr[1])
+	elif instr[0] == Code.EVAL:
 		str = "EVAL"
-	if instr[0] == Code.ADD:
+	elif instr[0] == Code.ADD:
 		str = "ADD"
-	if instr[0] == Code.SUB:
+	elif instr[0] == Code.SUB:
 		str = "SUB"
-	if instr[0] == Code.MUL:
+	elif instr[0] == Code.MUL:
 		str = "MUL"
-	if instr[0] == Code.DIV:
+	elif instr[0] == Code.DIV:
 		str = "DIV"
-	if instr[0] == Code.NEG:
+	elif instr[0] == Code.NEG:
 		str = "NEG"
-	if instr[0] == Code.EQ:
+	elif instr[0] == Code.EQ:
 		str = "EQ"
-	if instr[0] == Code.NEQ:
+	elif instr[0] == Code.NEQ:
 		str = "NEQ"
-	if instr[0] == Code.LT:
+	elif instr[0] == Code.LT:
 		str = "LT"
-	if instr[0] == Code.LTE:
+	elif instr[0] == Code.LTE:
 		str = "LTE"
-	if instr[0] == Code.GT:
+	elif instr[0] == Code.GT:
 		str = "GT"
-	if instr[0] == Code.GTE:
+	elif instr[0] == Code.GTE:
 		str = "GTE"
-	if instr[0] == Code.COND:
+	elif instr[0] == Code.COND:
 		str = "[COND %s | %s]" % (instr[1], instr[2])
 		str = str.replace('\n', '')
 	return "%s" % (str)
@@ -357,7 +379,14 @@ class State:
 				
 	def result(self):
 		"return the node at the top of the stack"
-		return self.heap[self.stack.peek()]
+		node = self.heap[self.stack.peek()]
+		if node.__class__ == NConstr:
+			if node.a == 1:
+				return True
+			elif node.a == 2:
+				return False
+		if node.__class__ == NNum:
+			return node.value
 
 # State Components
 
@@ -480,7 +509,7 @@ class Stack:
 	def __str__(self):
 		result = ''
 		for a in self.stack:
-			result += ', %s:%s' % (a, str(self.state.heap[a]))
+			result += ', %s:%s \n' % (a, str(self.state.heap[a]))
 		return result[2:]
 
 class Dump:
@@ -559,10 +588,20 @@ class NInd(Node):
 	def __init__(self, a):
 		self.a = None
 		if a != None:
-			self.a = int(a)
+			assert(int(a))
+			self.a = a
 
 	def __repr__(self):
 		return 'NInd(%s)' % (self.a)
+
+class NConstr(Node):
+	"represents a constructor at runtime"
+	def __init__(self, a, b):
+		self.a = a
+		self.b = b
+
+	def __repr__(self):
+		return 'NConstr(%s, %s)' % (self.a, self.b)
 
 def run(state, verbose=False):
 	def cache(n):
@@ -663,7 +702,7 @@ def run(state, verbose=False):
 			n0 = state.heap[a0].value
 			a1 = state.stack.pop()
 			n1 = state.heap[a1].value
-			n = 0
+			n = 2
 			if i[0] == Code.EQ:
 				if n0 == n1:
 					n = 1
@@ -682,7 +721,7 @@ def run(state, verbose=False):
 			elif i[0] == Code.GTE:
 				if n0 >= n1:
 					n = 1
-			state.stack.push(cache(n))
+			state.stack.push(state.heap.store(NConstr(n, [])))
 
 		# EVAL
 		elif i[0] == Code.EVAL:
@@ -691,6 +730,24 @@ def run(state, verbose=False):
 			state.stack = Stack(state)
 			state.stack.push(a)
 			state.code = [(Code.UNWIND,)]
+
+		# PACK
+		elif i[0] == Code.PACK:
+			aa = []
+			for _ in range(i[2]):
+				aa.append(state.stack.pop())
+			a = state.heap.store(NConstr(i[1], aa))				
+			state.stack.push(a)
+
+		# CASE
+		elif i[0] == Code.CASE:
+			state.code = i[1][n.a].instructions + state.code
+
+		# SPLIT
+		elif i[0] == Code.SPLIT:
+			state.stack.pop()
+			for a in n.b:
+				state.stack.push(a)
 
 		# UNWIND
 		elif i[0] == Code.UNWIND:
@@ -722,6 +779,12 @@ def run(state, verbose=False):
 				state.stack.pop()
 				state.stack.push(n.a)
 				state.code.append((Code.UNWIND,))
+			elif c == NConstr:
+				item = state.dump.pop()
+				a = state.stack.pop()
+				state.stack = item[0]
+				state.stack.push(a)
+				state.code = item[1]
 			elif c == NNum:
 				if state.dump.empty():
 					# we are done, return

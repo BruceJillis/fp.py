@@ -38,7 +38,7 @@ tokens {
    CASE   = 'case';
    IN     = 'in';
    OF     = 'of';
-   PACK   = 'pack';
+   PACK   = 'Pack';
    LCURLY = '{';
    RCURLY = '}';
    CASE   = 'case';
@@ -77,10 +77,10 @@ expression!
    | expr1
 ;
 
-alternatives: alternative (SCOLON! alternative)*;
+alternatives: alternative (COMMA! alternative)*;
 alternative!
-   : LT NUMBER GT ARROW expression
-     -> ^(ALTERNATIVE<AlternativeNode> NUMBER<NumberNode> expression)
+   : LT NUMBER GT ID* ARROW expression
+     -> ^(ALTERNATIVE<AlternativeNode> NUMBER<NumberNode> ID<IdentifierNode>* expression)
 ;
 
 definitions: definition (COMMA! definition)*;
@@ -100,23 +100,8 @@ expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
 expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
 
 expr6: (lst+=aexpr!)+ {
-# format linear list as application spine
-if len(list_lst) >= 2:
-   chain = ApplicationNode(APPLICATION)
-   # print list_lst 
-   list_lst.reverse()
-   chain.addChild(list_lst.pop())         
-   chain.addChild(list_lst.pop())
-   while len(list_lst) > 0:
-      ap = ApplicationNode(APPLICATION)
-      ap.addChild(chain)
-      ap.addChild(list_lst.pop())
-      chain = ap
-   self._adaptor.addChild(root_0, chain)
-else:
-   self._adaptor.addChild(root_0, list_lst[0])
-}
-;
+   self._adaptor.addChild(root_0, mk_ap_chain(list_lst, APPLICATION))
+};
 
 aexpr!
    : ID
