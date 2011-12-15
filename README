@@ -1,6 +1,11 @@
 FPJS
 ----
-FPJS is an experimental functional language that compiles to javascript and python. It offers seamless integration with imperative code. It is built using ANTLR 3.
+FPJS is an experimental functional language that compiles to javascript and python. It is built using ANTLR 3.
+
+It features:
+ - lazy evaluation
+ - infinite precision arithmetic (only ints currently)
+ - a garbage collector
 
 Usage
 -----
