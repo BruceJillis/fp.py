@@ -7,7 +7,7 @@ It features:
  - infinite precision arithmetic (only ints currently)
  - a garbage collector
 
-It's inspired by: <a href="http://en.wikipedia.org/wiki/Miranda_(programming_language)">Miranda</a> and Amanda (A windows based clone created by D. Bruin is included in this repository).
+It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin is included in this repository). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
 
 Status
 ------
