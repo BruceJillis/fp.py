@@ -12,7 +12,7 @@ It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin i
 Status
 ------
 	- Core
-		* Essentially done. All example programs run, all programs in this README run. The interpreter passes some 60 high and low level unittests at 68% code coverage (--test and --coverage).
+		* Essentially done. Everything except lambdas work. The interpreter passes some 60 high and low level unittests at 68% code coverage (--test and --coverage).
 	- High Level Language
 		* 0%
 
