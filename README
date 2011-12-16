@@ -1,20 +1,50 @@
-FPJS
+FP
 ----
-FPJS is an experimental functional language that compiles to javascript and python. It is built using ANTLR 3.
+FP is an experimental functional language that compiles to / can be interpreted in python. It's based on ANTLR 3 and the work of Simon Peyton-Jones.
 
 It features:
  - lazy evaluation
  - infinite precision arithmetic (only ints currently)
  - a garbage collector
 
+It's inspired by: <a href="http://en.wikipedia.org/wiki/Miranda_(programming_language)">Miranda</a> and Amanda (A windows based clone created by D. Bruin is included in this repository).
+
+Status
+------
+	- Core
+		* Essentially done. All example programs run, all programs in this README run. The interpreter passes some 60 high and low level unittests at 68% code coverage (--test and --coverage).
+	- High Level Language
+		* 0%
+
 Usage
 -----
 To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler like so:
 
-   python fpjs.py core\examples\fac.core
+   python fp.py core\examples\fac.core
 
-Use the command line option -h to obtain more information on available switches.
-   
+usage: fp.py [-h] [--include INCLUDE] [-v] [--stats] [--test] [--coverage]
+             [--show-missing] [--no-includes]
+             [file [file ...]]
+
+Compiler for the miranda-style functional language FP.
+
+positional arguments:
+  file               .core file to compile and evaluate
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --include INCLUDE  include .core files in these directories (default: core/runtime/*.core)
+
+debug:
+  commandline options used during development on FPJS itself
+
+  -v, --verbose      output a lot of information on the internals of the system
+  --stats            output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)
+  --test             run testsuite and report results
+  --coverage         run test, and record code coverage. report results
+  --show-missing     show line numbers that were not covered by the testsuite in the --coverage report
+  --no-includes      do not include any external files (--include) except those supplied on the commandline
+
 Core
 ----
       
@@ -171,4 +201,4 @@ The next program implements the Sieve of Eratosthenes to generate the infinite l
       <1> -> nil;
       <2> p ps -> cons p (take (n-1) ps))
 
-NOTE! Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)
+* Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)

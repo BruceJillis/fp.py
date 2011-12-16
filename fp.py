@@ -81,7 +81,6 @@ codegeneration = CodeGeneration(symtab)
 
 # transformations
 caselifter = CaseLifter(symtab)
-# packlifter = PackLifter()
 
 def transform(ast):
 	caselifter.visit(ast)

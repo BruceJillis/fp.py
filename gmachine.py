@@ -787,9 +787,9 @@ def run(state, verbose=False):
 					state.code = item[1]
 		else:
 			raise Exception('unknown instruction')
-		#if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
+		if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
 			# run the gc every x steps
-			# state.gc()
+			state.gc()
 		state.stats.step()
 	state.stats.stop()
 	return state.result()
