@@ -4,6 +4,4 @@
 Thumbs.db
 .coverage
 
-_*
-
 etc/antlr-3.4/**/*
