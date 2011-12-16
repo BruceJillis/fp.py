@@ -1,10 +1,9 @@
-import unittest
-import coverage
 import argparse, os, glob, antlr3, sys
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from visitors import Identification, CodeGeneration
 from gmachine import State, SymbolTable, run
+from transforms import CaseLifter
 
 # define the command line parser
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
@@ -20,13 +19,17 @@ debug.add_argument('--no-includes', action='store_true', dest="no_includes", def
 args = parser.parse_args()
 
 if args.coverage:
-	args.coverage = True
-	cov = coverage.coverage(auto_data=True, include=["visitors.py", "gmachine.py", "common.py"])
+	import coverage
+	args.test = True
+	if len(sys.argv) > 2:
+		sys.argv = [sys.argv[1]] + sys.argv[2:]
+	cov = coverage.coverage(auto_data=True, include=["visitors.py", "gmachine.py", "transforms.py"])
 	cov.start()
 
 if args.test:
+	import unittest
 	# run test suite and exit
-	unittest.main('CoreTest', 'CoreTest', sys.argv[1:])
+	unittest.main(module="tests", argv=sys.argv[1:], exit=not args.coverage)
 
 if args.coverage:
 	cov.stop()
@@ -61,13 +64,9 @@ def parse(filename):
 		tokens = antlr3.CommonTokenStream(lexer)
 		parser = CoreParser(tokens)
 		ast = parser.program()
+		for combinator in ast.tree.combinators():
+			symtab.combinators[combinator.name()] = True
 		return ast.tree
-
-def process(filename):
-	'deprecated: small helper function that defines the compiler stages. parse the file, process the ast'
-	ast = parse(filename)
-	identification.visit(ast)
-	codegeneration.visit(ast)
 
 def printcode(name):
 	'small helper function to easily and quickly print the gmachine code for a combinator'
@@ -80,6 +79,14 @@ symtab = SymbolTable()
 identification = Identification(symtab)
 codegeneration = CodeGeneration(symtab)
 
+# transformations
+caselifter = CaseLifter(symtab)
+# packlifter = PackLifter()
+
+def transform(ast):
+	caselifter.visit(ast)
+	return ast
+
 # do actual work: compile all the supplied files including the include directories (recursively if necessary)
 # do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
 # across files) before we start compilation
@@ -87,19 +94,21 @@ asts = []
 if not args.no_includes:
 	for filename in files(args.include, '*.core'):
 		ast = parse(filename)
+		ast = transform(ast)
 		identification.visit(ast)
 		asts.append(ast)
 for filename in args.file:
 	ast = parse(filename)
-	# print ast.toStringTree()
-	identification.visit(ast)
+	ast = transform(ast)
+	#print ast.toStringTree()
+	identification.visit(ast)	
 	asts.append(ast)
 # compile all the asts (files)
 for ast in asts:
 	codegeneration.visit(ast)
 # construct initial state and run the resulting program
 state = State(symtab)
-# printcode('main')
+#printcode('main')
 print	run(state, args.verbose)
 
 # output stats for the execution of the program

@@ -34,15 +34,15 @@ class Identification(Visitor):
 		if combinator.name() in self.symtab:
 			raise SyntaxError('%s already defined' % combinator.name())
 		self.symtab.enter(combinator.name())
-		for parameter in combinator.children[1:-1]:
+		for parameter in combinator.parameters():
 			self.symtab[str(parameter)] = parameter
-		self.symtab[SymbolTable.COUNT] = len(combinator.children[1:-1])
-		self.visit(combinator.children[-1])
+		self.symtab[SymbolTable.COUNT] = len(combinator.parameters())
+		self.visit(combinator.body())
 		self.symtab.leave()
 
 	def visit_ApplicationNode(self, node, *args, **kwargs):
-		self.visit(node.children[1])
-		self.visit(node.children[0])
+		self.visit(node.right())
+		self.visit(node.left())
 
 	def visit_LetNode(self, node):
 		self.symtab.enter(node)
@@ -63,54 +63,18 @@ class Identification(Visitor):
 		self.visit(node.children[-1])
 		self.symtab.leave()
 
+	def visit_CaseNode(self, node):
+		self.symtab.enter(node)		
+		for alt in node.alternatives():
+			self.visit(alt)
+		self.symtab.leave()
+
 	def visit_AlternativeNode(self, node):
 		self.symtab.enter(node)
 		for p in node.children[1:-1]:
 			self.symtab[str(p)] = p
 		self.visit(node.children[-1])
 		self.symtab.leave()
-
-# class Environment is only used during code generation to maintain stack indices
-class	Environment:
-	def	__init__(self):
-		self.mapping	=	{}
-		self.index	=	0
-
-	def	add(self,	param):
-		self.mapping[param] = self.index
-		self.index	+= 1
-
-	def	add_at(self,	param, at):
-		self.mapping[param] = at
-
-	def	get(self,	param):
-		if	not	param	in self.mapping:
-			exit('unknown local var: %s ' % (param))
-		return self.mapping[param]
-
-	def	count(self):
-		return len(self.mapping.keys())
-	
-	def merge_from(self, env, frm):
-		for m in env.mapping:
-			self.add_at(m, frm)
-			frm -= 1
-
-	def increment(self, amount = 1):
-		"clone and increment this environment"
-		result = Environment()
-		result.index = self.index
-		for k in self.mapping:
-			result.mapping[k] = self.mapping[k] + amount
-		return result
-
-	def clone(self):
-		"clone this environment so changes wont affect the master environment"
-		result = Environment()
-		result.index = self.index
-		for k in self.mapping:
-			result.mapping[k] = self.mapping[k]
-		return result
 
 class CodeGeneration(Visitor):
 	"generate GMachine code for the supplied program."
@@ -177,19 +141,19 @@ class CompilationScheme(Visitor):
 		raise Exception('undefined node type %s for %s: ' % (node.__class__.__name__, self.__class__.__name__))
 
 class CompileSC(CompilationScheme):
-	def visit_ProgramNode(self, program):
-		for combinator in program.children:
+	def visit_ProgramNode(self, node):
+		for combinator in node.combinators():
 			self.visit('R', combinator)
 
 class CompileR(CompilationScheme):
 	"generates code which instantiates the expression combinator.children[-1] in environment env, for a supercombinator of arity d, and then proceeds to unwind the resulting stack."
-	def visit_CombinatorNode(self, combinator):
+	def visit_CombinatorNode(self, node):
 		env = Environment()
-		self.symtab.enter(combinator.name())
-		for parameter in combinator.children[1:-1]:
+		self.symtab.enter(node.name())
+		for parameter in node.parameters():
 			env.add(str(parameter))
 		d = env.index
-		self.visit('E', combinator.children[-1], env = env)
+		self.visit('E', node.body(), env = env)
 		self.code.Update(d)
 		self.code.Pop(d)
 		self.code.Unwind()
@@ -202,11 +166,11 @@ class CompileE(CompilationScheme):
 	def visit_LetNode(self, node, **kwargs):
 		self.symtab.enter(node)
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
-		for definition in node.children[0:-1]:
+		for definition in node.definitions():
 			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
 			_env, n = kwargs['env'].increment(n), n + 1
-			self.visit('E', definition.children[1], env = _env)
-		self.visit('E', node.children[-1], env = env)
+			self.visit('E', definition.body(), env = _env)
+		self.visit('E', node.body(), env = env)
 		self.code.Slide(self.symtab[SymbolTable.COUNT])
 		self.symtab.leave()
 
@@ -214,72 +178,72 @@ class CompileE(CompilationScheme):
 		self.symtab.enter(node)
 		self.code.Alloc(self.symtab[SymbolTable.COUNT])
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
-		for definition in node.children[0:-1]:
+		for definition in node.definitions():
 			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
 			n += 1
 		u = self.symtab[SymbolTable.COUNT] - 1
-		for definition in node.children[0:-1]:
-			self.visit('E', definition.children[-1], env = env)
+		for definition in node.definitions():
+			self.visit('E', definition.body(), env = env)
 			self.code.Update(u)
 			u -= 1
-		self.visit('E', node.children[-1], env = env)
+		self.visit('E', node.body(), env = env)
 		self.code.Slide(self.symtab[SymbolTable.COUNT])
 		self.symtab.leave()
 	
 	def visit_CaseNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[0], *args, **kwargs)
+		self.symtab.enter(node)
+		self.visit('E', node.condition(), *args, **kwargs)
 		cases = {}
-		for alt in node.children[1:]:
+		for alt in node.alternatives():
 			self.visit('A', alt, *args, **kwargs)
 			cases[self.facade.A.item[0]] = self.facade.A.item[1]
 		self.code.Case(cases)
+		self.symtab.leave()
 
 	def visit_ConstructorNode(self, node, *args, **kwargs):
-		# massage the tree to get back the arguments for Pack, since they have been parsed as an application spine
-		n = int(str(node.children[1]))
-		for i, n in enumerate(node.children[2:]):
+		for i, n in enumerate(node.expressions()):
 			_env = kwargs['env'].increment(i)
 			self.visit('C', node.children[(i+2)], env = _env)
-		self.code.Pack(str(node.children[0]), str(node.children[1]))
+		self.code.Pack(node.tag(), node.arity())
 
 	def visit_AddNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Add()
 
 	def visit_MinNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Sub()
 
 	def visit_MulNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Mul()
 
 	def visit_DivNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Div()
 
 	def visit_EqualNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Eq();
 
 	def visit_NotEqualNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[1], *args, **kwargs)
+		self.visit('E', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('E', node.children[0], env = env)
+		self.visit('E', node.left(), env = env)
 		self.code.Neq();
 
 	def visit_NegateNode(self, node, *args, **kwargs):
-		self.visit('E', node.children[0], *args, **kwargs)
+		self.visit('E', node.left(), *args, **kwargs)
 		self.code.Neg()
 
 	def visit_NumberNode(self, number, **kwargs):
@@ -294,11 +258,11 @@ class CompileC(CompilationScheme):
 	def visit_LetNode(self, node, **kwargs):
 		self.symtab.enter(node)
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
-		for definition in node.children[0:-1]:
+		for definition in node.definitions():
 			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
 			_env, n = kwargs['env'].increment(n), n + 1
-			self.visit('C', definition.children[1], env = _env)
-		self.visit('C', node.children[-1], env = env)
+			self.visit('C', definition.body(), env = _env)
+		self.visit('C', node.body(), env = env)
 		self.code.Slide(self.symtab[SymbolTable.COUNT])
 		self.symtab.leave()
 
@@ -306,131 +270,127 @@ class CompileC(CompilationScheme):
 		self.symtab.enter(node)
 		self.code.Alloc(self.symtab[SymbolTable.COUNT])
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
-		for definition in node.children[0:-1]:
+		for definition in node.definitions():
 			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
 			n += 1
 		u = self.symtab[SymbolTable.COUNT] - 1
-		for definition in node.children[0:-1]:
-			self.visit('C', definition.children[-1], env = env)
+		for definition in node.definitions():
+			self.visit('C', definition.body(), env = env)
 			self.code.Update(u)
 			u -= 1
-		self.visit('C', node.children[-1], env = env)
+		self.visit('C', node.body(), env = env)
 		self.code.Slide(self.symtab[SymbolTable.COUNT])
 		self.symtab.leave()
 
-	def visit_CaseNode(self, node, *args, **kwargs):
-		print 'transform here'
-		print node.toStringTree()
-		exit()
+	def visit_CaseNode(self, node, **data):
+		self.symtab.enter(node)
+		self.visit('E', node.condition(), **data)
+		for alt in node.alternatives():
+			self.visit('A', alt, **data)
+		self.symtab.leave()
 
 	def visit_ConstructorNode(self, node, *args, **kwargs):
-		# massage the tree to get back the arguments for Pack, since they have been parsed as an application spine
-		n = int(str(node.children[1]))
-		for i, n in enumerate(node.children[2:]):
+		for i, n in enumerate(node.expressions()):
 			_env = kwargs['env'].increment(i)
 			self.visit('C', node.children[(i+2)], env = _env)
-		self.code.Pack(str(node.children[0]), str(node.children[1]))
+		self.code.Pack(node.tag(), node.arity())
 
 	def visit_ApplicationNode(self, node, **kwargs):
-		self.visit('C', node.children[1], env = kwargs['env'])
+		self.visit('C', node.right(), env = kwargs['env'])
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.Apply()
 
 	def visit_AddNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('+')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_MinNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('-')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_MulNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('*')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_DivNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('/')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_EqualNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('==')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_NotEqualNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('!=')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_LessThanNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('<')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_LessThanEqualNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('<=')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_GreaterThanNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('>')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_GreaterThanEqualNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[1], *args, **kwargs)
+		self.visit('C', node.right(), *args, **kwargs)
 		env = kwargs['env'].increment(1)
-		self.visit('C', node.children[0], env = env)
+		self.visit('C', node.left(), env = env)
 		self.code.PushG('>=')
 		self.code.Apply()
 		self.code.Apply()
 
 	def visit_IdentifierNode(self, identifier, **kwargs):
 		name = str(identifier)
-		try:
-			node = self.symtab[name]
-		except:
-			for a in self.symtab.tree:
-				print a
+		node = self.symtab[name]
 		if isinstance(node, ASTNode):
 			self.code.Push(kwargs['env'].get(name))
 		else:
 			self.code.PushG(name)
 
 	def visit_NegateNode(self, node, *args, **kwargs):
-		self.visit('C', node.children[0], *args, **kwargs)
+		self.visit('C', node.left(), *args, **kwargs)
 		self.code.PushG('negate')
 		self.code.Apply()
 
@@ -444,15 +404,15 @@ class CompileA(CompilationScheme):
 		self.symtab.enter(node)	
 		code = Code()
 		self.facade.switch_code(code)
-		n = len(node.children[1:-1])
+		n = len(node.parameters())
 		env = kwargs['env'].increment(n)
 		code.Split(n)
 		np = 0
-		for p in node.children[1:-1]:
+		for p in node.parameters():
 			env.add_at(str(p), np)
 			np += 1
-		self.visit('E', node.children[-1], env = env)
+		self.visit('E', node.body(), env = env)
 		code.Slide(n)
-		self.item = (int(str(node.children[0])), code)
+		self.item = (node.tag(), code)
 		self.facade.switch_code()
 		self.symtab.leave()

@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-14 23:55:44
+# $ANTLR 3.4 grammars/Core.g 2011-12-16 00:18:55
 
 import sys
 from antlr3 import *
@@ -2255,7 +2255,7 @@ class CoreParser(Parser):
                 if self._state.backtracking == 0:
                     pass
                                           
-                    self._adaptor.addChild(root_0, mk_ap_chain(list_lst, APPLICATION))
+                    self._adaptor.addChild(root_0, mk_ap_chain(list_lst))
 
 
 

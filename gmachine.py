@@ -18,6 +18,7 @@ class SymbolTable:
 		self.root = self.tree
 		self.tree[SymbolTable.PARENT] = None
 		self.precompiled()
+		self.combinators = {}
 	
 	def binary(self, symbol, field):
 		c = Code()
@@ -60,22 +61,6 @@ class SymbolTable:
 			SymbolTable.COUNT: 1,
 			SymbolTable.CODE: c,
 		}
-		# 'if'
-#		c = Code()
-#		c.Push(0)
-#		c.Eval()
-#		c1 = Code()
-#		c1.Push(1)
-#		c2 = Code()
-#		c2.Push(2)
-#		c.Cond(c1, c2)
-#		c.Update(3)
-#		c.Pop(3)
-#		c.Unwind()
-#		self.root['if'] = {
-#			SymbolTable.COUNT: 3,
-#			SymbolTable.CODE: c,
-#		}
 		
 	def enter(self, context):
 		'enter a new scope'
@@ -173,25 +158,25 @@ class Code:
 		
 	# factory functions for all instructions
 	def Pack(self, tag, arity):
-		self.instructions.append((Code.PACK, int(tag), int(arity)))
+		self.instructions.append((Code.PACK, tag, arity))
 
 	def Case(self, cases):
 		self.instructions.append((Code.CASE, cases))
 
 	def Split(self, n):
-		self.instructions.append((Code.SPLIT, int(n)))
+		self.instructions.append((Code.SPLIT, n))
 
 	def Alloc(self, value):
-		self.instructions.append((Code.ALLOC, int(value)))
+		self.instructions.append((Code.ALLOC, value))
 
 	def Slide(self, value):
-		self.instructions.append((Code.SLIDE, int(value)))
+		self.instructions.append((Code.SLIDE, value))
 
 	def Update(self, value):
-		self.instructions.append((Code.UPDATE, int(value)))
+		self.instructions.append((Code.UPDATE, value))
 
 	def Pop(self, value):
-		self.instructions.append((Code.POP, int(value)))
+		self.instructions.append((Code.POP, value))
 
 	def Apply(self):
 		self.instructions.append((Code.APPLY,))
@@ -242,7 +227,7 @@ class Code:
 		self.instructions.append((Code.PUSH, index))
 
 	def PushI(self, value):
-		self.instructions.append((Code.PUSHI, int(value)))
+		self.instructions.append((Code.PUSHI, value))
 
 	def PushG(self, name):
 		self.instructions.append((Code.PUSHG, name))
@@ -290,7 +275,7 @@ def code_to_str(instr):
 	elif instr[0] == Code.CASE:
 		str = "CASE [\n" 
 		for c in instr[1]:
-			str += '   ' + ', '.join(map(code_to_str, instr[1][c].instructions)) + ',\n'
+			str += '   %s -> ' % c + ', '.join(map(code_to_str, instr[1][c].instructions)) + ',\n'
 		str = str[0:-2] + '\n]'
 	elif instr[0] == Code.SPLIT:
 		str = "SPLIT %s" % (instr[1])
@@ -385,7 +370,18 @@ class State:
 				return True
 			elif node.a == 2:
 				return False
-		if node.__class__ == NNum:
+			elif node.a == 4:
+				return "nil"
+			else:
+				print self.heap
+				for a in node.b:
+						print self.heap[a]
+				exit()
+				result = 'NConstr(%s, [' % node.a 
+				for a in node.b:
+					result += str(self.heap[a]) + ', '
+				return result[0:-2] + '])'
+		elif node.__class__ == NNum:
 			return node.value
 
 # State Components
@@ -524,13 +520,6 @@ class Dump:
 	def pop(self):
 		self.state.stats.count('dump.pop')
 		return self.stack.pop()
-
-	def peek(self, n = 0):
-		self.state.stats.count('dump.peek')
-		return self.stack[-(n+1)]
-	
-	def append(self, list):
-		self.stack += list
 
 	def empty(self):
 		return len(self.stack) == 0
@@ -746,8 +735,7 @@ def run(state, verbose=False):
 		# SPLIT
 		elif i[0] == Code.SPLIT:
 			state.stack.pop()
-			for a in n.b:
-				state.stack.push(a)
+			state.stack.append(n.b)
 
 		# UNWIND
 		elif i[0] == Code.UNWIND:
@@ -799,9 +787,9 @@ def run(state, verbose=False):
 					state.code = item[1]
 		else:
 			raise Exception('unknown instruction')
-		if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
+		#if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
 			# run the gc every x steps
-			state.gc()
+			# state.gc()
 		state.stats.step()
 	state.stats.stop()
 	return state.result()

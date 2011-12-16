@@ -1,1 +1,5 @@
-main = if false 10 20
+from n = cons n (from (n+1));
+take n xs = if (n==1) nil (case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (take (n-1) ps));
+main = hd (tl (tl (tl (tl (tl (take 5 (from 5)))))))

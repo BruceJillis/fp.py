@@ -100,7 +100,7 @@ expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
 expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
 
 expr6: (lst+=aexpr!)+ {
-   self._adaptor.addChild(root_0, mk_ap_chain(list_lst, APPLICATION))
+   self._adaptor.addChild(root_0, mk_ap_chain(list_lst))
 };
 
 aexpr!
