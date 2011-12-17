@@ -251,6 +251,30 @@ main = square (square %s)
 		ans, state = self.run_str("main = 20 == 10");
 		self.assertEqual(ans, False)
 
+	def test_and1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = true & false");
+		self.assertEqual(ans, False)
+
+	def test_and2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = true & true");
+		self.assertEqual(ans, True)
+
+	def test_or1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = true | true");
+		self.assertEqual(ans, True)
+
+	def test_or2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = true | false");
+		self.assertEqual(ans, True)
+
 	def test_if1(self):
 		self.reset()
 		self.prelude()

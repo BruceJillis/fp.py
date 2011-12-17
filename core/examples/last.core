@@ -1,0 +1,16 @@
+# haskell 99 http://www.haskell.org/haskellwiki/H-99:_Ninety-Nine_Haskell_Problems
+# problem 1
+
+from n = cons n (from (n + 1));
+
+take n xs = if (n == 0) nil (case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (take (n-1) ps));
+
+last2 xs n = (case xs of
+	<4> -> n,
+	<3> p ps -> last2 ps p);
+last xs = last2 xs nil;
+
+list = take 10 (from 10);
+main = last list

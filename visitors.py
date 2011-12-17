@@ -1,29 +1,7 @@
-from common import *
+from common import Visitor, CompositeVisitor
 from gmachine import Code, SymbolTable
-
-class Visitor(object):
-	debug = False
-
-	def visit(self, node, *args, **kwargs):
-		method = None
-		for cls in node.__class__.__mro__:
-			method_name = 'visit_' + cls.__name__
-			method = getattr(self, method_name, None)
-			if method:
-				break
-		if not method:
-			# the fallback is defined on Visitor and thus will always be present
-			method = self.fallback
-		return method(node, *args, **kwargs)
-
-	def fallback(self, node, *args, **kwargs):
-		'generic method to direct a visitor over the children of the current node if the children property is present. prints node name if debug is set to True'
-		if self.debug:
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
-		if hasattr(node, 'children'):
-			for child in node.children:
-				self.visit(child, *args, **kwargs)
+from common import Environment
+from ast import *
 
 class Identification(Visitor):
 	"identify variables, check if program is obeys all scoping rules."
@@ -76,50 +54,27 @@ class Identification(Visitor):
 		self.visit(node.children[-1])
 		self.symtab.leave()
 
-class CodeGeneration(Visitor):
+class CodeGeneration(CompositeVisitor):
 	"generate GMachine code for the supplied program."
-	active = None
-
 	def __init__(self, symtab):
+		super(CodeGeneration, self).__init__()
 		self.symtab = symtab
-		self.SC = CompileSC(self, symtab)
-		self.R = CompileR(self, symtab)
-		self.C = CompileC(self, symtab)
-		self.E = CompileE(self, symtab)
-		self.A = CompileA(self, symtab)
+		self['SC'] = CompileSC(self, symtab)
+		self['R'] = CompileR(self, symtab)
+		self['C'] = CompileC(self, symtab)
+		self['E'] = CompileE(self, symtab)
+		self['A'] = CompileA(self, symtab)
+		self.select('SC')
 		self.code = Code()
 		self.switch_code(self.code)
-		self.select('SC')
 
 	def switch_code(self, code = None):
-		"awkward code switching routine to isolate code generation for alternatives. should rethink the visitor to return values"
-		if code != None:
-			self.SC.code = code
-			self.R.code = code
-			self.C.code = code
-			self.E.code = code
-			self.A.code = code
-		else:
-			self.SC.code = self.code
-			self.R.code = self.code
-			self.C.code = self.code
-			self.E.code = self.code
-			self.A.code = self.code
-
-	def select(self, scheme):
-		self.active = getattr(self, scheme)
-
-	def visit(self, node, *args, **kwargs):
-		method = None
-		for cls in node.__class__.__mro__:
-			method_name = 'visit_' + cls.__name__
-			method = getattr(self.active, method_name, None)
-			if method:
-				break
-		if not method:
-			# the fallback is defined on Visitor and thus will always be present
-			method = self.active.fallback
-		return method(node, *args, **kwargs)
+		"switch the code object to a new instance"
+		for k in self.schemes:
+			if code != None:
+				self.schemes[k].code = code
+			else:
+				self.schemes[k].code = self.code
 
 class CompilationScheme(Visitor):
 	def __init__(self, facade, symtab):
@@ -130,15 +85,12 @@ class CompilationScheme(Visitor):
 	def select(self, scheme):
 		self.facade.select(scheme)
 
-	def visit(self, scheme, node, *args, **kwargs):
+	def visit(self, scheme, node, **data):
 		active = self.facade.active
 		self.select(scheme)
-		result = self.facade.visit(node, *args, **kwargs)
+		result = self.facade.visit(node, **data)
 		self.facade.active = active
 		return result
-
-	def fallback(self, node, *args, **kwargs):
-		raise Exception('undefined node type %s for %s: ' % (node.__class__.__name__, self.__class__.__name__))
 
 class CompileSC(CompilationScheme):
 	def visit_ProgramNode(self, node):
@@ -196,7 +148,7 @@ class CompileE(CompilationScheme):
 		cases = {}
 		for alt in node.alternatives():
 			self.visit('A', alt, *args, **kwargs)
-			cases[self.facade.A.item[0]] = self.facade.A.item[1]
+			cases[self.facade['A'].item[0]] = self.facade['A'].item[1]
 		self.code.Case(cases)
 		self.symtab.leave()
 
@@ -205,6 +157,18 @@ class CompileE(CompilationScheme):
 			_env = kwargs['env'].increment(i)
 			self.visit('C', node.children[(i+2)], env = _env)
 		self.code.Pack(node.tag(), node.arity())
+
+	def visit_AndNode(self, node, *args, **kwargs):
+		self.visit('E', node.right(), *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('E', node.left(), env = env)
+		self.code.And()
+
+	def visit_OrNode(self, node, *args, **kwargs):
+		self.visit('E', node.right(), *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('E', node.left(), env = env)
+		self.code.Or()
 
 	def visit_AddNode(self, node, *args, **kwargs):
 		self.visit('E', node.right(), *args, **kwargs)
@@ -299,6 +263,22 @@ class CompileC(CompilationScheme):
 		self.visit('C', node.right(), env = kwargs['env'])
 		env = kwargs['env'].increment(1)
 		self.visit('C', node.left(), env = env)
+		self.code.Apply()
+
+	def visit_AndNode(self, node, *args, **kwargs):
+		self.visit('C', node.right(), *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.left(), env = env)
+		self.code.PushG('&')
+		self.code.Apply()
+		self.code.Apply()
+
+	def visit_OrNode(self, node, *args, **kwargs):
+		self.visit('C', node.right(), *args, **kwargs)
+		env = kwargs['env'].increment(1)
+		self.visit('C', node.left(), env = env)
+		self.code.PushG('|')
+		self.code.Apply()
 		self.code.Apply()
 
 	def visit_AddNode(self, node, *args, **kwargs):

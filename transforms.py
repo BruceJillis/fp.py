@@ -1,38 +1,9 @@
-from common import *
-from collections import defaultdict
 from CoreParser import PROGRAM, COMBINATOR, APPLICATION, ID
+from common import Visitor, CompositeVisitor
+from collections import defaultdict
+from ast import *
 
-class Transformer(object):
-	"visitor geared towards transforming the tree being walked"
-	debug = False
-
-	def visit(self, node, **data):
-		method = None
-		for cls in node.__class__.__mro__:
-			method_name = 'visit_' + cls.__name__
-			method = getattr(self, method_name, None)
-			if method:
-				break
-		if not method:
-			# the fallback is defined on Visitor and thus will always be present
-			method = self.fallback
-		return method(node, **data)
-
-	def fallback(self, node, **data):
-		'generic method to direct a visitor over the children of the current node if the children property is present. prints node name if debug is set to True'
-		if self.debug:
-			# if we are in debug mode print that we end up here (handy during development)
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
-		if hasattr(node, 'children'):
-			# call and collect results for all children
-			result = []
-			for child in node.children:
-				ans = self.visit(child, **data)
-				result.append(ans)
-			return result
-
-class FreeVariables(Transformer):
+class FreeVariables(Visitor):
 	def __init__(self, symtab):
 		self.symtab = symtab
 		self.bound = {}
@@ -62,43 +33,7 @@ class FreeVariables(Transformer):
 		if not str(node) in self.symtab.combinators and not str(node) in self.bound:
 			self.vars.append(node)
 
-class CompositeTransformer(Transformer):
-	"specialization of of transformer allowing it to be composed of multiple mutually recursive schemes"
-	def __init__(self):
-		self.active = None
-		self.schemes = {}
-
-	def __setitem__(self, key, scheme):
-		self.schemes[key] = scheme
-
-	def __getitem__(self, key):
-		return self.schemes[key]
-
-	def select(self, scheme):
-		self.active = self.schemes[scheme]
-
-	def visit(self, node, **data):
-		'direct a visitor over a composite using the classname to select to concrete method to call (instead of an accept method on each class)'
-		method = None
-		for cls in node.__class__.__mro__:
-			method_name = 'visit_' + cls.__name__
-			method = getattr(self.active, method_name, None)
-			if method:
-				break
-		if not method:
-			method = self.active.fallback
-		return method(node, **data)
-
-	def fallback(self, node, **data):
-		'generic method to direct a transformer over the children of the current node if the children property is present. prints node name if debug is set to True'
-		if self.debug:
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
-		if hasattr(node, 'children'):
-			for child in node.children:
-				self.visit(child, **data)
-
-class CaseLifter(CompositeTransformer):
+class CaseLifter(CompositeVisitor):
 	def __init__(self, symtab):
 		super(CaseLifter, self).__init__()
 		self.symtab = symtab
@@ -108,7 +43,7 @@ class CaseLifter(CompositeTransformer):
 		self['A'] = CaseLifterA(self)
 		self.select('S')
 
-class TransformationScheme(Transformer):
+class TransformationScheme(Visitor):
 	def __init__(self, facade):
 		super(TransformationScheme, self).__init__()
 		self.facade = facade
@@ -163,6 +98,14 @@ class CaseLifterE(TransformationScheme):
 	def visit_ConstructorNode(self, node, **data):
 		for n in node.expressions():
 			self.visit('C', n, **data)
+
+	def visit_AndNode(self, node, **data):
+		self.visit('E', node.right(), **data)
+		self.visit('E', node.left(), **data)
+
+	def visit_OrNode(self, node, **data):
+		self.visit('E', node.right(), **data)
+		self.visit('E', node.left(), **data)
 
 	def visit_AddNode(self, node, **data):
 		self.visit('E', node.right(), **data)

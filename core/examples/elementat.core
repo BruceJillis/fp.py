@@ -1,0 +1,15 @@
+# haskell 99 http://www.haskell.org/haskellwiki/H-99:_Ninety-Nine_Haskell_Problems
+# problem 3
+
+from n = cons n (from (n + 1));
+
+take n xs = if (n == 0) nil (case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (take (n-1) ps));
+
+elementat xs n = case xs of
+	<4> -> nil,
+	<3> p ps -> if (n == 0) p (elementat ps (n - 1));
+
+list = take 10 (from 10);
+main = elementat list 5

@@ -3,7 +3,7 @@ import time
 
 # Symbol Table
 class SymbolTable:
-	"the symbol table maintains a tree of scope's such that we can re-enter scopes in different phases of the compiler and enrich the information present."
+	"the symbol table maintains a tree of scope's such that we can re-enter scopes in different phases of the compiler and lookup / enrich the information present."
 	# reserved field names
 
 	# name of the field containing the back pointer to the parent, None for the root node
@@ -39,6 +39,8 @@ class SymbolTable:
 		}
 
 	def precompiled(self):
+		self.binary('&', 'And')
+		self.binary('|', 'And')
 		self.binary('+', 'Add')
 		self.binary('-', 'Sub')
 		self.binary('*', 'Mul')
@@ -152,6 +154,8 @@ class Code:
 	CASE = 24
 	SPLIT = 25
 
+	AND = 26
+	OR = 27
 
 	def __init__(self):
 		self.instructions = []
@@ -186,6 +190,12 @@ class Code:
 
 	def Eval(self):
 		self.instructions.append((Code.EVAL,))
+
+	def And(self):
+		self.instructions.append((Code.AND,))
+
+	def Or(self):
+		self.instructions.append((Code.OR,))
 
 	def Add(self):
 		self.instructions.append((Code.ADD,))
@@ -281,6 +291,10 @@ def code_to_str(instr):
 		str = "SPLIT %s" % (instr[1])
 	elif instr[0] == Code.EVAL:
 		str = "EVAL"
+	elif instr[0] == Code.AND:
+		str = "AND"
+	elif instr[0] == Code.OR:
+		str = "OR"
 	elif instr[0] == Code.ADD:
 		str = "ADD"
 	elif instr[0] == Code.SUB:
@@ -373,10 +387,6 @@ class State:
 			elif node.a == 4:
 				return "nil"
 			else:
-				print self.heap
-				for a in node.b:
-						print self.heap[a]
-				exit()
 				result = 'NConstr(%s, [' % node.a 
 				for a in node.b:
 					result += str(self.heap[a]) + ', '
@@ -622,7 +632,6 @@ def run(state, verbose=False):
 		
 		# PUSHI
 		elif i[0] == Code.PUSHI:
-			#state.stack.push(a)
 			state.stack.push(cache(i[1]))
 
 		# APPLY
@@ -686,7 +695,26 @@ def run(state, verbose=False):
 				state.code = i[2].instructions + state.code
 
 		# BOOLEAN
-		elif i[0] in [Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
+		elif i[0] in [Code.AND, Code.OR]:
+			a0 = state.stack.pop() 
+			n0 = False
+			if state.heap[a0].a == 1:
+				n0 = True
+			a1 = state.stack.pop()
+			n1 = False
+			if state.heap[a1].a == 1:
+				n1 = True
+			n = 2
+			if i[0] == Code.AND:
+				if n0 and n1:
+					n = 1
+			elif i[0] == Code.OR:
+				if n0 or n1:
+					n = 1
+			state.stack.push(state.heap.store(NConstr(n, [])))
+
+		# COMPARISON
+		elif i[0] in [Code.AND, Code.OR, Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
 			a0 = state.stack.pop() 
 			n0 = state.heap[a0].value
 			a1 = state.stack.pop()

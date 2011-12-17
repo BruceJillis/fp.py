@@ -1,0 +1,16 @@
+# haskell 99 http://www.haskell.org/haskellwiki/H-99:_Ninety-Nine_Haskell_Problems
+# problem 5
+
+from n = cons n (from (n + 1));
+
+take n xs = if (n == 0) nil (case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (take (n-1) ps));
+
+reverse2 xs ys = case xs of
+	<4> -> ys,
+	<3> p ps -> reverse2 ps (cons p ys);
+reverse xs = reverse2 xs nil;
+
+list = take 10 (from 10);
+main = hd (reverse list)

@@ -52,7 +52,7 @@ tokens {
 }
 
 @header {
-   from common import *
+   from ast import *
 }
 
 program!

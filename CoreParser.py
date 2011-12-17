@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-16 00:18:55
+# $ANTLR 3.4 grammars/Core.g 2011-12-17 11:47:08
 
 import sys
 from antlr3 import *
@@ -8,7 +8,7 @@ from antlr3.tree import *
 
 
         
-from common import *
+from ast import *
 
 
 
