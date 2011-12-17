@@ -614,6 +614,8 @@ def run(state, verbose=False):
 
 		# PUSHG
 		elif i[0] == Code.PUSHG:
+			if i[1] == 'abort':
+				exit('aborted')
 			a = state.globals[i[1]]
 			state.stack.push(a)
 		

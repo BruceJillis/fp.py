@@ -1,3 +1,5 @@
+abort = abort;
+
 # booleans
 true = Pack{1,0};
 false = Pack{2,0};
@@ -6,8 +8,8 @@ if c t f = case c of	<1> -> t, <2> -> f;
 # lists
 cons h t = Pack{3,2} h t;
 nil = Pack{4,0};
-hd a = case a of <3> h t -> h;
-tl a = case a of <3> h t -> t;
+hd a = case a of <3> h t -> h, <4> -> abort;
+tl a = case a of <3> h t -> t, <4> -> abort;
 
 # misc
 I x = x;
