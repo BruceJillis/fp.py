@@ -383,24 +383,6 @@ class State:
 				self.heap.free(addr)
 			else:
 				self.heap[addr].mark = False
-				
-	def result(self):
-		"return the node at the top of the stack"
-		node = self.heap[self.stack.peek()]
-		if node.__class__ == NConstr:
-			if node.a == 1:
-				return True
-			elif node.a == 2:
-				return False
-			elif node.a == 4:
-				return "nil"
-			else:
-				result = 'NConstr(%s, [' % node.a 
-				for a in node.b:
-					result += str(self.heap[a]) + ', '
-				return result[0:-2] + '])'
-		elif node.__class__ == NNum:
-			return node.value
 
 # State Components
 
@@ -856,4 +838,3 @@ def run(state, verbose=False):
 		state.stats.step()
 	state.stats.stop()
 	return state.output
-	#return state.result()
