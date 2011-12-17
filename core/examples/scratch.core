@@ -4,4 +4,4 @@ take n xs = if (n == 0) nil (case xs of
 	<4> -> nil,
 	<3> p ps -> cons p (take (n-1) ps));
 
-main = hd nil
+main = true == true

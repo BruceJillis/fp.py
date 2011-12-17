@@ -53,9 +53,9 @@ debug = parser.add_argument_group('debug', 'commandline options used during deve
 debug.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the systems")
 debug.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)")
 debug.add_argument('--test', action='store_true', dest="test", default=False, help="run testsuite and report results")
-debug.add_argument('--coverage', action='store_true', dest="coverage", default=False, help="run test, and record code coverage. report results")
+debug.add_argument('--coverage', action='store_true', dest="coverage", default=False, help="run test, record code coverage and report results")
 debug.add_argument('--show-missing', action='store_true', dest="show_missing", default=False, help="show line numbers that were not covered by the testsuite in the --coverage report")
-debug.add_argument('--no-includes', action='store_true', dest="no_includes", default=False, help="do not include any external files (--include) except those supplied on the commandline")
+debug.add_argument('--no-includes', action='store_true', dest="no_includes", default=False, help="do not include any external files (--include) except those supplied as positional arguments")
 args = parser.parse_args()
 
 # handle coverage command line argument

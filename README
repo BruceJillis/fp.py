@@ -18,7 +18,6 @@ Status
    - High Level Language
       * 0%
 
-Dependen
 Usage
 -----
 To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler like so:
@@ -47,9 +46,9 @@ Command Line Usage
      --stats            output stats for the execution of the program (nr. of steps, heap space used, 
                         pop/push/peeks, etc)
      --test             run testsuite and report results
-     --coverage         run test, and record code coverage. report results
+     --coverage         run test, record code coverage and report results
      --show-missing     show line numbers that were not covered by the testsuite in the --coverage report
-     --no-includes      do not include any external files (--include) except those supplied on the commandline
+     --no-includes      do not include any external files (--include) except those supplied as positional arguments
 
 Core
 ----
@@ -157,7 +156,7 @@ We begin with simple tests which do not require the conditional.
    
    main = 4*5+(2-5)
 
-This next program needs function calls to work properly. Try replacing twice twice with twice twice twice or twice twice twice twice. Predict what the result should be.
+This next program needs function calls to work properly. Try replacing "twice twice" with *twice twice twice* or _twice twice twice twice_. 
    
    inc x = x+1;
    main = twice twice inc 4
@@ -208,4 +207,4 @@ The next program implements the Sieve of Eratosthenes to generate the infinite l
 
    main = hd (tl (tl (tl (sieve (take 15 (from 2))))))
 
-* Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)
+* Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester
