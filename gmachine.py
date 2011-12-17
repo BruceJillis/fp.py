@@ -518,11 +518,7 @@ class Stack:
 			result += ', %s:%s \n' % (a, str(self.state.heap[a]))
 		return result[2:]
 
-class Dump:
-	def __init__(self, state):
-		self.state = state
-		self.stack = []
-
+class Dump(Stack):
 	def push(self, obj):
 		self.state.stats.count('dump.push')
 		self.stack.append(obj)
@@ -530,9 +526,6 @@ class Dump:
 	def pop(self):
 		self.state.stats.count('dump.pop')
 		return self.stack.pop()
-
-	def empty(self):
-		return len(self.stack) == 0
 
 	def to_str_stack(self, stack):
 		result = ''

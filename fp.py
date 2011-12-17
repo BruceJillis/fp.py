@@ -47,6 +47,8 @@ def printcode(name):
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')
 parser.add_argument('file', nargs='*', help='.core file to compile and evaluate')
 parser.add_argument('--include', action='append', dest="include", default=[os.path.join('core', 'runtime')], help="include .core files in these directories (default: core/runtime/*.core)")
+
+# debug options
 debug = parser.add_argument_group('debug', 'commandline options used during development on FPJS itself')
 debug.add_argument('-v', '--verbose', action='store_true', dest="verbose", help="output a lot of information on the internals of the systems")
 debug.add_argument('--stats', action='store_true', dest="stats", help="output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)")
@@ -78,9 +80,6 @@ if args.coverage:
 	cov.report(file=sys.stdout, show_missing=args.show_missing, ignore_errors=True)
 	exit()
 
-if len(args.file) == 0:
-	parser.error("no files supplied");
-
 # symbol table for global registration of info 
 symtab = SymbolTable()
 
@@ -94,6 +93,8 @@ caselifter = CaseLifter(symtab)
 # do actual work: compile all the supplied files including the include directories (recursively if necessary)
 # do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
 # across files) before we start compilation
+if len(args.file) == 0:
+	parser.error("no files supplied")
 asts = []
 if not args.no_includes:
 	for filename in files(args.include, '*.core'):

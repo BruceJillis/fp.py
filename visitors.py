@@ -99,6 +99,7 @@ class CompileSC(CompilationScheme):
 
 class CompileR(CompilationScheme):
 	"generates code which instantiates the expression combinator.children[-1] in environment env, for a supercombinator of arity d, and then proceeds to unwind the resulting stack."
+
 	def visit_CombinatorNode(self, node):
 		env = Environment()
 		self.symtab.enter(node.name())
@@ -115,6 +116,7 @@ class CompileR(CompilationScheme):
 
 class CompileE(CompilationScheme):
 	"compiles code that evaluates an expression e to WHNF in environment env, leaving a pointer to the expression on top of the stack"
+
 	def visit_LetNode(self, node, **kwargs):
 		self.symtab.enter(node)
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
@@ -219,6 +221,7 @@ class CompileE(CompilationScheme):
 
 class CompileC(CompilationScheme):
 	"generates code which constructs the graph of e in environment env, leaving a pointer to it on top of the stack."
+
 	def visit_LetNode(self, node, **kwargs):
 		self.symtab.enter(node)
 		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0

@@ -1,6 +1,6 @@
 FP
 ----
-FP is an educational functional language interpreter written in python. It's based on ANTLR 3 and the work of Simon Peyton-Jones.
+FP is an educational functional language interpreter written in python. 
 
 It features:
  - lazy evaluation
@@ -8,7 +8,7 @@ It features:
  - infinite precision arithmetic (only ints currently)
  - structured datatypes (algebraic types)
 
-It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin and included in this repository). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
+It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
 
 Status
 ------
@@ -17,6 +17,7 @@ Status
 	- High Level Language
 		* 0%
 
+Dependen
 Usage
 -----
 To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler like so:
