@@ -12,10 +12,11 @@ It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin a
 
 Status
 ------
-	- Core
-		* Essentially done. Everything except lambdas work. The interpreter passes some 60 high and low level unittests at 68% code coverage (--test and --coverage).
-	- High Level Language
-		* 0%
+   - Core
+      * Essentially done. Everything except lambdas work. The interpreter passes some 60 high and low 
+        level unittests at 68% code coverage (--test and --coverage).
+   - High Level Language
+      * 0%
 
 Dependen
 Usage
@@ -26,28 +27,29 @@ To compile (and evaluate) a Core program (extension assumed to be .core but isn'
 
 Command Line Usage
 ------------------
-	usage: fp.py [-h] [--include INCLUDE] [-v] [--stats] [--test] [--coverage]
-					 [--show-missing] [--no-includes]
-					 [file [file ...]]
+   usage: fp.py [-h] [--include INCLUDE] [-v] [--stats] [--test] [--coverage]
+                [--show-missing] [--no-includes]
+                [file [file ...]]
 
-	Compiler for the miranda-style functional language FP.
+   Compiler for the miranda-style functional language FP.
 
-	positional arguments:
-	  file               .core file to compile and evaluate
+   positional arguments:
+     file               .core file to compile and evaluate
 
-	optional arguments:
-	  -h, --help         show this help message and exit
-	  --include INCLUDE  include .core files in these directories (default: core/runtime/*.core)
+   optional arguments:
+     -h, --help         show this help message and exit
+     --include INCLUDE  include .core files in these directories (default: core/runtime/*.core)
 
-	debug:
-	  commandline options used during development on FPJS itself
+   debug:
+     commandline options used during development on FPJS itself
 
-	  -v, --verbose      output a lot of information on the internals of the system
-	  --stats            output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)
-	  --test             run testsuite and report results
-	  --coverage         run test, and record code coverage. report results
-	  --show-missing     show line numbers that were not covered by the testsuite in the --coverage report
-	  --no-includes      do not include any external files (--include) except those supplied on the commandline
+     -v, --verbose      output a lot of information on the internals of the system
+     --stats            output stats for the execution of the program (nr. of steps, heap space used, 
+                        pop/push/peeks, etc)
+     --test             run testsuite and report results
+     --coverage         run test, and record code coverage. report results
+     --show-missing     show line numbers that were not covered by the testsuite in the --coverage report
+     --no-includes      do not include any external files (--include) except those supplied on the commandline
 
 Core
 ----
@@ -188,22 +190,22 @@ This program returns a list of descending integers. The evaluator should be expe
 
 The next program implements the Sieve of Eratosthenes to generate the infinite list of primes, and takes the first few elements of the result list. If you arrange that output is printed incrementally, as it is generated, you can remove the call to take and just print the infinite list.
    
-	from n = cons n (from (n + 1));
+   from n = cons n (from (n + 1));
 
-	sieve xs = case xs of
-		<4> -> nil,
-		<3> p ps -> cons p (sieve (filter (nonMultiple p) ps));
+   sieve xs = case xs of
+      <4> -> nil,
+      <3> p ps -> cons p (sieve (filter (nonMultiple p) ps));
 
-	filter predicate xs = case xs of
-			<4> -> nil,
-			<3> p ps -> let rest = filter predicate ps in if (predicate p) (cons p rest) rest;
+   filter predicate xs = case xs of
+         <4> -> nil,
+         <3> p ps -> let rest = filter predicate ps in if (predicate p) (cons p rest) rest;
 
-	nonMultiple p n = ((n/p)*p) != n;
+   nonMultiple p n = ((n/p)*p) != n;
 
-	take n xs = if (n==0) nil (case xs of
-		<4> -> nil,
-		<3> p ps -> cons p (take (n-1) ps));
+   take n xs = if (n==0) nil (case xs of
+      <4> -> nil,
+      <3> p ps -> cons p (take (n-1) ps));
 
-	main = hd (tl (tl (tl (sieve (take 15 (from 2))))))
+   main = hd (tl (tl (tl (sieve (take 15 (from 2))))))
 
 * Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester (a copy is available in etc/)

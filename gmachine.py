@@ -156,6 +156,8 @@ class Code:
 
 	AND = 26
 	OR = 27
+	
+	PRINT = 28
 
 	def __init__(self):
 		self.instructions = []
@@ -184,6 +186,9 @@ class Code:
 
 	def Apply(self):
 		self.instructions.append((Code.APPLY,))
+
+	def Print(self):
+		self.instructions.append((Code.PRINT,))
 
 	def Unwind(self):
 		self.instructions.append((Code.UNWIND,))
@@ -317,6 +322,8 @@ def code_to_str(instr):
 		str = "GT"
 	elif instr[0] == Code.GTE:
 		str = "GTE"
+	elif instr[0] == Code.PRINT:
+		str = "PRINT"
 	elif instr[0] == Code.COND:
 		str = "[COND %s | %s]" % (instr[1], instr[2])
 		str = str.replace('\n', '')
@@ -329,11 +336,12 @@ class State:
 	def __init__(self, symtab):
 		self.symtab = symtab
 		self.stats = Stats(self)
-		self.code = [(Code.PUSHG, 'main'), (Code.EVAL,)]
+		self.code = [(Code.PUSHG, 'main'), (Code.EVAL,), (Code.PRINT,)]
 		self.stack = Stack(self)
 		self.heap = Heap(self)
 		self.globals = Globals(self, symtab)
 		self.dump = Dump(self)
+		self.output = None
 	
 	def gc(self):
 		"mark and scan garbage collector"
@@ -492,9 +500,13 @@ class Stack:
 		self.state.stats.count('stack.push')
 		self.stack.append(obj)
 
-	def pop(self):
-		self.state.stats.count('stack.pop')
-		return self.stack.pop()
+	def pop(self, n = None):
+		if n == None:
+			self.state.stats.count('stack.pop')
+			return self.stack.pop()
+		else:
+			if n != 0:
+				del self.stack[-(n):]
 
 	def peek(self, n = 0):
 		self.state.stats.count('stack.peek')
@@ -643,8 +655,7 @@ def run(state, verbose=False):
 		
 		# POP
 		elif i[0] == Code.POP:
-			for j in range(0, i[1]):
-				state.stack.pop()
+			state.stack.pop(i[1])
 
 		# ALLOC
 		elif i[0] == Code.ALLOC:
@@ -758,6 +769,36 @@ def run(state, verbose=False):
 			state.stack.pop()
 			state.stack.append(n.b)
 
+		# PRINT
+		elif i[0] == Code.PRINT:
+			a = state.stack.pop()
+			n = state.heap[a]
+			c = n.__class__
+			if c == NNum:
+				if state.output == None:
+					state.output = n.value
+				else:
+					state.output.append(n.value)
+			elif c == NConstr:
+				if n.a == 1:
+					state.output = True
+				elif n.a == 2:
+					state.output = False
+				elif n.a == 4:
+					if state.output == None:
+						state.output = 'nil'
+					else:
+						state.output.append('nil')
+				elif n.a == 3:
+					if state.output == None:
+						state.output = []
+					state.stack.append(n.b)
+					c = Code()
+					for _ in range(len(n.b)):
+						c.Eval()
+						c.Print()
+					state.code = c.instructions + state.code
+
 		# UNWIND
 		elif i[0] == Code.UNWIND:
 			a = state.stack.peek()
@@ -808,9 +849,11 @@ def run(state, verbose=False):
 					state.code = item[1]
 		else:
 			raise Exception('unknown instruction')
-		if (state.stats._steps > 0) and (state.stats._steps % 10000) == 0:
-			# run the gc every x steps
+		allocs = state.stats._counts['store']
+		if (allocs > 0) and (allocs % 50000) == 0:
+			# run the gc 
 			state.gc()
 		state.stats.step()
 	state.stats.stop()
-	return state.result()
+	return state.output
+	#return state.result()
