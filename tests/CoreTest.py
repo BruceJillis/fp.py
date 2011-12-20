@@ -554,3 +554,22 @@ f x = let g = \y. x*x + y in (g 3 + g 4);
 main = f 6
 """)
 		self.assertEqual(ans, 79)
+
+
+	def test_lambdalifter1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+f = (\ x.x + 1);
+main = f 1
+""")
+		self.assertEqual(ans, 2)
+
+	def test_lambdalifter2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+f x = let g = (\y. y+1) in g (g x);
+main = f 6
+""")
+		self.assertEqual(ans, 8)

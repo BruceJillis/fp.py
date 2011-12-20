@@ -1,6 +1,5 @@
 import unittest, CoreTest, GMachineTest
 
-
 def load_tests(loader, tests, pattern):
 	test_cases = (CoreTest.CoreTest, GMachineTest.HeapTest, GMachineTest.StackTest)
 	suite = unittest.TestSuite()

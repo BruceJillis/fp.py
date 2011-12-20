@@ -312,39 +312,96 @@ class CaseLifterA(TransformationScheme):
 	def visit_AlternativeNode(self, node, **data):
 		self.visit('E', node.body(), **data)
 
+class Renamer(Transformer):
+	def __init__(self, source, target):
+		super(Renamer, self).__init__()
+		self.source = str(source)
+		self.target = target
+
+	def visit_IdentifierNode(self, identifier, **kwargs):
+		if str(identifier) == self.source:
+			parent = identifier.getParent()
+			index = parent.children.index(identifier)
+			parent.children.remove(identifier)
+			parent.children.insert(index, self.target)
+
 class LambdaLifter(Transformer):
 	def __init__(self, symtab):
 		super(LambdaLifter, self).__init__()
 		self.symtab = symtab
 
+	def visit_ProgramNode(self, node, **data):
+		self.program = node
+		for node in node.combinators():
+			self.visit(node, **data)
+
+	def visit_CombinatorNode(self, node, **data):
+		if node.body().__class__ == LambdaNode:
+			# special case: do not introduce redundant supercombinator definitions by reusing the current combinator
+			lambda_node = node.body()
+			index = node.children.index(lambda_node)
+			node.children.remove(lambda_node)
+			# move lambda to the top level as combinator
+			fv = FreeVariables(self.symtab)
+			fv.visit(lambda_node)
+			for v in fv.variables():
+				node.children.insert(0, self.id(v))
+			for n in lambda_node.parameters():
+				node.children.insert(1, n)
+			node.addChild(lambda_node.body())
+		self.visit(node.body(), **data)
+
+	def visit_LetNode(self, node, **data):
+		for definition in node.definitions():
+			if definition.body().__class__ == LambdaNode:
+				# special case to avoid introducing too many useless let definitions
+				self.visit(definition.body(), **data)
+				fv = FreeVariables(self.symtab)
+				fv.visit(node.getAncestor(COMBINATOR))
+				if len(fv.variables()) == 1 and fv.variables()[0] == definition.name():
+					# if the name of the definition is the only free variable and we 
+					rn = Renamer(definition.name(), definition.body())
+					rn.visit(node.body())
+					parent = node.getParent()
+					index = parent.children.index(node)
+					parent.children.remove(node)
+					parent.children.insert(index, node.body())
+			else:
+				self.visit(definition.body(), **data)
+		self.visit(node.body(), **data)
+
 	def visit_LambdaNode(self, node, **data):
-		program = node.getAncestor(PROGRAM)
 		parent = node.getParent()
 		index = parent.children.index(node)
 		parent.children.remove(node)
-
+		# move lambda to the top level as combinator
 		fv = FreeVariables(self.symtab)
 		fv.visit(node)
 		for v in fv.variables():
 			node.children.insert(0, self.id(v))
-		
+		# now make the combinator
 		name = self.fresh('sc')
 		sc = CombinatorNode(self.token("COMBINATOR", COMBINATOR))
 		sc.addChild(self.id(name))
+		self.symtab.combinators[name] = sc
 		for n in node.parameters():
 			sc.addChild(n)
 		sc.addChild(node.body())	
-		program.addChild(sc)
-		
-		# build application spine
+		self.program.addChild(sc)
+		# replace the original expression
 		vs = fv.variables()
-		vs.reverse()
-		ap = ApplicationNode(APPLICATION)
-		ap.addChild(self.id(name))
-		ap.addChild(self.id(vs.pop()))
-		while len(vs) > 0:
-			a = ApplicationNode(APPLICATION)
-			a.addChild(ap)
-			a.addChild(self.id(vs.pop()))		
-			ap = a
-		parent.children.insert(index, ap)
+		if len(vs) > 0:
+			# build application spine
+			vs.reverse()
+			ap = ApplicationNode(APPLICATION)
+			ap.addChild(self.id(name))
+			ap.addChild(self.id(vs.pop()))
+			while len(vs) > 0:
+				a = ApplicationNode(APPLICATION)
+				a.addChild(ap)
+				a.addChild(self.id(vs.pop()))		
+				ap = a
+			parent.children.insert(index, ap)
+		else:
+			# if there is only 1 argument, add it as simple identifier
+			parent.children.insert(index, self.id(name))
