@@ -95,9 +95,9 @@ expr2: expr3 (AND<AndNode>^ expression)*;
 
 expr3: expr4 (relop^ expression)*;
 
-expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
+expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expr5)*;
 
-expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
+expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expr6)*;
 
 expr6: (lst+=aexpr!)+ {
    self._adaptor.addChild(root_0, mk_ap_chain(list_lst))

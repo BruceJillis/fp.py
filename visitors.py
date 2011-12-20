@@ -68,6 +68,7 @@ class CodeGeneration(CompositeVisitor):
 		self.code = Code()
 		self.switch_code(self.code)
 
+
 	def switch_code(self, code = None):
 		"switch the code object to a new instance"
 		for k in self.schemes:
@@ -86,11 +87,27 @@ class CompilationScheme(Visitor):
 		self.facade.select(scheme)
 
 	def visit(self, scheme, node, **data):
-		active = self.facade.active
-		self.select(scheme)
+		if scheme != None:
+			active = self.facade.active
+			self.select(scheme)
 		result = self.facade.visit(node, **data)
-		self.facade.active = active
+		if scheme != None:
+			self.facade.active = active
 		return result
+
+	def fallback(self, node, **data):
+		"define a fallback that is aware of the scheme parameter."
+		if self.debug:
+			# if we are in debug mode print that we end up here (handy during development)
+			print 'fallback ' + node.__class__.__name__
+			print node.toStringTree()
+		if hasattr(node, 'children'):
+			# call and collect results for all children
+			result = []
+			for child in node.children:
+				ans = self.visit(None, child, **data)
+				result.append(ans)
+			return result
 
 class CompileSC(CompilationScheme):
 	def visit_ProgramNode(self, node):

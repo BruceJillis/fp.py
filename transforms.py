@@ -1,9 +1,12 @@
-from CoreParser import PROGRAM, COMBINATOR, APPLICATION, ID
+from CoreParser import PROGRAM, COMBINATOR, APPLICATION, ID, LET, DEFINITION
 from common import Visitor, CompositeVisitor
 from collections import defaultdict
 from ast import *
 
 class FreeVariables(Visitor):
+	'''	An occurrence of a variable v in an expression e is said to be free in e if the occurrence is not bound by an enclosing lambda or let(rec) expression in e but there is no need to treat 
+	other top-level (combinators) functions as extra parameters.	'''
+
 	def __init__(self, symtab):
 		self.symtab = symtab
 		self.bound = {}
@@ -12,9 +15,14 @@ class FreeVariables(Visitor):
 		self.vars = []
 
 	def variables(self):
-		return self.vars
+		return list(set(self.vars))
 
 	def visit_CombinatorNode(self, node, **data):
+		for p in node.parameters():
+			self.bound[str(p)] = True
+		self.visit(node.body(), **data)
+
+	def visit_LambdaNode(self, node, **data):
 		for p in node.parameters():
 			self.bound[str(p)] = True
 		self.visit(node.body(), **data)
@@ -31,33 +39,12 @@ class FreeVariables(Visitor):
 
 	def visit_IdentifierNode(self, node):		
 		if not str(node) in self.symtab.combinators and not str(node) in self.bound:
-			self.vars.append(node)
+			self.vars.append(str(node))
 
-class CaseLifter(CompositeVisitor):
-	def __init__(self, symtab):
-		super(CaseLifter, self).__init__()
-		self.symtab = symtab
-		self['S'] = CaseLifterS(self)
-		self['E'] = CaseLifterE(self)
-		self['C'] = CaseLifterC(self)
-		self['A'] = CaseLifterA(self)
-		self.select('S')
-
-class TransformationScheme(Visitor):
-	def __init__(self, facade):
-		super(TransformationScheme, self).__init__()
-		self.facade = facade
+class Transformer(Visitor):
+	def __init__(self):
+		super(Transformer, self).__init__()
 		self.names = defaultdict(int)
-
-	def select(self, scheme):
-		self.facade.select(scheme)
-
-	def visit(self, scheme, node, **data):
-		active = self.facade.active
-		self.select(scheme)
-		result = self.facade.visit(node, **data)
-		self.facade.active = active
-		return result
 
 	def fresh(self, stub):
 		"generate a new fresh name"
@@ -73,6 +60,47 @@ class TransformationScheme(Visitor):
 	
 	def id(self, name):
 		return IdentifierNode(self.token(str(name), ID))
+
+class TransformationScheme(Transformer):
+	def __init__(self, facade):
+		super(TransformationScheme, self).__init__()
+		self.facade = facade
+
+	def select(self, scheme):
+		self.facade.select(scheme)
+
+	def visit(self, scheme, node, **data):
+		if scheme != None:
+			active = self.facade.active
+			self.select(scheme)
+		result = self.facade.visit(node, **data)
+		if scheme != None:
+			self.facade.active = active
+		return result
+
+	def fallback(self, node, **data):
+		"define a fallback that is aware of the scheme parameter."
+		if self.debug:
+			# if we are in debug mode print that we end up here (handy during development)
+			print 'fallback ' + node.__class__.__name__
+			print node.toStringTree()
+		if hasattr(node, 'children'):
+			# call and collect results for all children
+			result = []
+			for child in node.children:
+				ans = self.visit(None, child, **data)
+				result.append(ans)
+			return result
+
+class CaseLifter(CompositeVisitor):
+	def __init__(self, symtab):
+		super(CaseLifter, self).__init__()
+		self.symtab = symtab
+		self['S'] = CaseLifterS(self)
+		self['E'] = CaseLifterE(self)
+		self['C'] = CaseLifterC(self)
+		self['A'] = CaseLifterA(self)
+		self.select('S')
 
 class CaseLifterS(TransformationScheme):
 	def visit_ProgramNode(self, node, **data):
@@ -169,7 +197,7 @@ class CaseLifterC(TransformationScheme):
 		fv = FreeVariables(self.facade.symtab)
 		fv.visit(node)
 		for v in fv.variables():
-			sc.addChild(v)
+			sc.addChild(self.id(v))
 		sc.addChild(node)		
 		program.addChild(sc)
 			
@@ -177,7 +205,7 @@ class CaseLifterC(TransformationScheme):
 		vs.reverse()
 		ap = ApplicationNode(APPLICATION)
 		ap.addChild(self.id(name))
-		ap.addChild(vs.pop())
+		ap.addChild(self.id(vs.pop()))
 		while len(vs) > 0:
 			a = ApplicationNode(APPLICATION)
 			a.addChild(ap)
@@ -200,7 +228,7 @@ class CaseLifterC(TransformationScheme):
 			fv = FreeVariables(self.facade.symtab)
 			fv.visit(node)
 			for v in fv.variables():
-				sc.addChild(v)
+				sc.addChild(self.id(v))
 			for i in range(node.arity() - len(node.expressions())):
 				id = self.id(self.fresh('id'))
 				sc.addChild(id)
@@ -213,7 +241,7 @@ class CaseLifterC(TransformationScheme):
 				vs.reverse()
 				ap = ApplicationNode(APPLICATION)
 				ap.addChild(self.id(name))
-				ap.addChild(vs.pop())
+				ap.addChild(self.id(vs.pop()))
 				while len(vs) > 0:
 					a = ApplicationNode(APPLICATION)
 					a.addChild(ap)
@@ -283,3 +311,40 @@ class CaseLifterC(TransformationScheme):
 class CaseLifterA(TransformationScheme):
 	def visit_AlternativeNode(self, node, **data):
 		self.visit('E', node.body(), **data)
+
+class LambdaLifter(Transformer):
+	def __init__(self, symtab):
+		super(LambdaLifter, self).__init__()
+		self.symtab = symtab
+
+	def visit_LambdaNode(self, node, **data):
+		program = node.getAncestor(PROGRAM)
+		parent = node.getParent()
+		index = parent.children.index(node)
+		parent.children.remove(node)
+
+		fv = FreeVariables(self.symtab)
+		fv.visit(node)
+		for v in fv.variables():
+			node.children.insert(0, self.id(v))
+		
+		name = self.fresh('sc')
+		sc = CombinatorNode(self.token("COMBINATOR", COMBINATOR))
+		sc.addChild(self.id(name))
+		for n in node.parameters():
+			sc.addChild(n)
+		sc.addChild(node.body())	
+		program.addChild(sc)
+		
+		# build application spine
+		vs = fv.variables()
+		vs.reverse()
+		ap = ApplicationNode(APPLICATION)
+		ap.addChild(self.id(name))
+		ap.addChild(self.id(vs.pop()))
+		while len(vs) > 0:
+			a = ApplicationNode(APPLICATION)
+			a.addChild(ap)
+			a.addChild(self.id(vs.pop()))		
+			ap = a
+		parent.children.insert(index, ap)

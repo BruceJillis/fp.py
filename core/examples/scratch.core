@@ -1,6 +1,2 @@
-fcons a b cc cn = cc a b;
-fnil cc cn = cn;
-fhd list = list K abort;
-ftl list = list K1 abort;
-infinite x = fcons x (infinite x);
-main = fhd (infinite 1)
+f x = let g = \y. x*x + y in (g 3 + g 4);
+main = f 6

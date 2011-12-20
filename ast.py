@@ -69,6 +69,12 @@ class CombinatorNode(ASTNode):
 class LambdaNode(ASTNode):
 	spelling = 'LAMDA'
 
+	def parameters(self):
+		return self.children[0:-1]
+	
+	def body(self):
+		return self.children[-1]
+
 # Local (Recursive) Definitions
 
 class LetNode(ASTNode):

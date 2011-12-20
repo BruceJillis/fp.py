@@ -2,7 +2,7 @@ import argparse, os, glob, antlr3, sys
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from visitors import Identification, CodeGeneration
-from transforms import CaseLifter
+from transforms import CaseLifter, LambdaLifter
 from gmachine import State, SymbolTable, run
 
 def files(paths, pattern, recursive = False):
@@ -36,6 +36,7 @@ def parse(filename):
 
 def transform(ast):
 	"perform transformations on the supplied ast"
+	lambdalifter.visit(ast)
 	caselifter.visit(ast)
 	return ast
 
@@ -89,6 +90,7 @@ codegeneration = CodeGeneration(symtab)
 
 # transformations
 caselifter = CaseLifter(symtab)
+lambdalifter = LambdaLifter(symtab)
 
 # do actual work: compile all the supplied files including the include directories (recursively if necessary)
 # do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
@@ -105,7 +107,6 @@ if not args.no_includes:
 for filename in args.file:
 	ast = parse(filename)
 	ast = transform(ast)
-	#print ast.toStringTree()
 	identification.visit(ast)	
 	asts.append(ast)
 # compile all the asts (files)

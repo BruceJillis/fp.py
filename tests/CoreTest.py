@@ -2,7 +2,7 @@ import unittest, os, antlr3, StringIO, random
 from CoreLexer import CoreLexer
 from CoreParser import CoreParser
 from visitors import Identification, CodeGeneration
-from transforms import CaseLifter
+from transforms import CaseLifter, LambdaLifter
 from gmachine import State, SymbolTable, run
 
 class CoreTest(unittest.TestCase):
@@ -17,12 +17,14 @@ class CoreTest(unittest.TestCase):
 		self.id = Identification(self.symtab)
 		self.cg = CodeGeneration(self.symtab)
 		self.cl = CaseLifter(self.symtab)
+		self.ll = LambdaLifter(self.symtab)
 
 	def load(self, filename):
 		'load function list definitions'
 		if filename in self._loaded:
 			return
 		ast = self.parse(filename)
+		self.ll.visit(ast)
 		self.cl.visit(ast)
 		self.id.visit(ast)
 		self.asts.append(ast)
@@ -64,6 +66,7 @@ class CoreTest(unittest.TestCase):
 
 	def run_str(self, content):
 		ast = self.parse_str(content)
+		self.ll.visit(ast)
 		self.cl.visit(ast)
 		self.id.visit(ast)
 		self.compile(ast)
@@ -542,3 +545,12 @@ take n xs = if (n==0) nil (case xs of
 main = (sieve (take 15 (from 2)))
 """)
 		self.assertEqual(ans, [2, 3, 5, 7, 11, 13, 'nil'])
+
+	def test_lambdalifter(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+f x = let g = \y. x*x + y in (g 3 + g 4);
+main = f 6
+""")
+		self.assertEqual(ans, 79)

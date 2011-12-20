@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-18 12:12:09
+# $ANTLR 3.4 grammars/Core.g 2011-12-20 12:29:43
 
 import sys
 from antlr3 import *
@@ -420,7 +420,7 @@ class CoreParser(Parser):
 
 
                 # AST Rewrite
-                # elements: expression, ID, ID
+                # elements: ID, expression, ID
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -624,7 +624,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: LET, expression, definitions
+                    # elements: definitions, LET, expression
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -690,7 +690,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: LETREC, expression, definitions
+                    # elements: definitions, LETREC, expression
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -756,7 +756,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: CASE, expression, alternatives
+                    # elements: expression, alternatives, CASE
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -847,7 +847,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: LAMBDA, ID, expression
+                    # elements: ID, expression, LAMBDA
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -1151,7 +1151,7 @@ class CoreParser(Parser):
 
 
                 # AST Rewrite
-                # elements: NUMBER, ID, expression
+                # elements: ID, NUMBER, expression
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -1861,7 +1861,7 @@ class CoreParser(Parser):
 
 
     # $ANTLR start "expr4"
-    # grammars/Core.g:98:1: expr4 : expr5 ( ( ADD ^| MIN ^) expression )* ;
+    # grammars/Core.g:98:1: expr4 : expr5 ( ( ADD ^| MIN ^) expr5 )* ;
     def expr4(self, ):
         retval = self.expr4_return()
         retval.start = self.input.LT(1)
@@ -1874,7 +1874,7 @@ class CoreParser(Parser):
         MIN55 = None
         expr553 = None
 
-        expression56 = None
+        expr556 = None
 
 
         ADD54_tree = None
@@ -1890,8 +1890,8 @@ class CoreParser(Parser):
                     return retval
 
 
-                # grammars/Core.g:98:6: ( expr5 ( ( ADD ^| MIN ^) expression )* )
-                # grammars/Core.g:98:8: expr5 ( ( ADD ^| MIN ^) expression )*
+                # grammars/Core.g:98:6: ( expr5 ( ( ADD ^| MIN ^) expr5 )* )
+                # grammars/Core.g:98:8: expr5 ( ( ADD ^| MIN ^) expr5 )*
                 pass 
                 root_0 = self._adaptor.nil()
 
@@ -1904,29 +1904,17 @@ class CoreParser(Parser):
                     self._adaptor.addChild(root_0, expr553.tree)
 
 
-                # grammars/Core.g:98:14: ( ( ADD ^| MIN ^) expression )*
+                # grammars/Core.g:98:14: ( ( ADD ^| MIN ^) expr5 )*
                 while True: #loop14
                     alt14 = 2
                     LA14_0 = self.input.LA(1)
 
-                    if (LA14_0 == ADD) :
-                        LA14_2 = self.input.LA(2)
-
-                        if (self.synpred18_Core()) :
-                            alt14 = 1
-
-
-                    elif (LA14_0 == MIN) :
-                        LA14_3 = self.input.LA(2)
-
-                        if (self.synpred18_Core()) :
-                            alt14 = 1
-
-
+                    if (LA14_0 == ADD or LA14_0 == MIN) :
+                        alt14 = 1
 
 
                     if alt14 == 1:
-                        # grammars/Core.g:98:15: ( ADD ^| MIN ^) expression
+                        # grammars/Core.g:98:15: ( ADD ^| MIN ^) expr5
                         pass 
                         # grammars/Core.g:98:15: ( ADD ^| MIN ^)
                         alt13 = 2
@@ -1970,12 +1958,12 @@ class CoreParser(Parser):
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr4973)
-                        expression56 = self.expression()
+                        self._state.following.append(self.FOLLOW_expr5_in_expr4973)
+                        expr556 = self.expr5()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression56.tree)
+                            self._adaptor.addChild(root_0, expr556.tree)
 
 
 
@@ -2023,7 +2011,7 @@ class CoreParser(Parser):
 
 
     # $ANTLR start "expr5"
-    # grammars/Core.g:100:1: expr5 : expr6 ( ( DIV ^| MUL ^) expression )* ;
+    # grammars/Core.g:100:1: expr5 : expr6 ( ( DIV ^| MUL ^) expr6 )* ;
     def expr5(self, ):
         retval = self.expr5_return()
         retval.start = self.input.LT(1)
@@ -2036,7 +2024,7 @@ class CoreParser(Parser):
         MUL59 = None
         expr657 = None
 
-        expression60 = None
+        expr660 = None
 
 
         DIV58_tree = None
@@ -2052,8 +2040,8 @@ class CoreParser(Parser):
                     return retval
 
 
-                # grammars/Core.g:100:6: ( expr6 ( ( DIV ^| MUL ^) expression )* )
-                # grammars/Core.g:100:8: expr6 ( ( DIV ^| MUL ^) expression )*
+                # grammars/Core.g:100:6: ( expr6 ( ( DIV ^| MUL ^) expr6 )* )
+                # grammars/Core.g:100:8: expr6 ( ( DIV ^| MUL ^) expr6 )*
                 pass 
                 root_0 = self._adaptor.nil()
 
@@ -2066,29 +2054,17 @@ class CoreParser(Parser):
                     self._adaptor.addChild(root_0, expr657.tree)
 
 
-                # grammars/Core.g:100:14: ( ( DIV ^| MUL ^) expression )*
+                # grammars/Core.g:100:14: ( ( DIV ^| MUL ^) expr6 )*
                 while True: #loop16
                     alt16 = 2
                     LA16_0 = self.input.LA(1)
 
-                    if (LA16_0 == DIV) :
-                        LA16_2 = self.input.LA(2)
-
-                        if (self.synpred20_Core()) :
-                            alt16 = 1
-
-
-                    elif (LA16_0 == MUL) :
-                        LA16_3 = self.input.LA(2)
-
-                        if (self.synpred20_Core()) :
-                            alt16 = 1
-
-
+                    if (LA16_0 == DIV or LA16_0 == MUL) :
+                        alt16 = 1
 
 
                     if alt16 == 1:
-                        # grammars/Core.g:100:15: ( DIV ^| MUL ^) expression
+                        # grammars/Core.g:100:15: ( DIV ^| MUL ^) expr6
                         pass 
                         # grammars/Core.g:100:15: ( DIV ^| MUL ^)
                         alt15 = 2
@@ -2132,12 +2108,12 @@ class CoreParser(Parser):
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr5999)
-                        expression60 = self.expression()
+                        self._state.following.append(self.FOLLOW_expr6_in_expr5999)
+                        expr660 = self.expr6()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression60.tree)
+                            self._adaptor.addChild(root_0, expr660.tree)
 
 
 
@@ -2857,68 +2833,6 @@ class CoreParser(Parser):
 
 
 
-    # $ANTLR start "synpred18_Core"
-    def synpred18_Core_fragment(self, ):
-        # grammars/Core.g:98:15: ( ( ADD | MIN ) expression )
-        # grammars/Core.g:98:15: ( ADD | MIN ) expression
-        pass 
-        if self.input.LA(1) == ADD or self.input.LA(1) == MIN:
-            self.input.consume()
-            self._state.errorRecovery = False
-
-
-        else:
-            if self._state.backtracking > 0:
-                raise BacktrackingFailed
-
-
-            mse = MismatchedSetException(None, self.input)
-            raise mse
-
-
-
-        self._state.following.append(self.FOLLOW_expression_in_synpred18_Core973)
-        self.expression()
-
-        self._state.following.pop()
-
-
-
-    # $ANTLR end "synpred18_Core"
-
-
-
-    # $ANTLR start "synpred20_Core"
-    def synpred20_Core_fragment(self, ):
-        # grammars/Core.g:100:15: ( ( DIV | MUL ) expression )
-        # grammars/Core.g:100:15: ( DIV | MUL ) expression
-        pass 
-        if self.input.LA(1) == DIV or self.input.LA(1) == MUL:
-            self.input.consume()
-            self._state.errorRecovery = False
-
-
-        else:
-            if self._state.backtracking > 0:
-                raise BacktrackingFailed
-
-
-            mse = MismatchedSetException(None, self.input)
-            raise mse
-
-
-
-        self._state.following.append(self.FOLLOW_expression_in_synpred20_Core999)
-        self.expression()
-
-        self._state.following.pop()
-
-
-
-    # $ANTLR end "synpred20_Core"
-
-
-
 
     def synpred11_Core(self):
         self._state.backtracking += 1
@@ -2938,32 +2852,6 @@ class CoreParser(Parser):
         start = self.input.mark()
         try:
             self.synpred14_Core_fragment()
-        except BacktrackingFailed:
-            success = False
-        else:
-            success = True
-        self.input.rewind(start)
-        self._state.backtracking -= 1
-        return success
-
-    def synpred20_Core(self):
-        self._state.backtracking += 1
-        start = self.input.mark()
-        try:
-            self.synpred20_Core_fragment()
-        except BacktrackingFailed:
-            success = False
-        else:
-            success = True
-        self.input.rewind(start)
-        self._state.backtracking -= 1
-        return success
-
-    def synpred18_Core(self):
-        self._state.backtracking += 1
-        start = self.input.mark()
-        try:
-            self.synpred18_Core_fragment()
         except BacktrackingFailed:
             success = False
         else:
@@ -3055,13 +2943,13 @@ class CoreParser(Parser):
     FOLLOW_relop_in_expr3944 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
     FOLLOW_expression_in_expr3947 = frozenset([1, 17, 18, 19, 28, 29, 32])
     FOLLOW_expr5_in_expr4956 = frozenset([1, 4, 30])
-    FOLLOW_ADD_in_expr4960 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_MIN_in_expr4966 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_expr4973 = frozenset([1, 4, 30])
+    FOLLOW_ADD_in_expr4960 = frozenset([20, 27, 34, 37])
+    FOLLOW_MIN_in_expr4966 = frozenset([20, 27, 34, 37])
+    FOLLOW_expr5_in_expr4973 = frozenset([1, 4, 30])
     FOLLOW_expr6_in_expr5982 = frozenset([1, 15, 31])
-    FOLLOW_DIV_in_expr5986 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_MUL_in_expr5992 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_expr5999 = frozenset([1, 15, 31])
+    FOLLOW_DIV_in_expr5986 = frozenset([20, 27, 34, 37])
+    FOLLOW_MUL_in_expr5992 = frozenset([20, 27, 34, 37])
+    FOLLOW_expr6_in_expr5999 = frozenset([1, 15, 31])
     FOLLOW_aexpr_in_expr61011 = frozenset([1, 20, 27, 34, 37])
     FOLLOW_ID_in_aexpr1028 = frozenset([1])
     FOLLOW_NUMBER_in_aexpr1049 = frozenset([1])
@@ -3088,10 +2976,6 @@ class CoreParser(Parser):
     FOLLOW_expression_in_synpred15_Core932 = frozenset([1])
     FOLLOW_relop_in_synpred16_Core944 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
     FOLLOW_expression_in_synpred16_Core947 = frozenset([1])
-    FOLLOW_set_in_synpred18_Core959 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_synpred18_Core973 = frozenset([1])
-    FOLLOW_set_in_synpred20_Core985 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_synpred20_Core999 = frozenset([1])
 
 
 
