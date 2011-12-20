@@ -614,8 +614,6 @@ def run(state, verbose=False):
 
 		# PUSHG
 		elif i[0] == Code.PUSHG:
-			if i[1] == 'abort':
-				exit('aborted')
 			a = state.globals[i[1]]
 			state.stack.push(a)
 		
@@ -789,6 +787,8 @@ def run(state, verbose=False):
 			n = state.heap[a]
 			c = n.__class__
 			if c == NGlobal:
+				if n.name == 'abort':
+					raise Exception('user abort')
 				k = len(state.stack) - 1
 				if k >= n.n:
 					aa = []

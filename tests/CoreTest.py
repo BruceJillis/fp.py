@@ -347,6 +347,22 @@ main = square (square %s)
 		ans, state = self.run_str("main = let a = %s in (let b = 1 in K a b)" % (p));
 		self.assertEqual(ans, p)
 
+	@unittest.expectedFailure
+	def test_abort1(self):
+		self.reset()
+		ans, state = self.run_str("main = abort");
+
+	def test_abort2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = K 1 abort");
+
+	@unittest.expectedFailure
+	def test_abort3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("main = K1 1 abort");
+
 	def test_lists(self):
 		self.reset()
 		self.load("core\\tests\\lists.core")
@@ -354,7 +370,6 @@ main = square (square %s)
 		self.assertEqual(self.symtab.root['fhd'][SymbolTable.COUNT], 1)
 		self.assertEqual(self.symtab.root['fnil'][SymbolTable.COUNT], 2)
 		self.assertEqual(self.symtab.root['fcons'][SymbolTable.COUNT], 4)
-		self.assertEqual(self.symtab.root['abort'][SymbolTable.COUNT], 0)
 
 	def test_infinite(self):
 		self.reset()
@@ -503,3 +518,27 @@ take n xs = if (n==0) nil (case xs of
 main = hd (tl (tl (tl (sieve (take 15 (from 2))))))
 """)
 		self.assertEqual(ans, 7)
+
+	def test_highlevel5(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+from n = cons n (from (n + 1));
+
+sieve xs = case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (sieve (filter (nonMultiple p) ps));
+
+filter predicate xs = case xs of
+		<4> -> nil,
+		<3> p ps -> let rest = filter predicate ps in if (predicate p) (cons p rest) rest;
+
+nonMultiple p n = ((n/p)*p) != n;
+
+take n xs = if (n==0) nil (case xs of
+	<4> -> nil,
+	<3> p ps -> cons p (take (n-1) ps));
+
+main = (sieve (take 15 (from 2)))
+""")
+		self.assertEqual(ans, [2, 3, 5, 7, 11, 13, 'nil'])

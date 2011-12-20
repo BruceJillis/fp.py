@@ -2,4 +2,3 @@ fcons a b cc cn = cc a b;
 fnil cc cn = cn;
 fhd list = list K abort;
 ftl list = list K1 abort;
-abort = abort;

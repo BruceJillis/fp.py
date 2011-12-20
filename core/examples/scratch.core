@@ -1,7 +1,6 @@
-from n = cons n (from (n + 1));
-
-take n xs = if (n == 0) nil (case xs of
-	<4> -> nil,
-	<3> p ps -> cons p (take (n-1) ps));
-
-main = true == true
+fcons a b cc cn = cc a b;
+fnil cc cn = cn;
+fhd list = list K abort;
+ftl list = list K1 abort;
+infinite x = fcons x (infinite x);
+main = fhd (infinite 1)
