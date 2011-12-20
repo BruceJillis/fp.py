@@ -1,9 +1,9 @@
-cons a b cc cn = cc a b;
-nil cc cn = cn;
-hd list = list K abort;
-tl list = list K1 abort;
-abort = abort;
+fcons a b cc cn = cc a b;
+fnil cc cn = cn;
+fhd list = list K abort;
+ftl list = list K1 abort;
+fabort = abort;
 
-downfrom n = if (n == 0) nil (cons n (downfrom (n-1)));
+downfrom n = if (n == 0) nil (fcons n (downfrom (n-1)));
 list = (downfrom 4);
-main = hd (tl (tl list))
+main = fhd (ftl (ftl list))

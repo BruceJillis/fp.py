@@ -1,4 +1,4 @@
-from CoreParser import PROGRAM, COMBINATOR, APPLICATION, ID, LET, DEFINITION
+from CoreParser import PROGRAM, COMBINATOR, APPLICATION, ID, LET, DEFINITION, LAMBDA
 from common import Visitor, CompositeVisitor
 from collections import defaultdict
 from ast import *
@@ -23,6 +23,12 @@ class FreeVariables(Visitor):
 		self.visit(node.body(), **data)
 
 	def visit_LetNode(self, node, **data):
+		for d in node.definitions():
+			self.bound[d.name()] = True
+			self.visit(d.body(), **data)
+		self.visit(node.body(), **data)
+
+	def visit_LetRecNode(self, node, **data):
 		for d in node.definitions():
 			self.bound[d.name()] = True
 			self.visit(d.body(), **data)
@@ -324,12 +330,31 @@ class Renamer(Transformer):
 		self.source = str(source)
 		self.target = target
 
-	def visit_IdentifierNode(self, identifier, **kwargs):
-		if str(identifier) == self.source:
-			parent = identifier.getParent()
-			index = parent.children.index(identifier)
-			parent.children.remove(identifier)
+	def visit_IdentifierNode(self, node):
+		if str(node) == self.source:
+			parent = node.getParent()
+			index = parent.children.index(node)
+			parent.children.remove(node)
 			parent.children.insert(index, self.target)
+
+class LambdaSplitter(Transformer):
+	'split all multi parameter lambdas into nested single parameter lambdas'
+	def visit_LambdaNode(self, node, **data):
+		tree = None
+		root = None
+		if len(node.parameters()) > 1:
+			for p in node.parameters():
+				tmp = LambdaNode(self.token("LAMBDA", LAMBDA))
+				tmp.addChild(p)
+				if tree == None:
+					root = tmp
+					tree = tmp
+				else:
+					tree.addChild(tmp)
+					tree = tmp
+			tree.addChild(node.body())
+			index = node.getParent().children.index(node)
+			node.getParent().children[index] = root
 
 class LambdaLifter(Transformer):
 	def __init__(self, symtab):
@@ -340,7 +365,6 @@ class LambdaLifter(Transformer):
 		self.program = node
 		for node in node.combinators():
 			self.visit(node, **data)
-		print self.program.toStringTree()
 
 	def visit_CombinatorNode(self, node, **data):
 		if node.body().__class__ == LambdaNode:
@@ -351,9 +375,7 @@ class LambdaLifter(Transformer):
 			# move lambda to the top level as combinator
 			fv = FreeVariables(self.symtab)
 			fv.visit(lambda_node)
-			print fv.variables()
 			for v in fv.variables():
-				print v
 				node.children.insert(1, self.id(v))
 			for n in lambda_node.parameters():
 				node.children.insert(1, n)

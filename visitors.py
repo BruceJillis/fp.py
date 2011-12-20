@@ -3,6 +3,112 @@ from gmachine import Code, SymbolTable
 from common import Environment
 from ast import *
 
+class PrettyPrinter(Visitor):
+	'pretty print a Core program'
+	def visit_ProgramNode(self, node):
+		for c in node.combinators():
+			self.visit(c)
+		
+	def visit_CombinatorNode(self, node):
+		print node.name(),
+		for p in node.parameters():
+			print str(p),
+		print '=',
+		self.visit(node.body())
+		print ';'
+
+	def visit_LetNode(self, node):
+		print 'let',
+		for definition in node.children[0:-1]:
+			self.visit(definition)
+		print 'in',
+		self.visit(node.children[-1])
+
+	def visit_LetRecNode(self, node):
+		print 'letrec',
+		for definition in node.children[0:-1]:
+			self.visit(definition)
+		print 'in',
+		self.visit(node.children[-1])
+
+	def visit_DefinitionNode(self, node):
+		self.visit(node.children[0])
+		print '=',
+		self.visit(node.children[1])
+
+	def visit_CaseNode(self, node, *args, **kwargs):
+		print 'case',
+		self.visit(node.condition())
+		print 'of',
+		for alt in node.alternatives():
+			print '<',
+			self.visit(alt.children[0])
+			print '> =',
+			self.visit(alt.body())
+
+	def visit_LambdaNode(self, node):
+		print '\\',
+		for p in node.parameters():
+			self.visit(p)
+		print '.',
+		self.visit(node.body())
+
+	def visit_ApplicationNode(self, node):
+		print '(',
+		self.visit(node.left())
+		self.visit(node.right())
+		print ')',
+
+	def visit_EqualNode(self, node):
+		self.visit(node.left())
+		print '==',
+		self.visit(node.right())
+
+	def visit_NotEqualNode(self, node):
+		self.visit(node.left())
+		print '!=',
+		self.visit(node.right())
+
+	def visit_NegateNode(self, node):
+		print '-',
+		self.visit(node.left())
+
+	def visit_AddNode(self, node):
+		self.visit(node.left())
+		print '+',
+		self.visit(node.right())
+
+	def visit_MinNode(self, node):
+		self.visit(node.left())
+		print '-',
+		self.visit(node.right())
+
+	def visit_DivNode(self, node):
+		self.visit(node.left())
+		print '/',
+		self.visit(node.right())
+
+	def visit_MulNode(self, node):
+		self.visit(node.left())
+		print '*',
+		self.visit(node.right())
+
+	def visit_AndNode(self, node):
+		self.visit(node.left())
+		print '&',
+		self.visit(node.right())
+
+	def visit_OrNode(self, node):
+		self.visit(node.left())
+		print '|',
+		self.visit(node.right())
+
+	def visit_IdentifierNode(self, node):
+		print node,
+
+	def visit_NumberNode(self, node):
+		print node,
+
 class Identification(Visitor):
 	"identify variables, check if program is obeys all scoping rules."
 	def __init__(self, symtab):

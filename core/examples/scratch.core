@@ -1,3 +1,5 @@
-g = \y. let z = x*x in let p = z*z in p + y;
-# f x = let g = \y. x*x + y in (g 3 + g 4);
-main = g 2 3
+f x = let g = \y. let z = x*x
+in let p = z*z
+in p +  y in (g 3 + g 4);
+# let g = \y. x*x + y in (g 3 + g 4);
+main = f 6

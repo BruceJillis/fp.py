@@ -2,11 +2,10 @@
 # This uses a functional representation of lists: the functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator 
 # just generates an infinite loop. cons is used to cons-truct a list and nil is the empty list
 
-cons a b cc cn = cc a b;
-nil cc cn = cn;
-hd list = list K abort;
-tl list = list K1 abort;
-abort = abort;
+fcons a b cc cn = cc a b;
+fnil cc cn = cn;
+fhd list = list K abort;
+ftl list = list K1 abort;
 
-infinite x = cons x (infinite x);
-main = hd (tl (infinite 2))
+infinite x = fcons x (infinite x);
+main = fhd (ftl (infinite 2))
