@@ -6,6 +6,7 @@ It features:
  - lazy evaluation
  - a garbage collector
  - infinite precision arithmetic (only ints currently)
+ - anonymous local function definitions
  - structured datatypes (algebraic types)
 
 It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
@@ -13,8 +14,8 @@ It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin a
 Status
 ------
    - Core
-      * Essentially done. Everything except lambdas work. The interpreter passes some 60 high and low 
-        level unittests at 68% code coverage (--test and --coverage).
+      * Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be recalculated). The interpreter passes some 70 high and low 
+        level unittests at 71% code coverage (--test and --coverage).
    - High Level Language
       * 0%
 
@@ -30,7 +31,7 @@ Command Line Usage
                 [--show-missing] [--no-includes]
                 [file [file ...]]
 
-   Compiler for the miranda-style functional language FP.
+   Compiler / interpreter for a minimal functional language FP.
 
    positional arguments:
      file               .core file to compile and evaluate
