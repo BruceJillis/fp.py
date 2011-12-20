@@ -22,6 +22,12 @@ class FreeVariables(Visitor):
 			self.bound[str(p)] = True
 		self.visit(node.body(), **data)
 
+	def visit_LetNode(self, node, **data):
+		for d in node.definitions():
+			self.bound[d.name()] = True
+			self.visit(d.body(), **data)
+		self.visit(node.body(), **data)
+
 	def visit_LambdaNode(self, node, **data):
 		for p in node.parameters():
 			self.bound[str(p)] = True
@@ -37,7 +43,7 @@ class FreeVariables(Visitor):
 			self.bound[str(p)] = True
 		self.visit(node.body(), **data)		
 
-	def visit_IdentifierNode(self, node):		
+	def visit_IdentifierNode(self, node):
 		if not str(node) in self.symtab.combinators and not str(node) in self.bound:
 			self.vars.append(str(node))
 
@@ -334,6 +340,7 @@ class LambdaLifter(Transformer):
 		self.program = node
 		for node in node.combinators():
 			self.visit(node, **data)
+		print self.program.toStringTree()
 
 	def visit_CombinatorNode(self, node, **data):
 		if node.body().__class__ == LambdaNode:
@@ -344,8 +351,10 @@ class LambdaLifter(Transformer):
 			# move lambda to the top level as combinator
 			fv = FreeVariables(self.symtab)
 			fv.visit(lambda_node)
+			print fv.variables()
 			for v in fv.variables():
-				node.children.insert(0, self.id(v))
+				print v
+				node.children.insert(1, self.id(v))
 			for n in lambda_node.parameters():
 				node.children.insert(1, n)
 			node.addChild(lambda_node.body())

@@ -555,7 +555,6 @@ main = f 6
 """)
 		self.assertEqual(ans, 79)
 
-
 	def test_lambdalifter1(self):
 		self.reset()
 		self.prelude()
@@ -573,3 +572,12 @@ f x = let g = (\y. y+1) in g (g x);
 main = f 6
 """)
 		self.assertEqual(ans, 8)
+
+	def test_lambdalifter3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+g = \y. let z = x*x in let p = z*z in p + y;
+main = g 2 3
+""")
+		self.assertEqual(ans, 83)
