@@ -673,19 +673,17 @@ def run(state, verbose=False):
 
 		# DYADIC
 		elif i[0] in [Code.ADD, Code.SUB, Code.MUL, Code.DIV]:
-			a0 = state.stack.pop() 
-			n0 = state.heap[a0].value
-			a1 = state.stack.pop()
-			n1 = state.heap[a1].value
+			v0 = state.heap[state.stack.pop()].value
+			v1 = state.heap[state.stack.pop()].value
 			if i[0] == Code.ADD:
-				n = n0 + n1
+				v = v0 + v1
 			elif i[0] == Code.SUB:
-				n = n0 - n1
+				v = v0 - v1
 			elif i[0] == Code.MUL:
-				n = n0 * n1
+				v = v0 * v1
 			elif i[0] == Code.DIV:
-				n = n0 / n1
-			state.stack.push(cache(n))
+				v = v0 / v1
+			state.stack.push(cache(v))
 		
 		# NEG
 		elif i[0] == Code.NEG:
@@ -702,22 +700,16 @@ def run(state, verbose=False):
 
 		# BOOLEAN
 		elif i[0] in [Code.AND, Code.OR]:
-			a0 = state.stack.pop() 
-			n0 = False
-			if state.heap[a0].a == 1:
-				n0 = True
-			a1 = state.stack.pop()
-			n1 = False
-			if state.heap[a1].a == 1:
-				n1 = True
-			n = 2
+			v0 = bool(value(state.stack.pop()))
+			v1 = bool(value(state.stack.pop()))
+			v = 2
 			if i[0] == Code.AND:
-				if n0 and n1:
-					n = 1
+				if v0 and v1:
+					v = 1
 			elif i[0] == Code.OR:
-				if n0 or n1:
-					n = 1
-			state.stack.push(state.heap.store(NConstr(n, [])))
+				if v0 or v1:
+					v = 1
+			state.stack.push(state.heap.store(NConstr(v, [])))
 
 		# COMPARISON
 		elif i[0] in [Code.AND, Code.OR, Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
@@ -743,31 +735,6 @@ def run(state, verbose=False):
 				if v0 >= v1:
 					v = 1
 			state.stack.push(state.heap.store(NConstr(v, [])))
-			
-#			a0 = state.stack.pop() 
-#			n0 = state.heap[a0].value
-#			a1 = state.stack.pop()
-#			n1 = state.heap[a1].value
-#			n = 2
-#			if i[0] == Code.EQ:
-#				if n0 == n1:
-#					n = 1
-#			elif i[0] == Code.NEQ:
-#				if n0 != n1:
-#					n = 1
-#			elif i[0] == Code.LT:
-#				if n0 < n1:
-#					n = 1
-#			elif i[0] == Code.LTE:
-#				if n0 <= n1:
-#					n = 1
-#			elif i[0] == Code.GT:
-#				if n0 > n1:
-#					n = 1
-#			elif i[0] == Code.GTE:
-#				if n0 >= n1:
-#					n = 1
-#			state.stack.push(state.heap.store(NConstr(n, [])))
 
 		# EVAL
 		elif i[0] == Code.EVAL:

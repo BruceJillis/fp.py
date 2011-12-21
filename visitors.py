@@ -110,7 +110,7 @@ class PrettyPrinter(Visitor):
 		print node,
 
 class Identification(Visitor):
-	"identify variables, check if program is obeys all scoping rules."
+	"identify variables, combinators."
 	def __init__(self, symtab):
 		self.symtab = symtab
 
@@ -216,6 +216,7 @@ class CompilationScheme(Visitor):
 			return result
 
 class CompileSC(CompilationScheme):
+	'generates the G-machine code for the supercombinator definition d.'
 	def visit_ProgramNode(self, node):
 		for combinator in node.combinators():
 			self.visit('R', combinator)

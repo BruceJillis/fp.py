@@ -54,6 +54,7 @@ class FreeVariables(Visitor):
 			self.vars.append(str(node))
 
 class Transformer(Visitor):
+	'base class for all transforming visitors'
 	def __init__(self):
 		super(Transformer, self).__init__()
 		self.names = defaultdict(int)
@@ -74,6 +75,7 @@ class Transformer(Visitor):
 		return IdentifierNode(self.token(str(name), ID))
 
 class TransformationScheme(Transformer):
+	'base class for transformers that are composed of multiple mutually recursive sub-transformers'
 	def __init__(self, facade):
 		super(TransformationScheme, self).__init__()
 		self.facade = facade
@@ -105,6 +107,10 @@ class TransformationScheme(Transformer):
 			return result
 
 class CaseLifter(CompositeVisitor):
+	''' Some legal expressions cannot be compiled. They fall into 2 classes: 1. Occurrences of case in non-strict contexts; i.e. in expressions compiled by the C scheme. 2. Occurrences of constructors in expressions where 
+	it is applied to too few arguments. Both problems can be solved by using program transformation techniques. The solution for ECase is to make the offending expressions into supercombinators which are then applied to 
+	their free variables. The trick for constructors is to create a supercombinator for each constructor; this will be generated with enough free variables to saturate the constructor'''
+
 	def __init__(self, symtab):
 		super(CaseLifter, self).__init__()
 		self.symtab = symtab
@@ -338,7 +344,7 @@ class Renamer(Transformer):
 			parent.children.insert(index, self.target)
 
 class LambdaSplitter(Transformer):
-	'split all multi parameter lambdas into nested single parameter lambdas'
+	'split all multi parameter lambdas into nested single parameter lambdas as preparation for the full-laziness transform'
 	def visit_LambdaNode(self, node, **data):
 		tree = None
 		root = None
@@ -357,6 +363,8 @@ class LambdaSplitter(Transformer):
 			node.getParent().children[index] = root
 
 class LambdaLifter(Transformer):
+	'transform the program so that all local function definitions are transformed to functions defined as supercombinators.'
+
 	def __init__(self, symtab):
 		super(LambdaLifter, self).__init__()
 		self.symtab = symtab

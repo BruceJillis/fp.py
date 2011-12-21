@@ -34,11 +34,23 @@ def parse(filename):
 			symtab.combinators[combinator.name()] = True
 		return ast.tree
 
-def transform(ast):
+def transform(ast, prettyprint):
 	"perform transformations on the supplied ast"
+	def show(msg, ast):
+		if prettyprint:
+			print msg
+			print
+			prettyprinter.visit(ast)
+			print '-' * 40
+			print
+
+	show('before', ast)
 	lambdasplitter.visit(ast)
+	show('lambda splitter', ast)
 	lambdalifter.visit(ast)
+	show('lambda lifter', ast)
 	caselifter.visit(ast)
+	show('case / pack lifter', ast)
 	return ast
 
 def printcode(name):
@@ -58,6 +70,8 @@ debug.add_argument('--test', action='store_true', dest="test", default=False, he
 debug.add_argument('--coverage', action='store_true', dest="coverage", default=False, help="run test, record code coverage and report results")
 debug.add_argument('--show-missing', action='store_true', dest="show_missing", default=False, help="show line numbers that were not covered by the testsuite in the --coverage report")
 debug.add_argument('--no-includes', action='store_true', dest="no_includes", default=False, help="do not include any external files (--include) except those supplied as positional arguments")
+parser.add_argument('--print-code', action='append', dest="printcode", default=[], help="print gmachine instructions for the supplied combinators")
+parser.add_argument('--show-transformations', action='store_true', dest="show_transformations", default=[], help="prettyprint the program before, during and after the transformation step")
 args = parser.parse_args()
 
 # handle coverage command line argument
@@ -107,23 +121,25 @@ asts = []
 if not args.no_includes:
 	for filename in files(args.include, '*.core'):
 		ast = parse(filename)
-		ast = transform(ast)
+		ast = transform(ast, args.show_transformations)
 		identification.visit(ast)
 		asts.append(ast)
 for filename in args.file:
 	ast = parse(filename)
 	# prettyprinter.visit(ast)
-	ast = transform(ast)
+	ast = transform(ast, args.show_transformations)
 	identification.visit(ast)
 	# prettyprinter.visit(ast)
 	asts.append(ast)
 # compile all the asts (files)
 for ast in asts:
 	codegeneration.visit(ast)
+# print any code sequences the user wants to see
+for combinator in args.printcode:
+	printcode(combinator)
 # construct initial state and run the resulting program
 state = State(symtab)
-#printcode('main')
-print	run(state, args.verbose)
+print	'result:', run(state, args.verbose)
 
 # output stats for the execution of the program
 if args.verbose or args.stats:
