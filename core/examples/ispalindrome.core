@@ -12,10 +12,10 @@ reverse2 xs ys = case xs of
 	<3> p ps -> reverse2 ps (cons p ys);
 reverse xs = reverse2 xs nil;
 
-equals2 xs x ys = case xs of <4> -> (x == nil), <3> p ps -> (equals2 xs p ys);	
-equals xs ys = case xs of <4> -> (equals2 xs nil ys), <3> p ps -> (equals2 xs p ys);	
+equals xs ys = let xe = (xs == nil), ye = (ys == nil) in 
+	if (xe & ye) true (if ((hd xs) == (hd ys)) (equals (tl xs) (tl ys)) false);
 
 ispalindrome xs = equals xs (reverse xs);
 
-list = cons 1 (cons 2 (cons 1 nil));
-main = equals nil nil
+list = cons 1 (cons 2 (cons 2 (cons 1 nil)));
+main = ispalindrome list

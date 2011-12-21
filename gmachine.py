@@ -589,12 +589,33 @@ class NConstr(Node):
 	def __repr__(self):
 		return 'NConstr(%s, %s)' % (self.a, self.b)
 
+
 def run(state, verbose=False):
 	def cache(n):
 		key = str(n)
 		if not key in state.globals:
 			state.globals[key] = state.heap.store(NNum(n))
 		return state.globals[key]
+
+	def value(addr):
+		node = state.heap[addr]
+		if node.__class__ == NNum:
+			return node.value
+		elif node.__class__ == NConstr:
+			if node.a == 1:
+				return 1
+			elif node.a == 2:
+				return 0
+			elif node.a == 3:
+				return 'nil'
+			elif node.a == 4:
+				list = []
+				el = node
+				while len(el.b) >= 2:
+					list.append(el.b[0])
+					el = el.b[1]
+				return list
+		raise Exception('no value defined for node: ' + str(node))
 
 	state.stats.start()
 	while len(state.code) > 0:
@@ -700,30 +721,53 @@ def run(state, verbose=False):
 
 		# COMPARISON
 		elif i[0] in [Code.AND, Code.OR, Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
-			a0 = state.stack.pop() 
-			n0 = state.heap[a0].value
-			a1 = state.stack.pop()
-			n1 = state.heap[a1].value
-			n = 2
+			v0 = value(state.stack.pop())
+			v1 = value(state.stack.pop())
+			v = 2 # assume we fail
 			if i[0] == Code.EQ:
-				if n0 == n1:
-					n = 1
+				if v0 == v1:
+					v = 1
 			elif i[0] == Code.NEQ:
-				if n0 != n1:
-					n = 1
+				if v0 != v1:
+					v = 1
 			elif i[0] == Code.LT:
-				if n0 < n1:
-					n = 1
+				if v0 < v1:
+					v = 1
 			elif i[0] == Code.LTE:
-				if n0 <= n1:
-					n = 1
+				if v0 <= v1:
+					v = 1
 			elif i[0] == Code.GT:
-				if n0 > n1:
-					n = 1
+				if v0 > v1:
+					v = 1
 			elif i[0] == Code.GTE:
-				if n0 >= n1:
-					n = 1
-			state.stack.push(state.heap.store(NConstr(n, [])))
+				if v0 >= v1:
+					v = 1
+			state.stack.push(state.heap.store(NConstr(v, [])))
+			
+#			a0 = state.stack.pop() 
+#			n0 = state.heap[a0].value
+#			a1 = state.stack.pop()
+#			n1 = state.heap[a1].value
+#			n = 2
+#			if i[0] == Code.EQ:
+#				if n0 == n1:
+#					n = 1
+#			elif i[0] == Code.NEQ:
+#				if n0 != n1:
+#					n = 1
+#			elif i[0] == Code.LT:
+#				if n0 < n1:
+#					n = 1
+#			elif i[0] == Code.LTE:
+#				if n0 <= n1:
+#					n = 1
+#			elif i[0] == Code.GT:
+#				if n0 > n1:
+#					n = 1
+#			elif i[0] == Code.GTE:
+#				if n0 >= n1:
+#					n = 1
+#			state.stack.push(state.heap.store(NConstr(n, [])))
 
 		# EVAL
 		elif i[0] == Code.EVAL:
