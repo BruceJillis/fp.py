@@ -9,7 +9,7 @@ It features:
 
 Usage
 -----
-To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler like so:
+To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler:
 
    python fp.py core\examples\fac.core
 
