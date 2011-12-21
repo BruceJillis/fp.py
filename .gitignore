@@ -5,3 +5,4 @@ Thumbs.db
 .coverage
 
 etc/antlr-3.4/**/*
+etc/The*

@@ -1,4 +1,7 @@
-FP is an educational functional language compiler/interpreter written in python. Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
+FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: "Implementing functional languages: a tutorial" [1]. Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link)[2].
+
+[1] http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/
+[2] http://en.wikipedia.org/wiki/Miranda_(programming_language
 
 It features:
  - lazy evaluation
@@ -221,8 +224,8 @@ The next program computes the greatest common divisor of two integers, using Euc
 
 The nfib function is interesting because its result (an integer) gives a count of how many function calls were made during its execution. So the result divided by the execution time gives a performance measure in function calls per second. As a result, nfib is quite widely used as a benchmark. The 'nfib-number' for a particular implementation needs to be taken with an enormous dose of salt, however, because it is critically dependent on various rather specialised optimisations.
    
-   nfib n = if (n==0) 1 (1 + nfib (n-1) + nfib (n-2));
-   main = nfib 4
+	nfib n = if (n <= 0) 1 (1 + nfib (n-1) + nfib (n-2));
+	main = nfib 4
 
 This program returns a list of descending integers. The evaluator should be expecting a list as the result of the program. cons and nil are now expected to be implemented in the prelude as Pack{2,2} and Pack{1,0} respectively.
    
