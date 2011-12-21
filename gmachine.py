@@ -631,8 +631,7 @@ def run(state, verbose=False):
 		# SLIDE
 		elif i[0] == Code.SLIDE:
 			a0 = state.stack.pop()
-			for _ in range(1, i[1] + 1):
-				a = state.stack.pop()
+			state.stack.pop(i[1])
 			state.stack.push(a0)
 		
 		# POP

@@ -1,6 +1,6 @@
 FP
 ----
-FP is an educational functional language interpreter written in python. 
+FP is an educational functional language interpreter written in python. Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
 
 It features:
  - lazy evaluation
@@ -8,8 +8,6 @@ It features:
  - infinite precision arithmetic (only ints currently)
  - anonymous local function definitions
  - structured datatypes (algebraic types)
-
-It's inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link). See wikipedia for more info: http://en.wikipedia.org/wiki/Miranda_(programming_language)
 
 Status
 ------
