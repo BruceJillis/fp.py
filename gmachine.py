@@ -1,4 +1,5 @@
 from collections import defaultdict
+from decimal import *
 import time
 
 class PrecompiledNode:
@@ -542,7 +543,7 @@ class NInt(Node):
 class NFloat(Node):
 	"represents a floating point number at runtime"
 	def __init__(self, value):
-		self.value = float(value)
+		self.value = Decimal(value)
 
 	def __repr__(self):
 		return 'NFloat(%f)' % (self.value)
@@ -587,7 +588,7 @@ def run(state, verbose=False):
 					state.globals[key] = state.heap.store(NInt(n))
 				except:
 					try:
-						key == str(float(key))
+						key == str(Decimal(key))
 						state.globals[key] = state.heap.store(NFloat(n))
 					except:	
 						state.globals[key] = state.heap.store(NChar(n))
@@ -690,7 +691,7 @@ def run(state, verbose=False):
 				elif i[0] == Code.MUL:
 					v = v0 * v1
 				elif i[0] == Code.DIV:
-					v = v0 / v1			
+					v = v0 / v1
 				state.stack.push(cache(v))
 			except TypeError:
 				raise TypeError("cannot %s %s and %s objects" % (code_to_str(i), type(v0), type(v1)))

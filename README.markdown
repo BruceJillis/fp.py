@@ -4,14 +4,14 @@ It features:
 
 - lazy evaluation
 - a mark and sweep, stop the world garbage collector
-- infinite precision arithmetic (only ints currently)
+- infinite precision arithmetic on ints and floats
 - anonymous local function definitions
 - structured datatypes (algebraic types)
 
 Status
 ------
 - Core
-	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 90 high and low level unittests giving 88% code coverage (see --coverage for a report) and consists of 5k lines of python code.
+	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 91 high and low level unittests giving 91% code coverage (see --coverage for a report) and consists of 4985 lines of python code.
 - High Level Language
 	* 0%
 

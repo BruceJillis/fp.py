@@ -4,6 +4,7 @@ from CoreParser import CoreParser
 from visitors import Identification, CodeGeneration
 from transforms import CaseLifter, LambdaLifter
 from gmachine import State, SymbolTable, run
+from decimal import *
 
 class CoreTest(unittest.TestCase):
 	def setUp(self):
@@ -614,7 +615,7 @@ main = f (Pack{5, 1} 2)
 		ans, state = self.run_str("""
 main = 1.31 + 1.2
 """)
-		self.assertEqual(ans, 2.51)
+		self.assertEqual(str(ans), str('2.51'))
 
 	def test_floats1(self):
 		self.reset()
@@ -622,7 +623,7 @@ main = 1.31 + 1.2
 		ans, state = self.run_str("""
 main = 1.31 + 1
 """)
-		self.assertEqual(ans, 2.31)
+		self.assertEqual(str(ans), str('2.31'))
 
 	def test_floats2(self):
 		self.reset()
@@ -630,7 +631,7 @@ main = 1.31 + 1
 		ans, state = self.run_str("""
 main = 1.31 + 1
 """)
-		self.assertEqual(ans, 2.31)
+		self.assertEqual(str(ans), str('2.31'))
 
 	def test_floats3(self):
 		self.reset()
@@ -638,7 +639,7 @@ main = 1.31 + 1
 		ans, state = self.run_str("""
 main = 1.31 * 2
 """)
-		self.assertEqual(ans, 2.62)
+		self.assertEqual(str(ans), str('2.62'))
 
 	def test_floats4(self):
 		self.reset()
@@ -646,7 +647,16 @@ main = 1.31 * 2
 		ans, state = self.run_str("""
 main = 2.44 / 2
 """)
-		self.assertEqual(ans, 1.22)
+		self.assertEqual(str(ans), str('1.22'))
+
+	def test_floats5(self):
+		"test aribtrary precisionness of floats, google doesn't compute this sum but wolfram alpha will"
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 2.123456789123456789 / 1.121212121121212121
+""")
+		self.assertEqual(str(ans), str('1.893893893155560965668214599'))
 
 	def test_chars(self):
 		self.reset()

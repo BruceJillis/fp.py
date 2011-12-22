@@ -1,6 +1,7 @@
 "this module bundles all classes and functions pertaining to the AST and it's structure."
 from antlr3.tree import CommonTree, CommonToken;
 from CoreLexer import ID, APPLICATION
+from decimal import *
 
 def mk_ap_chain(list_lst):
 	"helper function to: parse a linear list of ASTNodes into an application spine and construct (un)saturated constructors"
@@ -220,7 +221,7 @@ class FloatNode(BasicNode):
 	spelling = 'FLOAT'
 
 	def value(self):
-		return float(self.toString())
+		return Decimal(self.toString())
 
 class CharNode(BasicNode):
 	spelling = 'CHAR'
