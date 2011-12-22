@@ -122,7 +122,7 @@ A universal feature of all modern functional programming languages is the provis
    
 	Pack{tag, arity}
 
-Here, tag is an integer which uniquely identifies the constructor, and arity tells how many arguments it takes. So in the Core language one writes:
+Here, `tag` is an integer which uniquely identifies the constructor, and `arity` tells how many arguments it takes. So in the Core language one writes:
 
 	Pack{2,2} (Pack{1,1} 3) (Pack{1,1} 4)
 
@@ -130,14 +130,12 @@ instead of:
 
 	Branch (Leaf 3) (Leaf 4)
 
-The tag is required so that objects built with different constructors can be distinguished from one another. In a well-typed program, objects of different type will never need to be 
-distinguished at run-time, so tags only need to be unique within a data type. Hence, we can start the tag at 1 afresh for each new data type.
+The `tag` is required so that objects built with different constructors can be distinguished from one another. In a well-typed program, objects of different type will never need to be distinguished at run-time, so `tag`'s only need to be unique within a data type. Hence, we can start the `tag` at 1 afresh for each new data type.
 
-In general, the pattern matching allowed by modern functional programming languages can be rather complex, with multiple nested patterns, overlapping patterns, guards and so on. For 
-the Core language, we eliminate these complications by outlawing all complex forms of pattern matching! We do this by providing only case expressions in the Core language.  
+In general, the pattern matching allowed by modern functional programming languages can be rather complex, with multiple nested patterns, overlapping patterns, guards and so on. For the Core language, we eliminate these complications by outlawing all complex forms of pattern matching! We do this by providing only `case` expressions in the Core language.  
 
-The important thing about case expressions is that each alternative consists only of a tag followed by a number of variables (which should be the same as the arity of the constructor). No nested patterns are allowed. Case 
-expressions have a very simple operational interpretation, rather like a multi-way jump: evaluate the expression to be analysed, get the tag of the constructor it is built with and evaluate the appropriate alternative.
+The important thing about case expressions is that each alternative consists only of a `tag` followed by a number of variables (which should be the same as the `arity` of the constructor). No nested patterns are allowed. Case 
+expressions have a very simple operational interpretation, rather like a multi-way jump: evaluate the expression to be analysed, get the `tag` of the constructor it is built with and evaluate the appropriate alternative.
 
 <table>
 	<tr>
@@ -179,25 +177,25 @@ expressions have a very simple operational interpretation, rather like a multi-w
 
 Basic programs
 --------------
-The programs in this section require only integer constants and function application. The following and first program should return the value 3 rather quickly:
+The programs in this section require only integer constants and function application. The following and first program should return the value `3` rather quickly:
    
 	main = I 3
 
-The next program requires a couple more steps before returning 3.
+The next program requires a couple more steps before returning `3`.
    
 	id = S K K;
 	main = id 3
 
-This one makes quite a few applications of id.
+This one makes quite a few applications of `id`.
 
 	id = S K K;
 	main = twice twice twice id 3
 
-This program should show up the difference between a system which does updating and one which does not. If updating occurs, the evaluation of (I I I) should take place only once; without updating it will take place twice.
+This program should show up the difference between a system which does updating and one which does not. If updating occurs, the evaluation of (`I I I`) should take place only once; without updating it will take place twice.
 
 	main = twice (I I I) 3
 
-This example uses a functional representation of lists to build an infinite list of 4's, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
+This example uses a functional representation of lists to build an infinite list of `4`'s, and then takes its second element. The functions for head and tail (`hd` and `tl`) return abort if their argument is an empty list. The `abort` supercombinator just generates an infinite loop.
 
 	cons a b cc cn = cc a b;
 	nil cc cn = cn;
@@ -208,16 +206,16 @@ This example uses a functional representation of lists to build an infinite list
 	infinite x = cons x (infinite x);
 	main = hd (tl (infinite 4))
 
-If updating is implemented, then this program will execute in fewer steps than if not, because the evaluation of id1 is shared.
+If updating is implemented, then this program will execute in fewer steps than if not, because the evaluation of `id1` is shared.
    
 	main = let id1 = I I I in id1 id1 3
 
-We should test nested let expressions too:
+We should test nested `let` expressions too:
 
 	oct g x = let h = twice g in let k = twice h in k (k x);
 	main = oct I 4
 
-The next program tests letrecs, using 'functional lists' based on the earlier definitions of cons, nil, etc.
+The next program tests `letrec`'s, using 'functional lists' based on the earlier definitions of `cons`, `nil`, etc.
    
 	infinite x = letrec xs = cons x xs in xs;
 	main = hd (tl (tl (infinite 4)))
@@ -226,18 +224,18 @@ We begin with simple tests which do not require the conditional.
    
 	main = 4*5+(2-5)
 
-This next program needs function calls to work properly. Try replacing "twice twice" with *twice twice twice* or _twice twice twice twice_. 
+This next program needs function calls to work properly. Try replacing `twice twice` with `twice twice twice` or `twice twice twice twice`. 
    
 	inc x = x+1;
 	main = twice twice inc 4
 
-Using functional lists again, we can write a length function:
+Using functional lists again, we can write a `length` function:
 
 	length xs = xs length1 0;
 	length1 x xs = 1 + (length xs);
 	main = length (cons 3 (cons 3 (cons 3 nil)))
 
-Once we have conditionals we can at last write 'interesting' programs. For example, factorial:
+Once we have conditionals we can at last write 'interesting' programs. For example, `factorial`:
    
 	fac n = if (n==0) 1 (n * fac (n-1)) ;
 	main = fac 5
@@ -252,12 +250,12 @@ The nfib function is interesting because its result (an integer) gives a count o
 	nfib n = if (n <= 0) 1 (1 + nfib (n-1) + nfib (n-2));
 	main = nfib 4
 
-This program returns a list of descending integers. The evaluator should be expecting a list as the result of the program. cons and nil are now expected to be implemented in the prelude as Pack{2,2} and Pack{1,0} respectively.
+This program returns a list of descending integers. The evaluator should be expecting a list as the result of the program. `Cons` and `nil` are now expected to be implemented in the prelude as `Pack{3,2}` and `Pack{4,0}` respectively.
    
 	downfrom n = if (n == 0) nil (cons n (downfrom (n-1)));
 	main = hd (downfrom 4)
 
-The next program implements the Sieve of Eratosthenes to generate the infinite list of primes, and takes the first few elements of the result list. If you arrange that output is printed incrementally, as it is generated, you can remove the call to take and just print the infinite list.
+The next program implements the sieve of eratosthenes to generate the infinite list of primes, and `take`'s the first few elements of the result list.
    
 	from n = cons n (from (n + 1));
 
