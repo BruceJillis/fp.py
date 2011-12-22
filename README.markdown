@@ -1,6 +1,7 @@
 FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: ["Implementing functional languages: a tutorial"](http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/). Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see [the Miranda wikipedia entry](http://en.wikipedia.org/wiki/Miranda_(programming_language) for more info generally and a download link).
 
 It features:
+
 - lazy evaluation
 - a garbage collector
 - infinite precision arithmetic (only ints currently)
