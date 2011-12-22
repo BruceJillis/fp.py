@@ -369,10 +369,10 @@ main = square (square %s)
 	def test_lists(self):
 		self.reset()
 		self.load("core\\tests\\lists.core")
-		self.assertEqual(self.symtab.root['ftl'][SymbolTable.COUNT], 1)
-		self.assertEqual(self.symtab.root['fhd'][SymbolTable.COUNT], 1)
-		self.assertEqual(self.symtab.root['fnil'][SymbolTable.COUNT], 2)
-		self.assertEqual(self.symtab.root['fcons'][SymbolTable.COUNT], 4)
+		self.assertEqual(len(self.symtab['ftl'].parameters()), 1)
+		self.assertEqual(len(self.symtab['fhd'].parameters()), 1)
+		self.assertEqual(len(self.symtab['fnil'].parameters()), 2)
+		self.assertEqual(len(self.symtab['fcons'].parameters()), 4)
 
 	def test_infinite(self):
 		self.reset()
@@ -382,7 +382,7 @@ main = square (square %s)
 infinite x = fcons x (infinite x);
 main = fhd (ftl (ftl (infinite %s)))
 """ % (p))
-		self.assertEqual(self.symtab.root['infinite'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['infinite'].parameters()), 1)
 		self.assertEqual(ans, p)
 
 	def test_infinite2(self):
@@ -393,7 +393,7 @@ main = fhd (ftl (ftl (infinite %s)))
 infinite x = letrec xs = fcons x xs in xs;
 main = fhd (ftl (ftl (infinite %s)))
 """ % (p))
-		self.assertEqual(self.symtab.root['infinite'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['infinite'].parameters()), 1)
 		self.assertEqual(ans, p)
 
 	def test_case1(self):
@@ -402,7 +402,7 @@ main = fhd (ftl (ftl (infinite %s)))
 length xs = case xs of <1> -> 0, <2> y ys -> 1 + length ys;
 main = length (Pack{2,2} 2 (Pack{2,2} 2 (Pack{2,2} 1 Pack{1,0})))
 """)
-		self.assertEqual(self.symtab.root['length'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['length'].parameters()), 1)
 		self.assertEqual(ans, 3)
 
 	def test_case2(self):
@@ -413,7 +413,7 @@ K x y = x;
 f x = K (1 + (case x of <3> -> 1, <4> -> 2)) 1;
 main = f Pack{3,0}
 """)
-		self.assertEqual(self.symtab.root['f'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['f'].parameters()), 1)
 		self.assertEqual(ans, 2)
 
 	def test_case3(self):
@@ -424,7 +424,7 @@ K x y = x;
 f x = K (1 + (case x of <3> -> 1, <4> -> 2)) 1;
 main = f Pack{4,0}
 """)
-		self.assertEqual(self.symtab.root['f'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['f'].parameters()), 1)
 		self.assertEqual(ans, 3)
 
 	def test_case4(self):
@@ -435,7 +435,7 @@ K x y = x;
 f x = K (1 + (case x of <3> -> 1, <4> x -> x)) 1;
 main = f Pack{4,1} 10
 """)
-		self.assertEqual(self.symtab.root['f'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['f'].parameters()), 1)
 		self.assertEqual(ans, 11)
 
 	def test_case5(self):
@@ -446,7 +446,7 @@ K x y = x;
 f x = K (1 + (case x of <3> x -> x, <4> x -> x)) 1;
 main = f Pack{3,1} 100
 """)
-		self.assertEqual(self.symtab.root['f'][SymbolTable.COUNT], 1)
+		self.assertEqual(len(self.symtab['f'].parameters()), 1)
 		self.assertEqual(ans, 101)
 
 	def test_highlevel1(self):
@@ -581,3 +581,29 @@ g = \y. let z = x*x in let p = z*z in p + y;
 main = g 2 3
 """)
 		self.assertEqual(ans, 83)
+
+	def test_shadowing1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = let x = (let y = 1 in y), y = 2 in x + y
+""")
+		self.assertEqual(ans, 3)
+
+	def test_shadowing2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+f x = case x of <5> h -> (let h = 10 in h) + h;
+main = f (Pack{5, 1} 2)
+""")
+		self.assertEqual(ans, 12)
+
+	def test_shadowing3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+f x = case x of <5> x -> (let x = 10 in x);
+main = f (Pack{5, 1} 2)
+""")
+		self.assertEqual(ans, 10)

@@ -115,13 +115,10 @@ class Identification(Visitor):
 		self.symtab = symtab
 
 	def visit_CombinatorNode(self, combinator):
-		if combinator.name() in self.symtab:
-			raise SyntaxError('%s already defined' % combinator.name())
-		self.symtab[combinator.name()] = {}
-		self.symtab[combinator.name()]['__count__'] = len(combinator.parameters())
-		binders = {
-			combinator.name(): combinator
-		}
+		binders = {}
+		binders[combinator.name()] = combinator
+		if not combinator.name() in self.symtab:
+			self.symtab[combinator.name()] = combinator
 		for parameter in combinator.parameters():
 			binders[str(parameter)] = parameter
 		self.visit(combinator.body(), env=binders)
@@ -131,29 +128,34 @@ class Identification(Visitor):
 		self.visit(node.left(), **kwargs)
 
 	def visit_LetNode(self, node, **kwargs):
+		binders = dict(kwargs['env'])
 		for definition in node.definitions():
-			kwargs['env'][definition.name()] = definition.children[0]
-			self.visit(definition.children[-1], **kwargs)
-		self.visit(node.body(), **kwargs)
+			binders[definition.name()] = definition.children[0]
+			self.visit(definition.children[-1], env=binders)
+		self.visit(node.body(), env=binders)
 
 	def visit_LetRecNode(self, node, **kwargs):
+		binders = dict(kwargs['env'])
 		for definition in node.definitions():
-			kwargs['env'][definition.name()] = definition.children[0]
+			binders[definition.name()] = definition.children[0]
 		for definition in node.definitions():
-			self.visit(definition.children[-1], **kwargs)
-		self.visit(node.body(), **kwargs)
+			self.visit(definition.children[-1], env=binders)
+		self.visit(node.body(), env=binders)
 
 	def visit_CaseNode(self, node, **kwargs):
-		self.visit(node.condition(), **kwargs)
+		binders = dict(kwargs['env'])
+		self.visit(node.condition(), env=binders)
 		for alt in node.alternatives():
-			self.visit(alt, **kwargs)
+			self.visit(alt, env=binders)
 
 	def visit_AlternativeNode(self, node, **kwargs):
+		binders = dict(kwargs['env'])
 		for p in node.parameters():
-			kwargs['env'][str(p)] = p
-		self.visit(node.body(), **kwargs)
+			binders[str(p)] = p
+		self.visit(node.body(), env=binders)
 
 	def visit_IdentifierNode(self, node, **kwargs):
+		binders = dict(kwargs['env'])
 		if str(node) in kwargs['env']:
 			node.binder(kwargs['env'][str(node)])
 
@@ -171,9 +173,8 @@ class CodeGeneration(CompositeVisitor):
 		self.code = Code()
 		self.switch_code(self.code)
 
-
 	def switch_code(self, code = None):
-		"switch the code object to a new instance"
+		"switch the code object to a new instance, if no code is supplied the standard code object (self.code) is reinstated"
 		for k in self.schemes:
 			if code != None:
 				self.schemes[k].code = code
@@ -187,6 +188,7 @@ class CompilationScheme(Visitor):
 		self.code = None
 	
 	def select(self, scheme):
+		"select a new scheme"
 		self.facade.select(scheme)
 
 	def visit(self, scheme, node, **data):
@@ -230,7 +232,7 @@ class CompileR(CompilationScheme):
 		self.code.Update(d)
 		self.code.Pop(d)
 		self.code.Unwind()
-		self.symtab[node.name()][SymbolTable.CODE] = self.code.clone()
+		self.symtab[node.name()].code = self.code.clone()
 		self.code.clear()
 
 class CompileE(CompilationScheme):

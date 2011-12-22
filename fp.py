@@ -31,7 +31,7 @@ def parse(filename):
 		parser = CoreParser(tokens)
 		ast = parser.program()
 		for combinator in ast.tree.combinators():
-			symtab.combinators[combinator.name()] = True
+			symtab[combinator.name()] = combinator
 		return ast.tree
 
 def transform(ast, prettyprint):

@@ -1,24 +1,25 @@
 from collections import defaultdict
 import time
 
+class PrecompiledNode:
+	def __init__(self, name, count, code):
+		self._name = name
+		self.args = [1 for i in range(count)]
+		self.code = code
+
+	def name(self):
+		return self._name
+
+	def parameters(self):
+		return self.args
+	
+
 # Symbol Table
 class SymbolTable:
-	"the symbol table maintains a tree of scope's such that we can re-enter scopes in different phases of the compiler and lookup / enrich the information present."
-	# reserved field names
-
-	# name of the field containing the back pointer to the parent, None for the root node
-	PARENT = '__parent__'
-	# name of the field containing code for combinators
-	CODE = '__code__'
-	# contains a count
-	COUNT = '__count__'
-
+	"this class maintains a registry of combinators so that we have access to information about it."
 	def __init__(self):
-		self.tree = {}
-		self.root = self.tree
-		self.tree[SymbolTable.PARENT] = None
+		self.data = {}
 		self.precompiled()
-		self.combinators = {}
 	
 	def binary(self, symbol, field):
 		c = Code()
@@ -33,10 +34,7 @@ class SymbolTable:
 		c.Update(2)
 		c.Pop(2)
 		c.Unwind()
-		self.root[symbol] = {
-			SymbolTable.COUNT: 2,
-			SymbolTable.CODE: c,
-		}
+		self.data[symbol] = PrecompiledNode(symbol, 2, c)
 
 	def precompiled(self):
 		self.binary('&', 'And')
@@ -51,7 +49,7 @@ class SymbolTable:
 		self.binary('<=', 'Lte')
 		self.binary('>', 'Gt')
 		self.binary('>=', 'Gte')
-		# 'negate'
+		# 'negate', the only unary operator
 		c = Code()
 		c.Push(0)
 		c.Eval()
@@ -59,37 +57,28 @@ class SymbolTable:
 		c.Update(1)
 		c.Pop(1)
 		c.Unwind()
-		self.root['negate'] = {
-			SymbolTable.COUNT: 1,
-			SymbolTable.CODE: c,
-		}
-		
+		self.data['negate'] = PrecompiledNode('-', 1, c)
+	
+	def __iter__(self):
+		for d in self.data:
+			yield self.data[d]
+		raise StopIteration
+
 	def __setitem__(self, key, value):
-		self.tree[key] = value
+		self.data[key] = value
 
 	def __getitem__(self, key):
-		if key in self.tree:
-			return self.tree[key]
-		tree = self.tree[SymbolTable.PARENT]
-		while tree != None:
-			if key in tree:
-				return tree[key]
-			tree = tree[SymbolTable.PARENT]
+		if key in self.data:
+			return self.data[key]
 		raise KeyError(key)
 
 	def __contains__(self, key):
-		"return True if this or a parent scope contains key"
-		if key in self.tree:
+		if key in self.data:
 			return True
-		tree = self.tree[SymbolTable.PARENT]
-		while tree != None:
-			if key in tree:
-				return True
-			tree = tree[SymbolTable.PARENT]
 		return False
 
 	def __len__(self, key):
-		return len(self.tree.keys())
+		return len(self.data.keys())
 
 # Code
 class Code:
@@ -392,12 +381,10 @@ class Globals:
 	def __init__(self, state, symtab):
 		self.state = state
 		self.data = {}
-		for name in symtab.root:
-			if name != SymbolTable.PARENT:
-				self.state.stats.count('globals')
-				symbol = symtab.root[name]
-				count, code = symbol[SymbolTable.COUNT], symbol[SymbolTable.CODE]
-				self.data[name] = state.heap.store(NGlobal(count, code, name))
+		for name in symtab.data:
+			self.state.stats.count('globals')
+			count, code = len(symtab[name].parameters()), symtab[name].code
+			self.data[name] = state.heap.store(NGlobal(count, code, name))
 
 	def __setitem__(self, name, address):
 		self.state.stats.count('globals')

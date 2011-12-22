@@ -10,6 +10,14 @@ It features:
  - anonymous local function definitions
  - structured datatypes (algebraic types)
 
+ Status
+------
+   - Core
+      * Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes some 77 high and low 
+        level unittests at 81% code coverage (see --coverage).
+   - High Level Language
+      * 0%
+
 Usage
 -----
 To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler:
@@ -86,14 +94,6 @@ FP consists of 4 parts:
    - contains the std prelude
  /core/tests
    - misc core code used in the unittests
-
-Status
-------
-   - Core
-      * Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes some 70 high and low 
-        level unittests at 76% code coverage (see --coverage).
-   - High Level Language
-      * 0%
 
 Core
 ----

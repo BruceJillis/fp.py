@@ -43,7 +43,6 @@ class	Environment:
 
 class Visitor(object):
 	"generic visitor implementation"
-	debug = False
 
 	def visit(self, node, **data):
 		"main method of the visitor"
@@ -59,11 +58,7 @@ class Visitor(object):
 		return method(node, **data)
 
 	def fallback(self, node, **data):
-		"generic fallback visit method that gets called if no concrete implementation is available. Prints trace if debug = True. Directs visitor over the children property if represent."
-		if self.debug:
-			# if we are in debug mode print that we end up here (handy during development)
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
+		"generic fallback visit method that gets called if no concrete implementation is available. Directs visitor over the children property if represent."
 		if hasattr(node, 'children'):
 			# call and collect results for all children
 			result = []
@@ -85,6 +80,7 @@ class CompositeVisitor(Visitor):
 		return self.schemes[key]
 
 	def select(self, scheme):
+		'select a new scheme'
 		self.active = self.schemes[scheme]
 
 	def visit(self, node, **data):
@@ -100,10 +96,7 @@ class CompositeVisitor(Visitor):
 		return method(node, **data)
 
 	def fallback(self, node, **data):
-		'generic method to direct a transformer over the children of the current node if the children property is present. prints node name if debug is set to True'
-		if self.debug:
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
+		'generic method to direct a transformer over the children of the current node if the children property is present.'
 		if hasattr(node, 'children'):
 			for child in node.children:
 				self.visit(child, **data)

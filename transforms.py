@@ -10,7 +10,7 @@ class FreeVariables(Visitor):
 	def __init__(self, symtab):
 		self.symtab = symtab
 		self.bound = {}
-		for c in symtab.combinators:
+		for c in symtab:
 			self.bound[c] = True
 		self.vars = []
 
@@ -50,7 +50,7 @@ class FreeVariables(Visitor):
 		self.visit(node.body(), **data)		
 
 	def visit_IdentifierNode(self, node):
-		if not str(node) in self.symtab.combinators and not str(node) in self.bound:
+		if not str(node) in self.bound:
 			self.vars.append(str(node))
 
 class Transformer(Visitor):
@@ -94,10 +94,6 @@ class TransformationScheme(Transformer):
 
 	def fallback(self, node, **data):
 		"define a fallback that is aware of the scheme parameter."
-		if self.debug:
-			# if we are in debug mode print that we end up here (handy during development)
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
 		if hasattr(node, 'children'):
 			# call and collect results for all children
 			result = []
@@ -196,10 +192,6 @@ class CaseLifterC(TransformationScheme):
 		for definition in node.definitions():
 			self.visit('C', definition.body(), **data)
 		self.visit('C', node.body(), **data)
-
-	def visit_ConstructorNode(self, node, **data):
-		print node.toStringTree()
-		exit('C')
 
 	def visit_CaseNode(self, node, **data):
 		"lift case node in non-strict context to the top level as a new combinator"
@@ -422,7 +414,7 @@ class LambdaLifter(Transformer):
 		name = self.fresh('sc')
 		sc = CombinatorNode(self.token("COMBINATOR", COMBINATOR))
 		sc.addChild(self.id(name))
-		self.symtab.combinators[name] = sc
+		self.symtab[name] = sc
 		for n in node.parameters():
 			sc.addChild(n)
 		sc.addChild(node.body())	
