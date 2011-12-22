@@ -96,27 +96,27 @@ Core
       
 The Core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
 
-Here is an example Core program, which evaluates to 42:
+Here is an example Core program, which evaluates to `42`:
    
 	main = double 21;
 	double x = x + x
 
-A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double. Supercombinators can have local definitions, using the let construct of the Core language:
+A Core program consists of a set of supercombinator definitions, including a distinguished one: `main`. To execute the program, we evaluate `main`. Supercombinators can define functions, such as the definition of `double`. Supercombinators can have local definitions, using the `let` construct of the Core language:
    
 	main = quadruple 20;
 	quadruple x = let twice_x = x+x in twice_x + twice_x
 
-Here twice_x is defined locally within the body of quadruple to be x+x, and quadruple returns twice_x + twice_x. A let expression is non-recursive. For recursive definitions, the Core language uses the letrec construct, which is exactly like let except that its definitions can be recursive. For example:
+Here `twice_x` is defined locally within the body of `quadruple` to be `x+x`, and `quadruple` returns `twice_x + twice_x`. A let expression is non-recursive. For recursive definitions, the Core language uses the `letrec` construct, which is exactly like `let` except that its definitions can be recursive. For example:
    
 	infinite n = letrec ns = cons n ns in ns
 
-The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code. The left-hand side of a let or letrec binding must always be a simple variable.
+The reason that we distinguish `let` from `letrec` in the Core language (rather than providing only `letrec`) is that `let` is a bit simpler to implement than `letrec`, and we may get slightly better code. The left-hand side of a `let` or `letrec` binding must always be a simple variable.
 
 It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
 
 	double_list xs = map (\x. 2*x) xs
 
-the lambda abstraction (\x. 2*x) denotes the function which doubles its argument.
+the lambda abstraction `(\x. 2*x)` denotes the function which doubles its argument.
 
 A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. The Core language provides a single family of constructors:
    
