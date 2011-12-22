@@ -98,37 +98,37 @@ The Core language is a minimal functional language carefully chosen so that it i
 
 Here is an example Core program, which evaluates to 42:
    
-   main = double 21;
-   double x = x + x
+	main = double 21;
+	double x = x + x
 
 A Core program consists of a set of supercombinator definitions, including a distinguished one, main. To execute the program, we evaluate main. Supercombinators can define functions, such as the definition of double. Supercombinators can have local definitions, using the let construct of the Core language:
    
-   main = quadruple 20;
-   quadruple x = let twice_x = x+x in twice_x + twice_x
+	main = quadruple 20;
+	quadruple x = let twice_x = x+x in twice_x + twice_x
 
 Here twice_x is defined locally within the body of quadruple to be x+x, and quadruple returns twice_x + twice_x. A let expression is non-recursive. For recursive definitions, the Core language uses the letrec construct, which is exactly like let except that its definitions can be recursive. For example:
    
-   infinite n = letrec ns = cons n ns in ns
+	infinite n = letrec ns = cons n ns in ns
 
 The reason that we distinguish let from letrec in the Core language (rather than providing only letrec) is that let is a bit simpler to implement than letrec, and we may get slightly better code. The left-hand side of a let or letrec binding must always be a simple variable.
 
 It is sometimes convenient to be able to denote functions using explicit lambda abstractions, and the Core language provides a construct to do so. For example, in the program
 
-   double_list xs = map (\x. 2*x) xs
+	double_list xs = map (\x. 2*x) xs
 
 the lambda abstraction (\x. 2*x) denotes the function which doubles its argument.
 
 A universal feature of all modern functional programming languages is the provision of structured types, often called algebraic data types. The Core language provides a single family of constructors:
    
-   Pack{tag, arity}
+	Pack{tag, arity}
 
 Here, tag is an integer which uniquely identifies the constructor, and arity tells how many arguments it takes. So in the Core language one writes:
 
-   Pack{2,2} (Pack{1,1} 3) (Pack{1,1} 4)
+	Pack{2,2} (Pack{1,1} 3) (Pack{1,1} 4)
 
 instead of:
 
-   Branch (Leaf 3) (Leaf 4)
+	Branch (Leaf 3) (Leaf 4)
 
 The tag is required so that objects built with different constructors can be distinguished from one another. In a well-typed program, objects of different type will never need to be 
 distinguished at run-time, so tags only need to be unique within a data type. Hence, we can start the tag at 1 afresh for each new data type.
@@ -152,71 +152,71 @@ Basic programs
 --------------
 The programs in this section require only integer constants and function application. The following and first program should return the value 3 rather quickly:
    
-   main = I 3
+	main = I 3
 
 The next program requires a couple more steps before returning 3.
    
-   id = S K K;
-   main = id 3
+	id = S K K;
+	main = id 3
 
 This one makes quite a few applications of id.
 
-   id = S K K;
-   main = twice twice twice id 3
+	id = S K K;
+	main = twice twice twice id 3
 
 This program should show up the difference between a system which does updating and one which does not. If updating occurs, the evaluation of (I I I) should take place only once; without updating it will take place twice.
 
-   main = twice (I I I) 3
+	main = twice (I I I) 3
 
 This example uses a functional representation of lists to build an infinite list of 4's, and then takes its second element. The functions for head and tail (hd and tl) return abort if their argument is an empty list. The abort supercombinator just generates an infinite loop.
 
-   cons a b cc cn = cc a b;
-   nil cc cn = cn;
-   hd list = list K abort;
-   tl list = list K1 abort;
-   abort = abort;
-
-   infinite x = cons x (infinite x);
-   main = hd (tl (infinite 4))
+	cons a b cc cn = cc a b;
+	nil cc cn = cn;
+	hd list = list K abort;
+	tl list = list K1 abort;
+	abort = abort;
+	
+	infinite x = cons x (infinite x);
+	main = hd (tl (infinite 4))
 
 If updating is implemented, then this program will execute in fewer steps than if not, because the evaluation of id1 is shared.
    
-   main = let id1 = I I I in id1 id1 3
+	main = let id1 = I I I in id1 id1 3
 
 We should test nested let expressions too:
 
-   oct g x = let h = twice g in let k = twice h in k (k x);
-   main = oct I 4
+	oct g x = let h = twice g in let k = twice h in k (k x);
+	main = oct I 4
 
 The next program tests letrecs, using 'functional lists' based on the earlier definitions of cons, nil, etc.
    
-   infinite x = letrec xs = cons x xs in xs;
-   main = hd (tl (tl (infinite 4)))
+	infinite x = letrec xs = cons x xs in xs;
+	main = hd (tl (tl (infinite 4)))
 
 We begin with simple tests which do not require the conditional.
    
-   main = 4*5+(2-5)
+	main = 4*5+(2-5)
 
 This next program needs function calls to work properly. Try replacing "twice twice" with *twice twice twice* or _twice twice twice twice_. 
    
-   inc x = x+1;
-   main = twice twice inc 4
+	inc x = x+1;
+	main = twice twice inc 4
 
 Using functional lists again, we can write a length function:
 
-   length xs = xs length1 0;
-   length1 x xs = 1 + (length xs);
-   main = length (cons 3 (cons 3 (cons 3 nil)))
+	length xs = xs length1 0;
+	length1 x xs = 1 + (length xs);
+	main = length (cons 3 (cons 3 (cons 3 nil)))
 
 Once we have conditionals we can at last write 'interesting' programs. For example, factorial:
    
-   fac n = if (n==0) 1 (n * fac (n-1)) ;
-   main = fac 5
+	fac n = if (n==0) 1 (n * fac (n-1)) ;
+	main = fac 5
 
 The next program computes the greatest common divisor of two integers, using Euclid's algorithm:
    
-   gcd a b = if (a==b) a if (a<b) (gcd b a) (gcd b (a-b));
-   main = gcd 6 10
+	gcd a b = if (a==b) a if (a<b) (gcd b a) (gcd b (a-b));
+	main = gcd 6 10
 
 The nfib function is interesting because its result (an integer) gives a count of how many function calls were made during its execution. So the result divided by the execution time gives a performance measure in function calls per second. As a result, nfib is quite widely used as a benchmark. The 'nfib-number' for a particular implementation needs to be taken with an enormous dose of salt, however, because it is critically dependent on various rather specialised optimisations.
    
@@ -225,8 +225,8 @@ The nfib function is interesting because its result (an integer) gives a count o
 
 This program returns a list of descending integers. The evaluator should be expecting a list as the result of the program. cons and nil are now expected to be implemented in the prelude as Pack{2,2} and Pack{1,0} respectively.
    
-   downfrom n = if (n == 0) nil (cons n (downfrom (n-1)));
-   main = hd (downfrom 4)
+	downfrom n = if (n == 0) nil (cons n (downfrom (n-1)));
+	main = hd (downfrom 4)
 
 The next program implements the Sieve of Eratosthenes to generate the infinite list of primes, and takes the first few elements of the result list. If you arrange that output is printed incrementally, as it is generated, you can remove the call to take and just print the infinite list.
    
