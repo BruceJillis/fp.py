@@ -55,7 +55,7 @@ def transform(ast, prettyprint):
 
 def printcode(name):
 	'small helper function to easily and quickly print the gmachine code for a combinator'
-	print '%s = %s' % (name, str(symtab[name][SymbolTable.CODE]))
+	print '%s = %s' % (name, str(symtab[name].code))
 
 # define the command line parser
 parser = argparse.ArgumentParser(description='Compiler for the miranda-style functional language FP.')

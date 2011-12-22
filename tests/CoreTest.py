@@ -647,3 +647,67 @@ main = 1.31 * 2
 main = 2.44 / 2
 """)
 		self.assertEqual(ans, 1.22)
+
+	def test_chars(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a'
+""")
+		self.assertEqual(ans, 'a')
+
+	@unittest.expectedFailure
+	def test_chars1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' + 1
+""")
+
+	@unittest.expectedFailure
+	def test_chars2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' < 1
+""")
+
+	def test_chars3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' < 'b'
+""")
+		self.assertEqual(ans, True)
+
+	def test_chars4(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'z' >= 'a'
+""")
+		self.assertEqual(ans, True)
+
+	def test_chars5(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' <= 'a'
+""")
+		self.assertEqual(ans, True)
+
+	def test_chars6(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' == 'a'
+""")
+		self.assertEqual(ans, True)
+
+	def test_chars7(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 'a' != 'a'
+""")
+		self.assertEqual(ans, False)

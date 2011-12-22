@@ -11,7 +11,7 @@ It features:
 Status
 ------
 - Core
-	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 82 high and low level unittests giving 85% code coverage (see --coverage for a report).
+	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 90 high and low level unittests giving 88% code coverage (see --coverage for a report) and consists of 5k lines of python code.
 - High Level Language
 	* 0%
 
@@ -25,6 +25,23 @@ Core
 ----
       
 The Core language is a minimal functional language carefully chosen so that it is possible to translate programs in a rich functional language (such as Miranda) into the Core language without losing expressiveness or efficiency. The Core language thus serves as a clean interface between the 'front end' of the compiler, which is concerned with high-level language constructs, and the 'back end', which is concerned with implementing the Core language in various different ways.
+
+The basic types are: 
+
+<table>
+	<tr>
+		<td>numbers</td>
+		<td>both integer and real (ie. the integers: 1, 2, 4 or 1000 or the reals: 1.131, 2.31 etc)</td>
+	</tr>
+	<tr>
+		<td>booleans</td>
+		<td>with only values true, false </td>
+	</tr>
+	<tr>
+		<td>characters</td>
+		<td>intended to be the whole ASCII (and maybe even unicode set) but for now just '[a-zA-Z0-9]'</td>
+	</tr>
+</table>
 
 Here is an example Core program, which evaluates to `42`:
    
@@ -278,3 +295,15 @@ FP consists of 4 parts:
    - contains the std prelude
 - /core/tests
    - misc core code used in the unittests
+
+- /etc/
+	- misc supporting stuff
+- /etc/vb-antlr*
+	- UTwente compiler construction lecture notes 
+- /etc/Implementing Functional Languages.pdf
+	- Book/Tutorial by Simon Peyton Jones about several machine models that can evaluate lazy functional languages and their implementations.
+- /etc/antlr-3.4.jar 
+	- the excellent antlr tool
+- /etc/cloc-1.55.exe
+- /etc/cloc.bat
+	- line counts tooling

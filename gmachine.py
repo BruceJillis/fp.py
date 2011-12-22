@@ -88,37 +88,38 @@ class Code:
 	PUSHG  = 2
 	PUSHI  = 3
 	PUSHF  = 4
-	UNWIND = 5
-	APPLY  = 6
-	UPDATE = 7
-	POP    = 8
-	SLIDE  = 9
-	ALLOC  = 10
-	EVAL   = 11
+	PUSHC  = 5
+	UNWIND = 6
+	APPLY  = 7
+	UPDATE = 8
+	POP    = 9
+	SLIDE  = 10
+	ALLOC  = 11
+	EVAL   = 12
 
-	ADD = 12
-	SUB = 13
-	MUL = 14
-	DIV = 15
-	NEG = 16
+	ADD = 13
+	SUB = 14
+	MUL = 15
+	DIV = 16
+	NEG = 17
 
-	EQ = 17
-	NEQ = 18
-	LT = 19
-	LTE = 20
-	GT = 21
-	GTE = 22
+	EQ = 18
+	NEQ = 19
+	LT = 20
+	LTE = 21
+	GT = 22
+	GTE = 23
 	
-	COND = 23
+	COND = 24
 
-	PACK = 24
-	CASE = 25
-	SPLIT = 26
+	PACK = 25
+	CASE = 26
+	SPLIT = 27
 
-	AND = 27
-	OR = 28
+	AND = 28
+	OR = 29
 	
-	PRINT = 29
+	PRINT = 30
 
 	def __init__(self):
 		self.instructions = []
@@ -208,6 +209,9 @@ class Code:
 	def PushF(self, value):
 		self.instructions.append((Code.PUSHF, value))
 
+	def PushC(self, value):
+		self.instructions.append((Code.PUSHC, value))
+
 	def PushG(self, name):
 		self.instructions.append((Code.PUSHG, name))
 
@@ -239,6 +243,8 @@ def code_to_str(instr):
 		str = "PI %s" % (instr[1])
 	elif instr[0] == Code.PUSHF:
 		str = "PF %s" % (instr[1])
+	elif instr[0] == Code.PUSHC:
+		str = "PC %s" % (instr[1])
 	elif instr[0] == Code.UNWIND:
 		str = "UNWIND"
 	elif instr[0] == Code.UPDATE:
@@ -534,12 +540,20 @@ class NInt(Node):
 		return 'NInt(%s)' % (self.value)
 
 class NFloat(Node):
-	"represents a number at runtime"
+	"represents a floating point number at runtime"
 	def __init__(self, value):
 		self.value = float(value)
 
 	def __repr__(self):
 		return 'NFloat(%f)' % (self.value)
+
+class NChar(Node):
+	"represents a character at runtime"
+	def __init__(self, value):
+		self.value = chr(ord(value))
+
+	def __repr__(self):
+		return 'NChar(%s)' % (self.value)
 
 class NInd(Node):
 	"represents an indirection at runtime"
@@ -566,20 +580,25 @@ def run(state, verbose=False):
 	def cache(n):
 		'cache ints in the globals component'
 		key = str(n)
-		if not key in state.globals:
-			try:
-				key == str(int(key))
-				state.globals[key] = state.heap.store(NInt(n))
-			except:
-				state.globals[key] = state.heap.store(NFloat(n))
-		return state.globals[key]
+		try: 
+			if not key in state.globals:
+				try:
+					key == str(int(key))
+					state.globals[key] = state.heap.store(NInt(n))
+				except:
+					try:
+						key == str(float(key))
+						state.globals[key] = state.heap.store(NFloat(n))
+					except:	
+						state.globals[key] = state.heap.store(NChar(n))
+			return state.globals[key]
+		except:
+			raise ValueError("couldn't cache value '%s' in globals" % str(n))
 
 	def value(addr):
 		'handy function to obtain uniformly obtain the value a node represents for comparison, boolean logic, arithmetic, etc.'
 		node = state.heap[addr]
-		if node.__class__ == NInt:
-			return node.value
-		if node.__class__ == NFloat:
+		if node.__class__ == NInt or node.__class__ == NFloat or node.__class__ == NChar:
 			return node.value
 		elif node.__class__ == NConstr:
 			if node.a == 1:
@@ -626,6 +645,10 @@ def run(state, verbose=False):
 		elif i[0] == Code.PUSHF:
 			state.stack.push(cache(i[1]))
 
+		# PUSHC
+		elif i[0] == Code.PUSHC:
+			state.stack.push(cache(i[1]))
+
 		# APPLY
 		elif i[0] == Code.APPLY:
 			a1 = state.stack.pop()
@@ -659,15 +682,18 @@ def run(state, verbose=False):
 		elif i[0] in [Code.ADD, Code.SUB, Code.MUL, Code.DIV]:
 			v0 = state.heap[state.stack.pop()].value
 			v1 = state.heap[state.stack.pop()].value
-			if i[0] == Code.ADD:
-				v = v0 + v1
-			elif i[0] == Code.SUB:
-				v = v0 - v1
-			elif i[0] == Code.MUL:
-				v = v0 * v1
-			elif i[0] == Code.DIV:
-				v = v0 / v1			
-			state.stack.push(cache(v))
+			try:
+				if i[0] == Code.ADD:
+					v = v0 + v1
+				elif i[0] == Code.SUB:
+					v = v0 - v1
+				elif i[0] == Code.MUL:
+					v = v0 * v1
+				elif i[0] == Code.DIV:
+					v = v0 / v1			
+				state.stack.push(cache(v))
+			except TypeError:
+				raise TypeError("cannot %s %s and %s objects" % (code_to_str(i), type(v0), type(v1)))
 		
 		# NEG
 		elif i[0] == Code.NEG:
@@ -699,6 +725,8 @@ def run(state, verbose=False):
 		elif i[0] in [Code.AND, Code.OR, Code.EQ, Code.NEQ, Code.LT, Code.LTE, Code.GT, Code.GTE]:
 			v0 = value(state.stack.pop())
 			v1 = value(state.stack.pop())
+			if type(v0) == str and not type(v1) == str or type(v1) == str and not type(v0) == str:
+				raise TypeError("cannot compare (%s) %s and %s objects" % (code_to_str(i), type(v0), type(v1)))
 			v = 2 # assume we fail
 			if i[0] == Code.EQ:
 				if v0 == v1:
@@ -756,6 +784,11 @@ def run(state, verbose=False):
 				else:
 					state.output.append(n.value)
 			elif c == NFloat:
+				if state.output == None:
+					state.output = n.value
+				else:
+					state.output.append(n.value)
+			elif c == NChar:
 				if state.output == None:
 					state.output = n.value
 				else:
@@ -818,7 +851,7 @@ def run(state, verbose=False):
 				state.stack = item[0]
 				state.stack.push(a)
 				state.code = item[1]
-			elif c == NInt or c == NFloat:
+			elif c == NInt or c == NFloat or c == NChar:
 				if state.dump.empty():
 					# we are done, return
 					state.code = []

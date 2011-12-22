@@ -328,11 +328,14 @@ class CompileE(CompilationScheme):
 		self.visit('E', node.left(), *args, **kwargs)
 		self.code.Neg()
 
-	def visit_FloatNode(self, number, **kwargs):
-		self.code.PushF(number.value())
+	def visit_FloatNode(self, node, **kwargs):
+		self.code.PushF(node.value())
 
-	def visit_IntNode(self, number, **kwargs):
-		self.code.PushI(number.value())
+	def visit_IntNode(self, node, **kwargs):
+		self.code.PushI(node.value())
+
+	def visit_CharNode(self, node, **kwargs):
+		self.code.PushC(node.value())
 
 	def fallback(self, node, *args, **kwargs):
 		self.visit('C', node, *args, **kwargs)
@@ -479,9 +482,9 @@ class CompileC(CompilationScheme):
 		self.code.Apply()
 		self.code.Apply()
 
-	def visit_IdentifierNode(self, identifier, **kwargs):
-		name = str(identifier)
-		if identifier.binder().__class__ == IdentifierNode:
+	def visit_IdentifierNode(self, node, **kwargs):
+		name = str(node)
+		if node.binder().__class__ == IdentifierNode:
 			self.code.Push(kwargs['env'].get(name))
 		else:
 			self.code.PushG(name)
@@ -491,11 +494,14 @@ class CompileC(CompilationScheme):
 		self.code.PushG('negate')
 		self.code.Apply()
 
-	def visit_FloatNode(self, number, **kwargs):
-		self.code.PushF(number.value())
+	def visit_FloatNode(self, node, **kwargs):
+		self.code.PushF(node.value())
 
-	def visit_IntNode(self, number, **kwargs):
-		self.code.PushI(number.value())
+	def visit_IntNode(self, node, **kwargs):
+		self.code.PushI(node.value())
+
+	def visit_CharNode(self, node, **kwargs):
+		self.code.PushC(node.value())
 
 class CompileA(CompilationScheme):
 	"compiles the code for an alternative in a case expression."

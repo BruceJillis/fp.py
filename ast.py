@@ -221,3 +221,9 @@ class FloatNode(BasicNode):
 
 	def value(self):
 		return float(self.toString())
+
+class CharNode(BasicNode):
+	spelling = 'CHAR'
+
+	def value(self):
+		return self.toString().replace('\'', '')

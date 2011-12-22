@@ -110,6 +110,8 @@ aexpr!
 	  -> ^(INT<IntNode>)
 	| FLOAT
      -> ^(FLOAT<FloatNode>)
+	| CHAR
+	  -> ^(CHAR<CharNode>)
    | PACK LCURLY INT COMMA INT RCURLY
      -> ^(PACK<ConstructorNode> INT<IntNode> INT<IntNode>)
    | LPAREN expression RPAREN
@@ -120,6 +122,8 @@ relop: LT<LessThanNode> | LTE<LessThanEqualNode> | EQ<EqualNode> | NEQ<NotEqualN
 
 INT: ('0'..'9')+;
 FLOAT: INT DOT INT;
+
+CHAR: '\'' ('a'..'z' | 'A'..'Z' | '0'..'9') '\'';
 
 ID: ('a'..'z' | 'A' .. 'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')* ('?' | '!')?;
 
