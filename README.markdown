@@ -1,4 +1,4 @@
-FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: [Implementing functional languages: a tutorial](http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/). Inspired by Miranda and Amanda (A windows based clone created by D. Bruin, see [the Miranda wikipedia entry](http://en.wikipedia.org/wiki/Miranda_(programming_language) for more info generally and a download link).
+FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: [Implementing functional languages: a tutorial](http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/). Inspired by Miranda and Amanda (A windows based clone created by D. Bruin, see [the Miranda wikipedia entry](http://en.wikipedia.org/wiki/Miranda_(programming_language) for more info generally and a download link). It emphasizes program transformation techniques over other approaches and uses these to among others a simple (but effective) lambda lifter.
 
 It features:
 
@@ -10,8 +10,10 @@ It features:
 
 Status
 ------
+Right now the codebase consists of 5k lines of python code, implementing everything from command line handling to parsing, transformation and compilation.
+
 - Core
-	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 94 high and low level unittests at 91% coverage (see --coverage for a report) and consists of 5k lines of python code.
+	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 94 high and low level unittests at 91% coverage (see --coverage for a report).
 - High Level Language
 	* 0%
 
