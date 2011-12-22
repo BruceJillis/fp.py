@@ -117,48 +117,45 @@ class Identification(Visitor):
 	def visit_CombinatorNode(self, combinator):
 		if combinator.name() in self.symtab:
 			raise SyntaxError('%s already defined' % combinator.name())
-		self.symtab.enter(combinator.name())
+		self.symtab[combinator.name()] = {}
+		self.symtab[combinator.name()]['__count__'] = len(combinator.parameters())
+		binders = {
+			combinator.name(): combinator
+		}
 		for parameter in combinator.parameters():
-			self.symtab[str(parameter)] = parameter
-		self.symtab[SymbolTable.COUNT] = len(combinator.parameters())
-		self.visit(combinator.body())
-		self.symtab.leave()
+			binders[str(parameter)] = parameter
+		self.visit(combinator.body(), env=binders)
 
-	def visit_ApplicationNode(self, node, *args, **kwargs):
-		self.visit(node.right())
-		self.visit(node.left())
+	def visit_ApplicationNode(self, node, **kwargs):
+		self.visit(node.right(), **kwargs)
+		self.visit(node.left(), **kwargs)
 
-	def visit_LetNode(self, node):
-		self.symtab.enter(node)
-		for definition in node.children[0:-1]:
-			self.symtab[definition.name()] = definition
-			self.visit(definition.children[-1])
-		self.symtab[SymbolTable.COUNT] = len(node.children[0:-1])
-		self.visit(node.children[-1])
-		self.symtab.leave()
+	def visit_LetNode(self, node, **kwargs):
+		for definition in node.definitions():
+			kwargs['env'][definition.name()] = definition.children[0]
+			self.visit(definition.children[-1], **kwargs)
+		self.visit(node.body(), **kwargs)
 
-	def visit_LetRecNode(self, node):
-		self.symtab.enter(node)
-		for definition in node.children[0:-1]:
-			self.symtab[definition.name()] = definition
-		for definition in node.children[0:-1]:
-			self.visit(definition.children[-1])
-		self.symtab[SymbolTable.COUNT] = len(node.children[0:-1])
-		self.visit(node.children[-1])
-		self.symtab.leave()
+	def visit_LetRecNode(self, node, **kwargs):
+		for definition in node.definitions():
+			kwargs['env'][definition.name()] = definition.children[0]
+		for definition in node.definitions():
+			self.visit(definition.children[-1], **kwargs)
+		self.visit(node.body(), **kwargs)
 
-	def visit_CaseNode(self, node):
-		self.symtab.enter(node)		
+	def visit_CaseNode(self, node, **kwargs):
+		self.visit(node.condition(), **kwargs)
 		for alt in node.alternatives():
-			self.visit(alt)
-		self.symtab.leave()
+			self.visit(alt, **kwargs)
 
-	def visit_AlternativeNode(self, node):
-		self.symtab.enter(node)
-		for p in node.children[1:-1]:
-			self.symtab[str(p)] = p
-		self.visit(node.children[-1])
-		self.symtab.leave()
+	def visit_AlternativeNode(self, node, **kwargs):
+		for p in node.parameters():
+			kwargs['env'][str(p)] = p
+		self.visit(node.body(), **kwargs)
+
+	def visit_IdentifierNode(self, node, **kwargs):
+		if str(node) in kwargs['env']:
+			node.binder(kwargs['env'][str(node)])
 
 class CodeGeneration(CompositeVisitor):
 	"generate GMachine code for the supplied program."
@@ -226,7 +223,6 @@ class CompileR(CompilationScheme):
 
 	def visit_CombinatorNode(self, node):
 		env = Environment()
-		self.symtab.enter(node.name())
 		for parameter in node.parameters():
 			env.add(str(parameter))
 		d = env.index
@@ -234,49 +230,44 @@ class CompileR(CompilationScheme):
 		self.code.Update(d)
 		self.code.Pop(d)
 		self.code.Unwind()
-		self.symtab[SymbolTable.CODE] = self.code.clone()
+		self.symtab[node.name()][SymbolTable.CODE] = self.code.clone()
 		self.code.clear()
-		self.symtab.leave()
 
 class CompileE(CompilationScheme):
 	"compiles code that evaluates an expression e to WHNF in environment env, leaving a pointer to the expression on top of the stack"
 
 	def visit_LetNode(self, node, **kwargs):
-		self.symtab.enter(node)
-		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		count = len(node.definitions())
+		env, n = kwargs['env'].increment(count), 0
 		for definition in node.definitions():
-			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			env.add_at(definition.name(), count - (n + 1))
 			_env, n = kwargs['env'].increment(n), n + 1
 			self.visit('E', definition.body(), env = _env)
 		self.visit('E', node.body(), env = env)
-		self.code.Slide(self.symtab[SymbolTable.COUNT])
-		self.symtab.leave()
+		self.code.Slide(count)
 
 	def visit_LetRecNode(self, node, **kwargs):
-		self.symtab.enter(node)
-		self.code.Alloc(self.symtab[SymbolTable.COUNT])
-		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		count = len(node.definitions())
+		self.code.Alloc(count)
+		env, n = kwargs['env'].increment(count), 0
 		for definition in node.definitions():
-			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			env.add_at(definition.name(), count - (n + 1))
 			n += 1
-		u = self.symtab[SymbolTable.COUNT] - 1
+		u = count - 1
 		for definition in node.definitions():
 			self.visit('E', definition.body(), env = env)
 			self.code.Update(u)
 			u -= 1
 		self.visit('E', node.body(), env = env)
-		self.code.Slide(self.symtab[SymbolTable.COUNT])
-		self.symtab.leave()
+		self.code.Slide(count)
 	
 	def visit_CaseNode(self, node, *args, **kwargs):
-		self.symtab.enter(node)
 		self.visit('E', node.condition(), *args, **kwargs)
 		cases = {}
 		for alt in node.alternatives():
 			self.visit('A', alt, *args, **kwargs)
 			cases[self.facade['A'].item[0]] = self.facade['A'].item[1]
 		self.code.Case(cases)
-		self.symtab.leave()
 
 	def visit_ConstructorNode(self, node, *args, **kwargs):
 		for i, n in enumerate(node.expressions()):
@@ -347,38 +338,34 @@ class CompileC(CompilationScheme):
 	"generates code which constructs the graph of e in environment env, leaving a pointer to it on top of the stack."
 
 	def visit_LetNode(self, node, **kwargs):
-		self.symtab.enter(node)
-		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		count = len(node.definitions())
+		env, n = kwargs['env'].increment(count), 0
 		for definition in node.definitions():
-			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			env.add_at(definition.name(), count - (n + 1))
 			_env, n = kwargs['env'].increment(n), n + 1
 			self.visit('C', definition.body(), env = _env)
 		self.visit('C', node.body(), env = env)
-		self.code.Slide(self.symtab[SymbolTable.COUNT])
-		self.symtab.leave()
+		self.code.Slide(count)
 
 	def visit_LetRecNode(self, node, **kwargs):
-		self.symtab.enter(node)
-		self.code.Alloc(self.symtab[SymbolTable.COUNT])
-		env, n = kwargs['env'].increment(self.symtab[SymbolTable.COUNT]), 0
+		count = len(node.definitions())
+		self.code.Alloc(count)
+		env, n = kwargs['env'].increment(count), 0
 		for definition in node.definitions():
-			env.add_at(definition.name(), self.symtab[SymbolTable.COUNT] - (n + 1))
+			env.add_at(definition.name(), count - (n + 1))
 			n += 1
-		u = self.symtab[SymbolTable.COUNT] - 1
+		u = count - 1
 		for definition in node.definitions():
 			self.visit('C', definition.body(), env = env)
 			self.code.Update(u)
 			u -= 1
 		self.visit('C', node.body(), env = env)
-		self.code.Slide(self.symtab[SymbolTable.COUNT])
-		self.symtab.leave()
+		self.code.Slide(count)
 
 	def visit_CaseNode(self, node, **data):
-		self.symtab.enter(node)
 		self.visit('E', node.condition(), **data)
 		for alt in node.alternatives():
 			self.visit('A', alt, **data)
-		self.symtab.leave()
 
 	def visit_ConstructorNode(self, node, *args, **kwargs):
 		for i, n in enumerate(node.expressions()):
@@ -490,8 +477,7 @@ class CompileC(CompilationScheme):
 
 	def visit_IdentifierNode(self, identifier, **kwargs):
 		name = str(identifier)
-		node = self.symtab[name]
-		if isinstance(node, ASTNode):
+		if identifier.binder().__class__ == IdentifierNode:
 			self.code.Push(kwargs['env'].get(name))
 		else:
 			self.code.PushG(name)
@@ -508,18 +494,19 @@ class CompileA(CompilationScheme):
 	"compiles the code for an alternative in a case expression."
 
 	def visit_AlternativeNode(self, node, *args, **kwargs):
-		self.symtab.enter(node)	
+		# temporarily switch to a new code object to store the generated code
 		code = Code()
 		self.facade.switch_code(code)
-		n = len(node.parameters())
-		env = kwargs['env'].increment(n)
-		code.Split(n)
+		# now generate code as normal
+		count = len(node.parameters())
+		env = kwargs['env'].increment(count)
+		code.Split(count)
 		np = 0
 		for p in node.parameters():
 			env.add_at(str(p), np)
 			np += 1
 		self.visit('E', node.body(), env = env)
-		code.Slide(n)
+		code.Slide(count)
+		# switch back to the previous code object, store the new generated code object in self.item for later retrieval
 		self.item = (node.tag(), code)
 		self.facade.switch_code()
-		self.symtab.leave()

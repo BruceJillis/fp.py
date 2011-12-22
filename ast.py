@@ -203,6 +203,13 @@ class BasicNode(ASTNode):
 class IdentifierNode(BasicNode):
 	spelling = 'ID'
 
+	def binder(self, node = None):
+		if node == None:
+			if hasattr(self, '_binder'):
+				return self._binder
+			return None
+		self._binder = node
+
 class NumberNode(BasicNode):
 	spelling = 'NUMBER'
 

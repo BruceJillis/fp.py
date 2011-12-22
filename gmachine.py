@@ -64,21 +64,6 @@ class SymbolTable:
 			SymbolTable.CODE: c,
 		}
 		
-	def enter(self, context):
-		'enter a new scope'
-		key = str(context)
-		if not key in self.tree:
-			self.tree[key] = {}
-		parent = self.tree
-		self.tree = self.tree[key]
-		self.tree[SymbolTable.PARENT] = parent
-
-	def leave(self):
-		'leave current scope'
-		if self.tree[SymbolTable.PARENT] == None:
-			raise Error('cannot pop root scope!')
-		self.tree = self.tree[SymbolTable.PARENT]
-
 	def __setitem__(self, key, value):
 		self.tree[key] = value
 
@@ -105,20 +90,6 @@ class SymbolTable:
 
 	def __len__(self, key):
 		return len(self.tree.keys())
-	
-	def prettyprint(self, tree, indent = 0):
-		"prettyprint the tree"
-		try:
-			result = '\n'
-			for k in tree:
-				if k != SymbolTable.PARENT:
-					result += (indent * '   ') + '%s = %s\n' % (k, self.prettyprint(tree[k], indent+1))
-			return result
-		except:
-			return str(tree)
-
-	def __str__(self):
-		return self.prettyprint(self.root)
 
 # Code
 class Code:

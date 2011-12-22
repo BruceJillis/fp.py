@@ -74,6 +74,21 @@ parser.add_argument('--print-code', action='append', dest="printcode", default=[
 parser.add_argument('--show-transformations', action='store_true', dest="show_transformations", default=[], help="prettyprint the program before, during and after the transformation step")
 args = parser.parse_args()
 
+# symbol table for global registration of info 
+symtab = SymbolTable()
+
+# phases of the compiler
+identification = Identification(symtab)
+codegeneration = CodeGeneration(symtab)
+
+# transformations
+caselifter = CaseLifter(symtab)
+lambdasplitter = LambdaSplitter()
+lambdalifter = LambdaLifter(symtab)
+
+# misc
+prettyprinter = PrettyPrinter()
+
 # handle coverage command line argument
 if args.coverage:
 	import coverage
@@ -95,22 +110,6 @@ if args.coverage:
 	cov.stop()
 	cov.report(file=sys.stdout, show_missing=args.show_missing, ignore_errors=True)
 	exit()
-
-# symbol table for global registration of info 
-symtab = SymbolTable()
-
-# phases of the compiler
-identification = Identification(symtab)
-codegeneration = CodeGeneration(symtab)
-
-# transformations
-caselifter = CaseLifter(symtab)
-lambdasplitter = LambdaSplitter()
-lambdalifter = LambdaLifter(symtab)
-
-# misc
-prettyprinter = PrettyPrinter()
-
 
 # do actual work: compile all the supplied files including the include directories (recursively if necessary)
 # do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
