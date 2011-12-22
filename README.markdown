@@ -20,8 +20,8 @@ To compile (and evaluate) a Core program (extension assumed to be .core but isn'
 
 	python fp.py core\examples\fac.core  
 
-Command Line Usage
-------------------
+Command Line Parameters
+-----------------------
 	usage: fp.py [-h] [--include INCLUDE] [-v] [--stats] [--test] [--coverage]
 					 [--show-missing] [--no-includes] [--print-code PRINTCODE]
 					 [--show-transformations]
