@@ -3,15 +3,15 @@ FP is an educational functional language compiler/interpreter written in python.
 It features:
 
 - lazy evaluation
-- a mark and sweep, stop the world garbage collector
-- infinite precision arithmetic on ints and floats
+- a mark and sweep, stop the world, garbage collector
+- infinite precision arithmetic for ints and floats
 - anonymous local function definitions
 - structured datatypes (algebraic types)
 
 Status
 ------
 - Core
-	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 91 high and low level unittests giving 91% code coverage (see --coverage for a report) and consists of 4985 lines of python code.
+	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes 94 high and low level unittests at 91% coverage (see --coverage for a report) and consists of 5k lines of python code.
 - High Level Language
 	* 0%
 
@@ -238,28 +238,21 @@ Command Line Parameters
 
 	optional arguments:
 	  -h, --help            show this help message and exit
-	  --include INCLUDE     include .core files in these directories (default:
-									core/runtime/*.core)
+	  --include INCLUDE     include .core files in these directories (default:	core/runtime/*.core)
 	  --print-code PRINTCODE
-									print gmachine instructions for the supplied
-									combinators
+									print gmachine instructions for the supplied combinators
 	  --show-transformations
-									prettyprint the program before, during and after the
-									transformation step
+									prettyprint the program before, during and after the transformation step
 
 	debug:
 	  commandline options used during development on FPJS itself
 
-	  -v, --verbose         output a lot of information on the internals of the
-									systems
-	  --stats               output stats for the execution of the program (nr. of
-									steps, heap space used, pop/push/peeks, etc)
+	  -v, --verbose         output a lot of information on the internals of the systems
+	  --stats               output stats for the execution of the program (nr. of steps, heap space used, pop/push/peeks, etc)
 	  --test                run testsuite and report results
 	  --coverage            run test, record code coverage and report results
-	  --show-missing        show line numbers that were not covered by the
-									testsuite in the --coverage report
-	  --no-includes         do not include any external files (--include) except
-									those supplied as positional arguments
+	  --show-missing        show line numbers that were not covered by the testsuite in the --coverage report
+	  --no-includes         do not include any external files (--include) except those supplied as positional arguments
 
 Structure
 ---------

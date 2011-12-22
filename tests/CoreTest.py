@@ -102,6 +102,27 @@ class CoreTest(unittest.TestCase):
 		ans, state = self.run_str("main = twice (I I I) %s" % (p));
 		self.assertEqual(ans, p)
 
+	def test_precedence(self):
+		self.reset()
+		ans, state = self.run_str("""
+main = 4*5+(2-5)
+""")
+		self.assertEqual(ans, 17)
+
+	def test_precedence1(self):
+		self.reset()
+		ans, state = self.run_str("""
+main = (4+2)*5+2-5
+""")
+		self.assertEqual(ans, 27)
+
+	def test_precedence2(self):
+		self.reset()
+		ans, state = self.run_str("""
+main = 4+2*5+2-5
+""")
+		self.assertEqual(ans, 11)
+
 	def test_negate1(self):
 		self.reset()
 		self.prelude()
