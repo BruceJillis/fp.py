@@ -13,7 +13,12 @@ reverse2 xs ys = case xs of
 reverse xs = reverse2 xs nil;
 
 equals xs ys = let xe = (xs == nil), ye = (ys == nil) in 
-	if (xe & ye) true (if ((hd xs) == (hd ys)) (equals (tl xs) (tl ys)) false);
+	if (xe & ye) 
+		true 
+		(if ((hd xs) == (hd ys)) 
+			(equals (tl xs) (tl ys)) 
+			false
+		);
 
 ispalindrome xs = equals xs (reverse xs);
 

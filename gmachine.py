@@ -607,7 +607,7 @@ def run(state, verbose=False):
 			elif node.a == 2:
 				return 0
 			elif node.a == 3:
-				return 'nil'
+				return []
 			elif node.a == 4:
 				list = []
 				el = node
