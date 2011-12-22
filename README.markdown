@@ -139,14 +139,43 @@ the Core language, we eliminate these complications by outlawing all complex for
 The important thing about case expressions is that each alternative consists only of a tag followed by a number of variables (which should be the same as the arity of the constructor). No nested patterns are allowed. Case 
 expressions have a very simple operational interpretation, rather like a multi-way jump: evaluate the expression to be analysed, get the tag of the constructor it is built with and evaluate the appropriate alternative.
 
-   precedence | associativity | operator
-   -------------------------------------
-       6      | left          | application
-       5      | left          | /, *  
-       4      | left          | +, -
-       3      | left          | <, <=, ==, !=, >=, >
-       2      | left          | &
-       1      | left          | |
+<table>
+	<tr>
+		<th>precedence</th>
+		<th>associativity</th>
+		<th>operator</th>
+	</tr>
+	<tr>
+		<td>6</td>
+		<td>left</td>
+		<td>application</td>
+	</tr>
+	<tr>
+		<td>5</td>
+		<td>left</td>
+		<td>/, *</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>left</td>
+		<td>+, -</td>
+	</tr>
+	<tr>
+		<td>3</td>
+		<td>left</td>
+		<td>&lt;, &lt;=, ==, !=, &gt;=, &gt;</td>
+	</tr>
+	<tr>
+		<td>2</td>
+		<td>left</td>
+		<td>&amp;</td>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>left</td>
+		<td>|</td>
+	</tr>
+</table>
 
 Basic programs
 --------------
