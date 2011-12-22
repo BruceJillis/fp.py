@@ -1,28 +1,24 @@
-FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: "Implementing functional languages: a tutorial" [1]. Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see the Miranda wikipedia page for a download link)[2].
-
-[1] http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/
-[2] http://en.wikipedia.org/wiki/Miranda_(programming_language
+FP is an educational functional language compiler/interpreter written in python. Based on Simon Peyton Jones' work, specifically: ["Implementing functional languages: a tutorial"](http://research.microsoft.com/en-us/um/people/simonpj/papers/pj-lester-book/). Inspired by Miranda and Amanda (A windows based clone created by D. Bruin and see [the Miranda wikipedia entry](http://en.wikipedia.org/wiki/Miranda_(programming_language) for more info generally and a download link).
 
 It features:
- - lazy evaluation
- - a garbage collector
- - infinite precision arithmetic (only ints currently)
- - anonymous local function definitions
- - structured datatypes (algebraic types)
+- lazy evaluation
+- a garbage collector
+- infinite precision arithmetic (only ints currently)
+- anonymous local function definitions
+- structured datatypes (algebraic types)
 
- Status
+Status
 ------
-   - Core
-      * Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes some 77 high and low 
-        level unittests at 81% code coverage (see --coverage).
-   - High Level Language
-      * 0%
+- Core
+	* Functionally done. Everything works but isn't fully lazy yet (meaning some sub-expressions will be unnecessarily recalculated). The interpreter passes some 77 high and low level unittests at 81% code coverage (see --coverage).
+- High Level Language
+	* 0%
 
 Usage
 -----
 To compile (and evaluate) a Core program (extension assumed to be .core but isn't mandated), just supply it's name to the compiler:
 
-   python fp.py core\examples\fac.core
+python fp.py core\examples\fac.core  
 
 Command Line Usage
 ------------------
