@@ -62,6 +62,7 @@ Structure
 ---------
 
 FP consists of 4 parts: 
+
 - an ANTLR 3 based parser
 - several program transformations
 - a treewalker that compiles the AST down to a almost linear list of instructions
