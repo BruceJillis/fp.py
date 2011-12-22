@@ -607,3 +607,43 @@ f x = case x of <5> x -> (let x = 10 in x);
 main = f (Pack{5, 1} 2)
 """)
 		self.assertEqual(ans, 10)
+
+	def test_floats(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 1.31 + 1.2
+""")
+		self.assertEqual(ans, 2.51)
+
+	def test_floats1(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 1.31 + 1
+""")
+		self.assertEqual(ans, 2.31)
+
+	def test_floats2(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 1.31 + 1
+""")
+		self.assertEqual(ans, 2.31)
+
+	def test_floats3(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 1.31 * 2
+""")
+		self.assertEqual(ans, 2.62)
+
+	def test_floats4(self):
+		self.reset()
+		self.prelude()
+		ans, state = self.run_str("""
+main = 2.44 / 2
+""")
+		self.assertEqual(ans, 1.22)

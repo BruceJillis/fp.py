@@ -210,8 +210,14 @@ class IdentifierNode(BasicNode):
 			return None
 		self._binder = node
 
-class NumberNode(BasicNode):
-	spelling = 'NUMBER'
+class IntNode(BasicNode):
+	spelling = 'INT'
 
 	def value(self):
 		return int(self.toString())
+
+class FloatNode(BasicNode):
+	spelling = 'FLOAT'
+
+	def value(self):
+		return float(self.toString())

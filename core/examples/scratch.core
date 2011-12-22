@@ -1,2 +1,1 @@
-I x = x;
-main = let id1 = I I I in id1 1
+main = 1.31 * 2

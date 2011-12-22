@@ -176,9 +176,6 @@ class CaseLifterE(TransformationScheme):
 	def visit_NegateNode(self, node, **data):
 		self.visit('E', node.left(), **data)
 
-	def visit_NumberNode(self, number, **kwargs):
-		pass
-
 	def fallback(self, node, **data):
 		self.visit('C', node, **data)
 
@@ -314,9 +311,6 @@ class CaseLifterC(TransformationScheme):
 
 	def visit_NegateNode(self, node, **data):
 		self.visit('C', node.left(), **data)
-
-	def visit_NumberNode(self, number, **kwargs):
-		pass
 
 class CaseLifterA(TransformationScheme):
 	def visit_AlternativeNode(self, node, **data):

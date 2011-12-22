@@ -106,7 +106,10 @@ class PrettyPrinter(Visitor):
 	def visit_IdentifierNode(self, node):
 		print node,
 
-	def visit_NumberNode(self, node):
+	def visit_IntNode(self, node):
+		print node,
+
+	def visit_FloatNode(self, node):
 		print node,
 
 class Identification(Visitor):
@@ -202,10 +205,6 @@ class CompilationScheme(Visitor):
 
 	def fallback(self, node, **data):
 		"define a fallback that is aware of the scheme parameter."
-		if self.debug:
-			# if we are in debug mode print that we end up here (handy during development)
-			print 'fallback ' + node.__class__.__name__
-			print node.toStringTree()
 		if hasattr(node, 'children'):
 			# call and collect results for all children
 			result = []
@@ -329,7 +328,10 @@ class CompileE(CompilationScheme):
 		self.visit('E', node.left(), *args, **kwargs)
 		self.code.Neg()
 
-	def visit_NumberNode(self, number, **kwargs):
+	def visit_FloatNode(self, number, **kwargs):
+		self.code.PushF(number.value())
+
+	def visit_IntNode(self, number, **kwargs):
 		self.code.PushI(number.value())
 
 	def fallback(self, node, *args, **kwargs):
@@ -489,7 +491,10 @@ class CompileC(CompilationScheme):
 		self.code.PushG('negate')
 		self.code.Apply()
 
-	def visit_NumberNode(self, number, **kwargs):
+	def visit_FloatNode(self, number, **kwargs):
+		self.code.PushF(number.value())
+
+	def visit_IntNode(self, number, **kwargs):
 		self.code.PushI(number.value())
 
 class CompileA(CompilationScheme):

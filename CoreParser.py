@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-20 12:29:43
+# $ANTLR 3.4 grammars/Core.g 2011-12-22 22:24:54
 
 import sys
 from antlr3 import *
@@ -31,39 +31,40 @@ DEFINITION=14
 DIV=15
 DOT=16
 EQ=17
-GT=18
-GTE=19
-ID=20
-IN=21
-IS=22
-LAMBDA=23
-LCURLY=24
-LET=25
-LETREC=26
-LPAREN=27
-LT=28
-LTE=29
-MIN=30
-MUL=31
-NEQ=32
-NOT=33
-NUMBER=34
-OF=35
-OR=36
-PACK=37
-PROGRAM=38
-RCURLY=39
-RPAREN=40
-SCOLON=41
-WHITESPACE=42
+FLOAT=18
+GT=19
+GTE=20
+ID=21
+IN=22
+INT=23
+IS=24
+LAMBDA=25
+LCURLY=26
+LET=27
+LETREC=28
+LPAREN=29
+LT=30
+LTE=31
+MIN=32
+MUL=33
+NEQ=34
+NOT=35
+OF=36
+OR=37
+PACK=38
+PROGRAM=39
+RCURLY=40
+RPAREN=41
+SCOLON=42
+WHITESPACE=43
 
 # token names
 tokenNames = [
     "<invalid>", "<EOR>", "<DOWN>", "<UP>",
     "ADD", "ALTERNATIVE", "AND", "APPLICATION", "ARROW", "CASE", "COLON", 
     "COMBINATOR", "COMMA", "COMMENT", "DEFINITION", "DIV", "DOT", "EQ", 
-    "GT", "GTE", "ID", "IN", "IS", "LAMBDA", "LCURLY", "LET", "LETREC", 
-    "LPAREN", "LT", "LTE", "MIN", "MUL", "NEQ", "NOT", "NUMBER", "OF", "OR", 
+    "FLOAT", "GT", "GTE", "ID", "IN", "INT", "IS", "LAMBDA", "LCURLY", "LET", 
+    "LETREC", "LPAREN", "LT", "LTE", "MIN", "MUL", "NEQ", "NOT", "OF", "OR", 
     "PACK", "PROGRAM", "RCURLY", "RPAREN", "SCOLON", "WHITESPACE"
 ]
 
@@ -420,7 +421,7 @@ class CoreParser(Parser):
 
 
                 # AST Rewrite
-                # elements: ID, expression, ID
+                # elements: expression, ID, ID
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -582,7 +583,7 @@ class CoreParser(Parser):
                     alt6 = 3
                 elif LA6 == LAMBDA:
                     alt6 = 4
-                elif LA6 == ID or LA6 == LPAREN or LA6 == NUMBER or LA6 == PACK:
+                elif LA6 == FLOAT or LA6 == ID or LA6 == INT or LA6 == LPAREN or LA6 == PACK:
                     alt6 = 5
                 else:
                     if self._state.backtracking > 0:
@@ -624,7 +625,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: definitions, LET, expression
+                    # elements: LET, expression, definitions
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -690,7 +691,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: definitions, LETREC, expression
+                    # elements: LETREC, expression, definitions
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -756,7 +757,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: expression, alternatives, CASE
+                    # elements: CASE, expression, alternatives
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -847,7 +848,7 @@ class CoreParser(Parser):
 
 
                     # AST Rewrite
-                    # elements: ID, expression, LAMBDA
+                    # elements: LAMBDA, ID, expression
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -1059,7 +1060,7 @@ class CoreParser(Parser):
 
 
     # $ANTLR start "alternative"
-    # grammars/Core.g:81:1: alternative : LT NUMBER GT ( ID )* ARROW expression -> ^( ALTERNATIVE NUMBER ( ID )* expression ) ;
+    # grammars/Core.g:81:1: alternative : LT INT GT ( ID )* ARROW expression -> ^( ALTERNATIVE INT ( ID )* expression ) ;
     def alternative(self, ):
         retval = self.alternative_return()
         retval.start = self.input.LT(1)
@@ -1069,7 +1070,7 @@ class CoreParser(Parser):
         root_0 = None
 
         LT32 = None
-        NUMBER33 = None
+        INT33 = None
         GT34 = None
         ID35 = None
         ARROW36 = None
@@ -1077,15 +1078,15 @@ class CoreParser(Parser):
 
 
         LT32_tree = None
-        NUMBER33_tree = None
+        INT33_tree = None
         GT34_tree = None
         ID35_tree = None
         ARROW36_tree = None
         stream_GT = RewriteRuleTokenStream(self._adaptor, "token GT")
         stream_ARROW = RewriteRuleTokenStream(self._adaptor, "token ARROW")
         stream_LT = RewriteRuleTokenStream(self._adaptor, "token LT")
+        stream_INT = RewriteRuleTokenStream(self._adaptor, "token INT")
         stream_ID = RewriteRuleTokenStream(self._adaptor, "token ID")
-        stream_NUMBER = RewriteRuleTokenStream(self._adaptor, "token NUMBER")
         stream_expression = RewriteRuleSubtreeStream(self._adaptor, "rule expression")
         success = False
 
@@ -1097,17 +1098,17 @@ class CoreParser(Parser):
                     return retval
 
 
-                # grammars/Core.g:82:4: ( LT NUMBER GT ( ID )* ARROW expression -> ^( ALTERNATIVE NUMBER ( ID )* expression ) )
-                # grammars/Core.g:82:6: LT NUMBER GT ( ID )* ARROW expression
+                # grammars/Core.g:82:4: ( LT INT GT ( ID )* ARROW expression -> ^( ALTERNATIVE INT ( ID )* expression ) )
+                # grammars/Core.g:82:6: LT INT GT ( ID )* ARROW expression
                 pass 
                 LT32 = self.match(self.input, LT, self.FOLLOW_LT_in_alternative807) 
                 if self._state.backtracking == 0:
                     stream_LT.add(LT32)
 
 
-                NUMBER33 = self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_alternative809) 
+                INT33 = self.match(self.input, INT, self.FOLLOW_INT_in_alternative809) 
                 if self._state.backtracking == 0:
-                    stream_NUMBER.add(NUMBER33)
+                    stream_INT.add(INT33)
 
 
                 GT34 = self.match(self.input, GT, self.FOLLOW_GT_in_alternative811) 
@@ -1115,7 +1116,7 @@ class CoreParser(Parser):
                     stream_GT.add(GT34)
 
 
-                # grammars/Core.g:82:19: ( ID )*
+                # grammars/Core.g:82:16: ( ID )*
                 while True: #loop8
                     alt8 = 2
                     LA8_0 = self.input.LA(1)
@@ -1125,7 +1126,7 @@ class CoreParser(Parser):
 
 
                     if alt8 == 1:
-                        # grammars/Core.g:82:19: ID
+                        # grammars/Core.g:82:16: ID
                         pass 
                         ID35 = self.match(self.input, ID, self.FOLLOW_ID_in_alternative813) 
                         if self._state.backtracking == 0:
@@ -1151,7 +1152,7 @@ class CoreParser(Parser):
 
 
                 # AST Rewrite
-                # elements: ID, NUMBER, expression
+                # elements: INT, ID, expression
                 # token labels: 
                 # rule labels: retval
                 # token list labels: 
@@ -1166,18 +1167,18 @@ class CoreParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 83:6: -> ^( ALTERNATIVE NUMBER ( ID )* expression )
-                    # grammars/Core.g:83:9: ^( ALTERNATIVE NUMBER ( ID )* expression )
+                    # 83:6: -> ^( ALTERNATIVE INT ( ID )* expression )
+                    # grammars/Core.g:83:9: ^( ALTERNATIVE INT ( ID )* expression )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     AlternativeNode(ALTERNATIVE)
                     , root_1)
 
                     self._adaptor.addChild(root_1, 
-                    NumberNode(stream_NUMBER.nextToken())
+                    IntNode(stream_INT.nextToken())
                     )
 
-                    # grammars/Core.g:83:59: ( ID )*
+                    # grammars/Core.g:83:53: ( ID )*
                     while stream_ID.hasNext():
                         self._adaptor.addChild(root_1, 
                         IdentifierNode(stream_ID.nextToken())
@@ -2197,7 +2198,7 @@ class CoreParser(Parser):
                     alt17 = 2
                     LA17_0 = self.input.LA(1)
 
-                    if (LA17_0 == ID or LA17_0 == LPAREN or LA17_0 == NUMBER or LA17_0 == PACK) :
+                    if (LA17_0 == FLOAT or LA17_0 == ID or LA17_0 == INT or LA17_0 == LPAREN or LA17_0 == PACK) :
                         alt17 = 1
 
 
@@ -2276,7 +2277,7 @@ class CoreParser(Parser):
 
 
     # $ANTLR start "aexpr"
-    # grammars/Core.g:106:1: aexpr : ( ID -> ^( ID ) | NUMBER -> ^( NUMBER ) | PACK LCURLY NUMBER COMMA NUMBER RCURLY -> ^( PACK NUMBER NUMBER ) | LPAREN expression RPAREN -> expression );
+    # grammars/Core.g:106:1: aexpr : ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | PACK LCURLY INT COMMA INT RCURLY -> ^( PACK INT INT ) | LPAREN expression RPAREN -> expression );
     def aexpr(self, ):
         retval = self.aexpr_return()
         retval.start = self.input.LT(1)
@@ -2286,36 +2287,39 @@ class CoreParser(Parser):
         root_0 = None
 
         ID61 = None
-        NUMBER62 = None
-        PACK63 = None
-        LCURLY64 = None
-        NUMBER65 = None
-        COMMA66 = None
-        NUMBER67 = None
-        RCURLY68 = None
-        LPAREN69 = None
-        RPAREN71 = None
-        expression70 = None
+        INT62 = None
+        FLOAT63 = None
+        PACK64 = None
+        LCURLY65 = None
+        INT66 = None
+        COMMA67 = None
+        INT68 = None
+        RCURLY69 = None
+        LPAREN70 = None
+        RPAREN72 = None
+        expression71 = None
 
 
         ID61_tree = None
-        NUMBER62_tree = None
-        PACK63_tree = None
-        LCURLY64_tree = None
-        NUMBER65_tree = None
-        COMMA66_tree = None
-        NUMBER67_tree = None
-        RCURLY68_tree = None
-        LPAREN69_tree = None
-        RPAREN71_tree = None
+        INT62_tree = None
+        FLOAT63_tree = None
+        PACK64_tree = None
+        LCURLY65_tree = None
+        INT66_tree = None
+        COMMA67_tree = None
+        INT68_tree = None
+        RCURLY69_tree = None
+        LPAREN70_tree = None
+        RPAREN72_tree = None
         stream_RPAREN = RewriteRuleTokenStream(self._adaptor, "token RPAREN")
         stream_LCURLY = RewriteRuleTokenStream(self._adaptor, "token LCURLY")
+        stream_FLOAT = RewriteRuleTokenStream(self._adaptor, "token FLOAT")
+        stream_INT = RewriteRuleTokenStream(self._adaptor, "token INT")
         stream_ID = RewriteRuleTokenStream(self._adaptor, "token ID")
         stream_COMMA = RewriteRuleTokenStream(self._adaptor, "token COMMA")
         stream_PACK = RewriteRuleTokenStream(self._adaptor, "token PACK")
         stream_LPAREN = RewriteRuleTokenStream(self._adaptor, "token LPAREN")
         stream_RCURLY = RewriteRuleTokenStream(self._adaptor, "token RCURLY")
-        stream_NUMBER = RewriteRuleTokenStream(self._adaptor, "token NUMBER")
         stream_expression = RewriteRuleSubtreeStream(self._adaptor, "rule expression")
         success = False
 
@@ -2327,17 +2331,19 @@ class CoreParser(Parser):
                     return retval
 
 
-                # grammars/Core.g:107:4: ( ID -> ^( ID ) | NUMBER -> ^( NUMBER ) | PACK LCURLY NUMBER COMMA NUMBER RCURLY -> ^( PACK NUMBER NUMBER ) | LPAREN expression RPAREN -> expression )
-                alt18 = 4
+                # grammars/Core.g:107:4: ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | PACK LCURLY INT COMMA INT RCURLY -> ^( PACK INT INT ) | LPAREN expression RPAREN -> expression )
+                alt18 = 5
                 LA18 = self.input.LA(1)
                 if LA18 == ID:
                     alt18 = 1
-                elif LA18 == NUMBER:
+                elif LA18 == INT:
                     alt18 = 2
-                elif LA18 == PACK:
+                elif LA18 == FLOAT:
                     alt18 = 3
-                elif LA18 == LPAREN:
+                elif LA18 == PACK:
                     alt18 = 4
+                elif LA18 == LPAREN:
+                    alt18 = 5
                 else:
                     if self._state.backtracking > 0:
                         raise BacktrackingFailed
@@ -2390,15 +2396,15 @@ class CoreParser(Parser):
 
 
                 elif alt18 == 2:
-                    # grammars/Core.g:109:6: NUMBER
+                    # grammars/Core.g:109:6: INT
                     pass 
-                    NUMBER62 = self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_aexpr1049) 
+                    INT62 = self.match(self.input, INT, self.FOLLOW_INT_in_aexpr1049) 
                     if self._state.backtracking == 0:
-                        stream_NUMBER.add(NUMBER62)
+                        stream_INT.add(INT62)
 
 
                     # AST Rewrite
-                    # elements: NUMBER
+                    # elements: INT
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2413,11 +2419,11 @@ class CoreParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 110:6: -> ^( NUMBER )
-                        # grammars/Core.g:110:9: ^( NUMBER )
+                        # 110:4: -> ^( INT )
+                        # grammars/Core.g:110:7: ^( INT )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
-                        NumberNode(stream_NUMBER.nextToken())
+                        IntNode(stream_INT.nextToken())
                         , root_1)
 
                         self._adaptor.addChild(root_0, root_1)
@@ -2431,40 +2437,15 @@ class CoreParser(Parser):
 
 
                 elif alt18 == 3:
-                    # grammars/Core.g:111:6: PACK LCURLY NUMBER COMMA NUMBER RCURLY
+                    # grammars/Core.g:111:4: FLOAT
                     pass 
-                    PACK63 = self.match(self.input, PACK, self.FOLLOW_PACK_in_aexpr1070) 
+                    FLOAT63 = self.match(self.input, FLOAT, self.FOLLOW_FLOAT_in_aexpr1066) 
                     if self._state.backtracking == 0:
-                        stream_PACK.add(PACK63)
-
-
-                    LCURLY64 = self.match(self.input, LCURLY, self.FOLLOW_LCURLY_in_aexpr1072) 
-                    if self._state.backtracking == 0:
-                        stream_LCURLY.add(LCURLY64)
-
-
-                    NUMBER65 = self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_aexpr1074) 
-                    if self._state.backtracking == 0:
-                        stream_NUMBER.add(NUMBER65)
-
-
-                    COMMA66 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_aexpr1076) 
-                    if self._state.backtracking == 0:
-                        stream_COMMA.add(COMMA66)
-
-
-                    NUMBER67 = self.match(self.input, NUMBER, self.FOLLOW_NUMBER_in_aexpr1078) 
-                    if self._state.backtracking == 0:
-                        stream_NUMBER.add(NUMBER67)
-
-
-                    RCURLY68 = self.match(self.input, RCURLY, self.FOLLOW_RCURLY_in_aexpr1080) 
-                    if self._state.backtracking == 0:
-                        stream_RCURLY.add(RCURLY68)
+                        stream_FLOAT.add(FLOAT63)
 
 
                     # AST Rewrite
-                    # elements: NUMBER, NUMBER, PACK
+                    # elements: FLOAT
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -2479,20 +2460,12 @@ class CoreParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 112:6: -> ^( PACK NUMBER NUMBER )
-                        # grammars/Core.g:112:9: ^( PACK NUMBER NUMBER )
+                        # 112:6: -> ^( FLOAT )
+                        # grammars/Core.g:112:9: ^( FLOAT )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
-                        ConstructorNode(stream_PACK.nextToken())
+                        FloatNode(stream_FLOAT.nextToken())
                         , root_1)
-
-                        self._adaptor.addChild(root_1, 
-                        NumberNode(stream_NUMBER.nextToken())
-                        )
-
-                        self._adaptor.addChild(root_1, 
-                        NumberNode(stream_NUMBER.nextToken())
-                        )
 
                         self._adaptor.addChild(root_0, root_1)
 
@@ -2505,24 +2478,98 @@ class CoreParser(Parser):
 
 
                 elif alt18 == 4:
-                    # grammars/Core.g:113:6: LPAREN expression RPAREN
+                    # grammars/Core.g:113:6: PACK LCURLY INT COMMA INT RCURLY
                     pass 
-                    LPAREN69 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_aexpr1111) 
+                    PACK64 = self.match(self.input, PACK, self.FOLLOW_PACK_in_aexpr1087) 
                     if self._state.backtracking == 0:
-                        stream_LPAREN.add(LPAREN69)
+                        stream_PACK.add(PACK64)
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_aexpr1113)
-                    expression70 = self.expression()
+                    LCURLY65 = self.match(self.input, LCURLY, self.FOLLOW_LCURLY_in_aexpr1089) 
+                    if self._state.backtracking == 0:
+                        stream_LCURLY.add(LCURLY65)
+
+
+                    INT66 = self.match(self.input, INT, self.FOLLOW_INT_in_aexpr1091) 
+                    if self._state.backtracking == 0:
+                        stream_INT.add(INT66)
+
+
+                    COMMA67 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_aexpr1093) 
+                    if self._state.backtracking == 0:
+                        stream_COMMA.add(COMMA67)
+
+
+                    INT68 = self.match(self.input, INT, self.FOLLOW_INT_in_aexpr1095) 
+                    if self._state.backtracking == 0:
+                        stream_INT.add(INT68)
+
+
+                    RCURLY69 = self.match(self.input, RCURLY, self.FOLLOW_RCURLY_in_aexpr1097) 
+                    if self._state.backtracking == 0:
+                        stream_RCURLY.add(RCURLY69)
+
+
+                    # AST Rewrite
+                    # elements: PACK, INT, INT
+                    # token labels: 
+                    # rule labels: retval
+                    # token list labels: 
+                    # rule list labels: 
+                    # wildcard labels: 
+                    if self._state.backtracking == 0:
+                        retval.tree = root_0
+                        if retval is not None:
+                            stream_retval = RewriteRuleSubtreeStream(self._adaptor, "rule retval", retval.tree)
+                        else:
+                            stream_retval = RewriteRuleSubtreeStream(self._adaptor, "token retval", None)
+
+
+                        root_0 = self._adaptor.nil()
+                        # 114:6: -> ^( PACK INT INT )
+                        # grammars/Core.g:114:9: ^( PACK INT INT )
+                        root_1 = self._adaptor.nil()
+                        root_1 = self._adaptor.becomeRoot(
+                        ConstructorNode(stream_PACK.nextToken())
+                        , root_1)
+
+                        self._adaptor.addChild(root_1, 
+                        IntNode(stream_INT.nextToken())
+                        )
+
+                        self._adaptor.addChild(root_1, 
+                        IntNode(stream_INT.nextToken())
+                        )
+
+                        self._adaptor.addChild(root_0, root_1)
+
+
+
+
+                        retval.tree = root_0
+
+
+
+
+                elif alt18 == 5:
+                    # grammars/Core.g:115:6: LPAREN expression RPAREN
+                    pass 
+                    LPAREN70 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_aexpr1128) 
+                    if self._state.backtracking == 0:
+                        stream_LPAREN.add(LPAREN70)
+
+
+                    self._state.following.append(self.FOLLOW_expression_in_aexpr1130)
+                    expression71 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_expression.add(expression70.tree)
+                        stream_expression.add(expression71.tree)
 
 
-                    RPAREN71 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_aexpr1115) 
+                    RPAREN72 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_aexpr1132) 
                     if self._state.backtracking == 0:
-                        stream_RPAREN.add(RPAREN71)
+                        stream_RPAREN.add(RPAREN72)
 
 
                     # AST Rewrite
@@ -2541,7 +2588,7 @@ class CoreParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 114:6: -> expression
+                        # 116:6: -> expression
                         self._adaptor.addChild(root_0, stream_expression.nextTree())
 
 
@@ -2590,7 +2637,7 @@ class CoreParser(Parser):
 
 
     # $ANTLR start "relop"
-    # grammars/Core.g:117:1: relop : ( LT | LTE | EQ | NEQ | GTE | GT );
+    # grammars/Core.g:119:1: relop : ( LT | LTE | EQ | NEQ | GTE | GT );
     def relop(self, ):
         retval = self.relop_return()
         retval.start = self.input.LT(1)
@@ -2599,19 +2646,19 @@ class CoreParser(Parser):
 
         root_0 = None
 
-        LT72 = None
-        LTE73 = None
-        EQ74 = None
-        NEQ75 = None
-        GTE76 = None
-        GT77 = None
+        LT73 = None
+        LTE74 = None
+        EQ75 = None
+        NEQ76 = None
+        GTE77 = None
+        GT78 = None
 
-        LT72_tree = None
-        LTE73_tree = None
-        EQ74_tree = None
-        NEQ75_tree = None
-        GTE76_tree = None
-        GT77_tree = None
+        LT73_tree = None
+        LTE74_tree = None
+        EQ75_tree = None
+        NEQ76_tree = None
+        GTE77_tree = None
+        GT78_tree = None
 
         success = False
 
@@ -2623,7 +2670,7 @@ class CoreParser(Parser):
                     return retval
 
 
-                # grammars/Core.g:117:6: ( LT | LTE | EQ | NEQ | GTE | GT )
+                # grammars/Core.g:119:6: ( LT | LTE | EQ | NEQ | GTE | GT )
                 alt19 = 6
                 LA19 = self.input.LA(1)
                 if LA19 == LT:
@@ -2649,85 +2696,85 @@ class CoreParser(Parser):
 
 
                 if alt19 == 1:
-                    # grammars/Core.g:117:8: LT
+                    # grammars/Core.g:119:8: LT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    LT72 = self.match(self.input, LT, self.FOLLOW_LT_in_relop1132)
+                    LT73 = self.match(self.input, LT, self.FOLLOW_LT_in_relop1149)
                     if self._state.backtracking == 0:
-                        LT72_tree = LessThanNode(LT72) 
-                        self._adaptor.addChild(root_0, LT72_tree)
+                        LT73_tree = LessThanNode(LT73) 
+                        self._adaptor.addChild(root_0, LT73_tree)
 
 
 
 
                 elif alt19 == 2:
-                    # grammars/Core.g:117:27: LTE
+                    # grammars/Core.g:119:27: LTE
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    LTE73 = self.match(self.input, LTE, self.FOLLOW_LTE_in_relop1139)
+                    LTE74 = self.match(self.input, LTE, self.FOLLOW_LTE_in_relop1156)
                     if self._state.backtracking == 0:
-                        LTE73_tree = LessThanEqualNode(LTE73) 
-                        self._adaptor.addChild(root_0, LTE73_tree)
+                        LTE74_tree = LessThanEqualNode(LTE74) 
+                        self._adaptor.addChild(root_0, LTE74_tree)
 
 
 
 
                 elif alt19 == 3:
-                    # grammars/Core.g:117:52: EQ
+                    # grammars/Core.g:119:52: EQ
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    EQ74 = self.match(self.input, EQ, self.FOLLOW_EQ_in_relop1146)
+                    EQ75 = self.match(self.input, EQ, self.FOLLOW_EQ_in_relop1163)
                     if self._state.backtracking == 0:
-                        EQ74_tree = EqualNode(EQ74) 
-                        self._adaptor.addChild(root_0, EQ74_tree)
+                        EQ75_tree = EqualNode(EQ75) 
+                        self._adaptor.addChild(root_0, EQ75_tree)
 
 
 
 
                 elif alt19 == 4:
-                    # grammars/Core.g:117:68: NEQ
+                    # grammars/Core.g:119:68: NEQ
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    NEQ75 = self.match(self.input, NEQ, self.FOLLOW_NEQ_in_relop1153)
+                    NEQ76 = self.match(self.input, NEQ, self.FOLLOW_NEQ_in_relop1170)
                     if self._state.backtracking == 0:
-                        NEQ75_tree = NotEqualNode(NEQ75) 
-                        self._adaptor.addChild(root_0, NEQ75_tree)
+                        NEQ76_tree = NotEqualNode(NEQ76) 
+                        self._adaptor.addChild(root_0, NEQ76_tree)
 
 
 
 
                 elif alt19 == 5:
-                    # grammars/Core.g:117:88: GTE
+                    # grammars/Core.g:119:88: GTE
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    GTE76 = self.match(self.input, GTE, self.FOLLOW_GTE_in_relop1160)
+                    GTE77 = self.match(self.input, GTE, self.FOLLOW_GTE_in_relop1177)
                     if self._state.backtracking == 0:
-                        GTE76_tree = GreaterThanEqualNode(GTE76) 
-                        self._adaptor.addChild(root_0, GTE76_tree)
+                        GTE77_tree = GreaterThanEqualNode(GTE77) 
+                        self._adaptor.addChild(root_0, GTE77_tree)
 
 
 
 
                 elif alt19 == 6:
-                    # grammars/Core.g:117:116: GT
+                    # grammars/Core.g:119:116: GT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    GT77 = self.match(self.input, GT, self.FOLLOW_GT_in_relop1167)
+                    GT78 = self.match(self.input, GT, self.FOLLOW_GT_in_relop1184)
                     if self._state.backtracking == 0:
-                        GT77_tree = GreaterThanNode(GT77) 
-                        self._adaptor.addChild(root_0, GT77_tree)
+                        GT78_tree = GreaterThanNode(GT78) 
+                        self._adaptor.addChild(root_0, GT78_tree)
 
 
 
@@ -2890,91 +2937,92 @@ class CoreParser(Parser):
 
  
 
-    FOLLOW_COMMENT_in_program552 = frozenset([13, 41])
-    FOLLOW_combinator_in_program556 = frozenset([13, 41])
-    FOLLOW_SCOLON_in_program560 = frozenset([20])
-    FOLLOW_combinator_in_program562 = frozenset([13, 41])
-    FOLLOW_COMMENT_in_program566 = frozenset([13, 41])
+    FOLLOW_COMMENT_in_program552 = frozenset([13, 42])
+    FOLLOW_combinator_in_program556 = frozenset([13, 42])
+    FOLLOW_SCOLON_in_program560 = frozenset([21])
+    FOLLOW_combinator_in_program562 = frozenset([13, 42])
+    FOLLOW_COMMENT_in_program566 = frozenset([13, 42])
     FOLLOW_SCOLON_in_program570 = frozenset([])
     FOLLOW_EOF_in_program573 = frozenset([1])
-    FOLLOW_ID_in_combinator603 = frozenset([20, 22])
-    FOLLOW_ID_in_combinator605 = frozenset([20, 22])
-    FOLLOW_IS_in_combinator608 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_ID_in_combinator603 = frozenset([21, 24])
+    FOLLOW_ID_in_combinator605 = frozenset([21, 24])
+    FOLLOW_IS_in_combinator608 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_combinator610 = frozenset([1])
-    FOLLOW_LET_in_expression651 = frozenset([20])
-    FOLLOW_definitions_in_expression653 = frozenset([21])
-    FOLLOW_IN_in_expression655 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_LET_in_expression651 = frozenset([21])
+    FOLLOW_definitions_in_expression653 = frozenset([22])
+    FOLLOW_IN_in_expression655 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_expression657 = frozenset([1])
-    FOLLOW_LETREC_in_expression682 = frozenset([20])
-    FOLLOW_definitions_in_expression684 = frozenset([21])
-    FOLLOW_IN_in_expression686 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_LETREC_in_expression682 = frozenset([21])
+    FOLLOW_definitions_in_expression684 = frozenset([22])
+    FOLLOW_IN_in_expression686 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_expression688 = frozenset([1])
-    FOLLOW_CASE_in_expression713 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_expression715 = frozenset([35])
-    FOLLOW_OF_in_expression717 = frozenset([28])
+    FOLLOW_CASE_in_expression713 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
+    FOLLOW_expression_in_expression715 = frozenset([36])
+    FOLLOW_OF_in_expression717 = frozenset([30])
     FOLLOW_alternatives_in_expression719 = frozenset([1])
-    FOLLOW_LAMBDA_in_expression744 = frozenset([20])
-    FOLLOW_ID_in_expression746 = frozenset([16, 20])
-    FOLLOW_DOT_in_expression749 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_LAMBDA_in_expression744 = frozenset([21])
+    FOLLOW_ID_in_expression746 = frozenset([16, 21])
+    FOLLOW_DOT_in_expression749 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_expression751 = frozenset([1])
     FOLLOW_expr1_in_expression780 = frozenset([1])
     FOLLOW_alternative_in_alternatives788 = frozenset([1, 12])
-    FOLLOW_COMMA_in_alternatives791 = frozenset([28])
+    FOLLOW_COMMA_in_alternatives791 = frozenset([30])
     FOLLOW_alternative_in_alternatives794 = frozenset([1, 12])
-    FOLLOW_LT_in_alternative807 = frozenset([34])
-    FOLLOW_NUMBER_in_alternative809 = frozenset([18])
-    FOLLOW_GT_in_alternative811 = frozenset([8, 20])
-    FOLLOW_ID_in_alternative813 = frozenset([8, 20])
-    FOLLOW_ARROW_in_alternative816 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_LT_in_alternative807 = frozenset([23])
+    FOLLOW_INT_in_alternative809 = frozenset([19])
+    FOLLOW_GT_in_alternative811 = frozenset([8, 21])
+    FOLLOW_ID_in_alternative813 = frozenset([8, 21])
+    FOLLOW_ARROW_in_alternative816 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_alternative818 = frozenset([1])
     FOLLOW_definition_in_definitions853 = frozenset([1, 12])
-    FOLLOW_COMMA_in_definitions856 = frozenset([20])
+    FOLLOW_COMMA_in_definitions856 = frozenset([21])
     FOLLOW_definition_in_definitions859 = frozenset([1, 12])
-    FOLLOW_ID_in_definition872 = frozenset([22])
-    FOLLOW_IS_in_definition874 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_ID_in_definition872 = frozenset([24])
+    FOLLOW_IS_in_definition874 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_definition876 = frozenset([1])
-    FOLLOW_expr2_in_expr1905 = frozenset([1, 36])
-    FOLLOW_OR_in_expr1908 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_expr1914 = frozenset([1, 36])
+    FOLLOW_expr2_in_expr1905 = frozenset([1, 37])
+    FOLLOW_OR_in_expr1908 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
+    FOLLOW_expression_in_expr1914 = frozenset([1, 37])
     FOLLOW_expr3_in_expr2923 = frozenset([1, 6])
-    FOLLOW_AND_in_expr2926 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_AND_in_expr2926 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_expr2932 = frozenset([1, 6])
-    FOLLOW_expr4_in_expr3941 = frozenset([1, 17, 18, 19, 28, 29, 32])
-    FOLLOW_relop_in_expr3944 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_expr3947 = frozenset([1, 17, 18, 19, 28, 29, 32])
-    FOLLOW_expr5_in_expr4956 = frozenset([1, 4, 30])
-    FOLLOW_ADD_in_expr4960 = frozenset([20, 27, 34, 37])
-    FOLLOW_MIN_in_expr4966 = frozenset([20, 27, 34, 37])
-    FOLLOW_expr5_in_expr4973 = frozenset([1, 4, 30])
-    FOLLOW_expr6_in_expr5982 = frozenset([1, 15, 31])
-    FOLLOW_DIV_in_expr5986 = frozenset([20, 27, 34, 37])
-    FOLLOW_MUL_in_expr5992 = frozenset([20, 27, 34, 37])
-    FOLLOW_expr6_in_expr5999 = frozenset([1, 15, 31])
-    FOLLOW_aexpr_in_expr61011 = frozenset([1, 20, 27, 34, 37])
+    FOLLOW_expr4_in_expr3941 = frozenset([1, 17, 19, 20, 30, 31, 34])
+    FOLLOW_relop_in_expr3944 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
+    FOLLOW_expression_in_expr3947 = frozenset([1, 17, 19, 20, 30, 31, 34])
+    FOLLOW_expr5_in_expr4956 = frozenset([1, 4, 32])
+    FOLLOW_ADD_in_expr4960 = frozenset([18, 21, 23, 29, 38])
+    FOLLOW_MIN_in_expr4966 = frozenset([18, 21, 23, 29, 38])
+    FOLLOW_expr5_in_expr4973 = frozenset([1, 4, 32])
+    FOLLOW_expr6_in_expr5982 = frozenset([1, 15, 33])
+    FOLLOW_DIV_in_expr5986 = frozenset([18, 21, 23, 29, 38])
+    FOLLOW_MUL_in_expr5992 = frozenset([18, 21, 23, 29, 38])
+    FOLLOW_expr6_in_expr5999 = frozenset([1, 15, 33])
+    FOLLOW_aexpr_in_expr61011 = frozenset([1, 18, 21, 23, 29, 38])
     FOLLOW_ID_in_aexpr1028 = frozenset([1])
-    FOLLOW_NUMBER_in_aexpr1049 = frozenset([1])
-    FOLLOW_PACK_in_aexpr1070 = frozenset([24])
-    FOLLOW_LCURLY_in_aexpr1072 = frozenset([34])
-    FOLLOW_NUMBER_in_aexpr1074 = frozenset([12])
-    FOLLOW_COMMA_in_aexpr1076 = frozenset([34])
-    FOLLOW_NUMBER_in_aexpr1078 = frozenset([39])
-    FOLLOW_RCURLY_in_aexpr1080 = frozenset([1])
-    FOLLOW_LPAREN_in_aexpr1111 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
-    FOLLOW_expression_in_aexpr1113 = frozenset([40])
-    FOLLOW_RPAREN_in_aexpr1115 = frozenset([1])
-    FOLLOW_LT_in_relop1132 = frozenset([1])
-    FOLLOW_LTE_in_relop1139 = frozenset([1])
-    FOLLOW_EQ_in_relop1146 = frozenset([1])
-    FOLLOW_NEQ_in_relop1153 = frozenset([1])
-    FOLLOW_GTE_in_relop1160 = frozenset([1])
-    FOLLOW_GT_in_relop1167 = frozenset([1])
-    FOLLOW_COMMA_in_synpred11_Core791 = frozenset([28])
+    FOLLOW_INT_in_aexpr1049 = frozenset([1])
+    FOLLOW_FLOAT_in_aexpr1066 = frozenset([1])
+    FOLLOW_PACK_in_aexpr1087 = frozenset([26])
+    FOLLOW_LCURLY_in_aexpr1089 = frozenset([23])
+    FOLLOW_INT_in_aexpr1091 = frozenset([12])
+    FOLLOW_COMMA_in_aexpr1093 = frozenset([23])
+    FOLLOW_INT_in_aexpr1095 = frozenset([40])
+    FOLLOW_RCURLY_in_aexpr1097 = frozenset([1])
+    FOLLOW_LPAREN_in_aexpr1128 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
+    FOLLOW_expression_in_aexpr1130 = frozenset([41])
+    FOLLOW_RPAREN_in_aexpr1132 = frozenset([1])
+    FOLLOW_LT_in_relop1149 = frozenset([1])
+    FOLLOW_LTE_in_relop1156 = frozenset([1])
+    FOLLOW_EQ_in_relop1163 = frozenset([1])
+    FOLLOW_NEQ_in_relop1170 = frozenset([1])
+    FOLLOW_GTE_in_relop1177 = frozenset([1])
+    FOLLOW_GT_in_relop1184 = frozenset([1])
+    FOLLOW_COMMA_in_synpred11_Core791 = frozenset([30])
     FOLLOW_alternative_in_synpred11_Core794 = frozenset([1])
-    FOLLOW_OR_in_synpred14_Core908 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_OR_in_synpred14_Core908 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_synpred14_Core914 = frozenset([1])
-    FOLLOW_AND_in_synpred15_Core926 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_AND_in_synpred15_Core926 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_synpred15_Core932 = frozenset([1])
-    FOLLOW_relop_in_synpred16_Core944 = frozenset([9, 20, 23, 25, 26, 27, 34, 37])
+    FOLLOW_relop_in_synpred16_Core944 = frozenset([9, 18, 21, 23, 25, 27, 28, 29, 38])
     FOLLOW_expression_in_synpred16_Core947 = frozenset([1])
 
 

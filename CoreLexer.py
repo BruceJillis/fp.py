@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Core.g 2011-12-20 12:29:45
+# $ANTLR 3.4 grammars/Core.g 2011-12-22 22:24:55
 
 import sys
 from antlr3 import *
@@ -25,31 +25,32 @@ DEFINITION=14
 DIV=15
 DOT=16
 EQ=17
-GT=18
-GTE=19
-ID=20
-IN=21
-IS=22
-LAMBDA=23
-LCURLY=24
-LET=25
-LETREC=26
-LPAREN=27
-LT=28
-LTE=29
-MIN=30
-MUL=31
-NEQ=32
-NOT=33
-NUMBER=34
-OF=35
-OR=36
-PACK=37
-PROGRAM=38
-RCURLY=39
-RPAREN=40
-SCOLON=41
-WHITESPACE=42
+FLOAT=18
+GT=19
+GTE=20
+ID=21
+IN=22
+INT=23
+IS=24
+LAMBDA=25
+LCURLY=26
+LET=27
+LETREC=28
+LPAREN=29
+LT=30
+LTE=31
+MIN=32
+MUL=33
+NEQ=34
+NOT=35
+OF=36
+OR=37
+PACK=38
+PROGRAM=39
+RCURLY=40
+RPAREN=41
+SCOLON=42
+WHITESPACE=43
 
 
 class CoreLexer(Lexer):
@@ -866,16 +867,16 @@ class CoreLexer(Lexer):
 
 
 
-    # $ANTLR start "NUMBER"
-    def mNUMBER(self, ):
+    # $ANTLR start "INT"
+    def mINT(self, ):
         try:
-            _type = NUMBER
+            _type = INT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:119:7: ( ( '0' .. '9' )+ )
-            # grammars/Core.g:119:9: ( '0' .. '9' )+
+            # grammars/Core.g:121:4: ( ( '0' .. '9' )+ )
+            # grammars/Core.g:121:6: ( '0' .. '9' )+
             pass 
-            # grammars/Core.g:119:9: ( '0' .. '9' )+
+            # grammars/Core.g:121:6: ( '0' .. '9' )+
             cnt1 = 0
             while True: #loop1
                 alt1 = 2
@@ -915,7 +916,36 @@ class CoreLexer(Lexer):
         finally:
             pass
 
-    # $ANTLR end "NUMBER"
+    # $ANTLR end "INT"
+
+
+
+    # $ANTLR start "FLOAT"
+    def mFLOAT(self, ):
+        try:
+            _type = FLOAT
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Core.g:122:6: ( INT DOT INT )
+            # grammars/Core.g:122:8: INT DOT INT
+            pass 
+            self.mINT()
+
+
+            self.mDOT()
+
+
+            self.mINT()
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "FLOAT"
 
 
 
@@ -925,8 +955,8 @@ class CoreLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:121:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
-            # grammars/Core.g:121:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
+            # grammars/Core.g:124:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )? )
+            # grammars/Core.g:124:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )* ( '?' | '!' )?
             pass 
             if (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -937,7 +967,7 @@ class CoreLexer(Lexer):
 
 
 
-            # grammars/Core.g:121:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
+            # grammars/Core.g:124:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' )*
             while True: #loop2
                 alt2 = 2
                 LA2_0 = self.input.LA(1)
@@ -963,7 +993,7 @@ class CoreLexer(Lexer):
                     break #loop2
 
 
-            # grammars/Core.g:121:63: ( '?' | '!' )?
+            # grammars/Core.g:124:63: ( '?' | '!' )?
             alt3 = 2
             LA3_0 = self.input.LA(1)
 
@@ -1001,10 +1031,10 @@ class CoreLexer(Lexer):
             _type = WHITESPACE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:123:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            # grammars/Core.g:123:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:126:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            # grammars/Core.g:126:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             pass 
-            # grammars/Core.g:123:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Core.g:126:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             cnt4 = 0
             while True: #loop4
                 alt4 = 2
@@ -1059,12 +1089,12 @@ class CoreLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Core.g:127:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
-            # grammars/Core.g:127:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:130:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF ) )
+            # grammars/Core.g:130:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' | EOF )
             pass 
             self.match(35)
 
-            # grammars/Core.g:127:14: (~ ( '\\n' | '\\r' ) )*
+            # grammars/Core.g:130:14: (~ ( '\\n' | '\\r' ) )*
             while True: #loop5
                 alt5 = 2
                 LA5_0 = self.input.LA(1)
@@ -1090,7 +1120,7 @@ class CoreLexer(Lexer):
                     break #loop5
 
 
-            # grammars/Core.g:127:32: ( ( '\\r' )? '\\n' | EOF )
+            # grammars/Core.g:130:32: ( ( '\\r' )? '\\n' | EOF )
             alt7 = 2
             LA7_0 = self.input.LA(1)
 
@@ -1100,16 +1130,16 @@ class CoreLexer(Lexer):
                 alt7 = 2
 
             if alt7 == 1:
-                # grammars/Core.g:127:33: ( '\\r' )? '\\n'
+                # grammars/Core.g:130:33: ( '\\r' )? '\\n'
                 pass 
-                # grammars/Core.g:127:33: ( '\\r' )?
+                # grammars/Core.g:130:33: ( '\\r' )?
                 alt6 = 2
                 LA6_0 = self.input.LA(1)
 
                 if (LA6_0 == 13) :
                     alt6 = 1
                 if alt6 == 1:
-                    # grammars/Core.g:127:33: '\\r'
+                    # grammars/Core.g:130:33: '\\r'
                     pass 
                     self.match(13)
 
@@ -1120,7 +1150,7 @@ class CoreLexer(Lexer):
 
 
             elif alt7 == 2:
-                # grammars/Core.g:127:46: EOF
+                # grammars/Core.g:130:46: EOF
                 pass 
                 self.match(EOF)
 
@@ -1145,8 +1175,8 @@ class CoreLexer(Lexer):
 
 
     def mTokens(self):
-        # grammars/Core.g:1:8: ( ADD | ALTERNATIVE | AND | APPLICATION | ARROW | CASE | COLON | COMBINATOR | COMMA | DEFINITION | DIV | DOT | EQ | GT | GTE | IN | IS | LAMBDA | LCURLY | LET | LETREC | LPAREN | LT | LTE | MIN | MUL | NEQ | NOT | OF | OR | PACK | PROGRAM | RCURLY | RPAREN | SCOLON | NUMBER | ID | WHITESPACE | COMMENT )
-        alt8 = 39
+        # grammars/Core.g:1:8: ( ADD | ALTERNATIVE | AND | APPLICATION | ARROW | CASE | COLON | COMBINATOR | COMMA | DEFINITION | DIV | DOT | EQ | GT | GTE | IN | IS | LAMBDA | LCURLY | LET | LETREC | LPAREN | LT | LTE | MIN | MUL | NEQ | NOT | OF | OR | PACK | PROGRAM | RCURLY | RPAREN | SCOLON | INT | FLOAT | ID | WHITESPACE | COMMENT )
+        alt8 = 40
         alt8 = self.dfa8.predict(self.input)
         if alt8 == 1:
             # grammars/Core.g:1:10: ADD
@@ -1394,28 +1424,35 @@ class CoreLexer(Lexer):
 
 
         elif alt8 == 36:
-            # grammars/Core.g:1:206: NUMBER
+            # grammars/Core.g:1:206: INT
             pass 
-            self.mNUMBER()
+            self.mINT()
 
 
 
         elif alt8 == 37:
-            # grammars/Core.g:1:213: ID
+            # grammars/Core.g:1:210: FLOAT
+            pass 
+            self.mFLOAT()
+
+
+
+        elif alt8 == 38:
+            # grammars/Core.g:1:216: ID
             pass 
             self.mID()
 
 
 
-        elif alt8 == 38:
-            # grammars/Core.g:1:216: WHITESPACE
+        elif alt8 == 39:
+            # grammars/Core.g:1:219: WHITESPACE
             pass 
             self.mWHITESPACE()
 
 
 
-        elif alt8 == 39:
-            # grammars/Core.g:1:227: COMMENT
+        elif alt8 == 40:
+            # grammars/Core.g:1:230: COMMENT
             pass 
             self.mCOMMENT()
 
@@ -1430,42 +1467,43 @@ class CoreLexer(Lexer):
 
     DFA8_eot = DFA.unpack(
         u"\2\uffff\1\42\1\uffff\1\44\1\32\4\uffff\1\47\1\51\1\32\2\uffff"
-        u"\1\32\2\uffff\1\55\1\32\1\uffff\1\32\17\uffff\1\32\4\uffff\1\63"
-        u"\1\32\2\uffff\1\65\1\32\2\uffff\1\32\1\uffff\1\71\1\uffff\1\32"
-        u"\1\73\1\32\1\uffff\1\75\1\uffff\1\32\1\uffff\1\77\1\uffff"
+        u"\1\32\2\uffff\1\55\1\32\1\uffff\1\32\3\uffff\1\60\13\uffff\1\32"
+        u"\4\uffff\1\65\1\32\2\uffff\1\67\1\32\4\uffff\1\32\1\uffff\1\73"
+        u"\1\uffff\1\32\1\75\1\32\1\uffff\1\77\1\uffff\1\32\1\uffff\1\101"
+        u"\1\uffff"
         )
 
     DFA8_eof = DFA.unpack(
-        u"\100\uffff"
+        u"\102\uffff"
         )
 
     DFA8_min = DFA.unpack(
         u"\1\11\1\uffff\1\75\1\uffff\1\76\1\141\4\uffff\2\75\1\156\2\uffff"
-        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\7\uffff\1\154\7\uffff\1"
-        u"\163\4\uffff\1\41\1\164\2\uffff\1\41\1\143\2\uffff\1\145\1\uffff"
-        u"\1\41\1\uffff\1\153\1\41\1\145\1\uffff\1\41\1\uffff\1\143\1\uffff"
-        u"\1\41\1\uffff"
+        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\3\uffff\1\56\3\uffff\1"
+        u"\154\7\uffff\1\163\4\uffff\1\41\1\164\2\uffff\1\41\1\143\4\uffff"
+        u"\1\145\1\uffff\1\41\1\uffff\1\153\1\41\1\145\1\uffff\1\41\1\uffff"
+        u"\1\143\1\uffff\1\41\1\uffff"
         )
 
     DFA8_max = DFA.unpack(
         u"\1\175\1\uffff\1\160\1\uffff\1\76\1\141\4\uffff\2\75\1\156\2\uffff"
-        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\7\uffff\1\160\7\uffff\1"
-        u"\163\4\uffff\1\172\1\164\2\uffff\1\172\1\143\2\uffff\1\145\1\uffff"
-        u"\1\172\1\uffff\1\153\1\172\1\145\1\uffff\1\172\1\uffff\1\143\1"
-        u"\uffff\1\172\1\uffff"
+        u"\1\145\2\uffff\1\75\1\146\1\uffff\1\141\3\uffff\1\71\3\uffff\1"
+        u"\160\7\uffff\1\163\4\uffff\1\172\1\164\2\uffff\1\172\1\143\4\uffff"
+        u"\1\145\1\uffff\1\172\1\uffff\1\153\1\172\1\145\1\uffff\1\172\1"
+        u"\uffff\1\143\1\uffff\1\172\1\uffff"
         )
 
     DFA8_accept = DFA.unpack(
         u"\1\uffff\1\1\1\uffff\1\3\2\uffff\1\7\1\11\1\13\1\14\3\uffff\1\22"
-        u"\1\23\1\uffff\1\26\1\32\2\uffff\1\36\1\uffff\1\41\1\42\1\43\1\44"
-        u"\1\45\1\46\1\47\1\uffff\1\10\1\12\1\30\1\40\1\27\1\5\1\31\1\uffff"
-        u"\1\15\1\21\1\17\1\16\2\uffff\1\33\1\34\2\uffff\1\2\1\4\1\uffff"
-        u"\1\20\1\uffff\1\35\3\uffff\1\24\1\uffff\1\6\1\uffff\1\37\1\uffff"
-        u"\1\25"
+        u"\1\23\1\uffff\1\26\1\32\2\uffff\1\36\1\uffff\1\41\1\42\1\43\1\uffff"
+        u"\1\46\1\47\1\50\1\uffff\1\10\1\12\1\30\1\40\1\27\1\5\1\31\1\uffff"
+        u"\1\15\1\21\1\17\1\16\2\uffff\1\33\1\34\2\uffff\1\44\1\45\1\2\1"
+        u"\4\1\uffff\1\20\1\uffff\1\35\3\uffff\1\24\1\uffff\1\6\1\uffff\1"
+        u"\37\1\uffff\1\25"
         )
 
     DFA8_special = DFA.unpack(
-        u"\100\uffff"
+        u"\102\uffff"
         )
 
 
@@ -1498,26 +1536,21 @@ class CoreLexer(Lexer):
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
+        DFA.unpack(u"\1\61\1\uffff\12\31"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\62\3\uffff\1\63"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\60\3\uffff\1\61"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\62"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\32\32"),
         DFA.unpack(u"\1\64"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
@@ -1525,20 +1558,27 @@ class CoreLexer(Lexer):
         DFA.unpack(u"\1\66"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\67"),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
-        u"\21\32\1\70\10\32"),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\72"),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
         u"\32\32"),
+        DFA.unpack(u"\1\70"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\71"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
+        u"\21\32\1\72\10\32"),
+        DFA.unpack(u""),
         DFA.unpack(u"\1\74"),
+        DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
+        u"\32\32"),
+        DFA.unpack(u"\1\76"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
         u"\32\32"),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\76"),
+        DFA.unpack(u"\1\100"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\32\16\uffff\12\32\5\uffff\1\32\1\uffff\32\32\6\uffff"
         u"\32\32"),

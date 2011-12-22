@@ -79,8 +79,8 @@ expression!
 
 alternatives: alternative (COMMA! alternative)*;
 alternative!
-   : LT NUMBER GT ID* ARROW expression
-     -> ^(ALTERNATIVE<AlternativeNode> NUMBER<NumberNode> ID<IdentifierNode>* expression)
+   : LT INT GT ID* ARROW expression
+     -> ^(ALTERNATIVE<AlternativeNode> INT<IntNode> ID<IdentifierNode>* expression)
 ;
 
 definitions: definition (COMMA! definition)*;
@@ -106,17 +106,20 @@ expr6: (lst+=aexpr!)+ {
 aexpr!
    : ID
      -> ^(ID<IdentifierNode>)
-   | NUMBER
-     -> ^(NUMBER<NumberNode>)
-   | PACK LCURLY NUMBER COMMA NUMBER RCURLY
-     -> ^(PACK<ConstructorNode> NUMBER<NumberNode> NUMBER<NumberNode>)
+   | INT
+	  -> ^(INT<IntNode>)
+	| FLOAT
+     -> ^(FLOAT<FloatNode>)
+   | PACK LCURLY INT COMMA INT RCURLY
+     -> ^(PACK<ConstructorNode> INT<IntNode> INT<IntNode>)
    | LPAREN expression RPAREN
      -> expression
 ;
 
 relop: LT<LessThanNode> | LTE<LessThanEqualNode> | EQ<EqualNode> | NEQ<NotEqualNode> | GTE<GreaterThanEqualNode> | GT<GreaterThanNode>;
 
-NUMBER: ('0'..'9')+;
+INT: ('0'..'9')+;
+FLOAT: INT DOT INT;
 
 ID: ('a'..'z' | 'A' .. 'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')* ('?' | '!')?;
 
