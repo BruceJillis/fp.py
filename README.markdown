@@ -222,7 +222,7 @@ The next program implements the sieve of eratosthenes to generate the infinite l
 
 	main = (sieve (take 15 (from 2)))
 
-* Large parts of this section have been taken verbatim from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester
+* Adapted from: Implementing Functional Languages: a tutorial by Simon L. Peyton Jones & David R. Lester
 
 Command Line Parameters
 -----------------------
