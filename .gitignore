@@ -3,6 +3,7 @@
 *.tokens
 Thumbs.db
 .coverage
+AMANDA.GID
 
 etc/antlr-3.4/**/*
 etc/The*
