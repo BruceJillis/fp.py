@@ -26,11 +26,14 @@ tokens {
    COMMA  = ',';
    DOT    = '.';
    IS     = '=';
+   COMMA  = ',';
    SINGLE_QUOTE = '\'';
    DOUBLE_QUOTE = '"';
-
-   DEDENT = '<dedent>';
+    
+   // imaginary
+   DEDENT     = '<dedent>';
    DEFINITION = '<definition>';
+   TUPLE      = '<tuple>';
 }
 
 @lexer::members {
@@ -101,7 +104,9 @@ aexpr
 	 | FLOAT
    | CHAR
    | STRING
-   | LPAREN expression RPAREN
+   | LPAREN! expression RPAREN!
+   | LPAREN expression (COMMA expression)* RPAREN
+     -> ^(TUPLE expression*)
 ;
 
 relop: LT | LTE | EQ | NEQ | GTE | GT;
