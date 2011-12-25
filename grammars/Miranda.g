@@ -26,14 +26,28 @@ tokens {
    COMMA  = ',';
    DOT    = '.';
    IS     = '=';
+   NOT    = '!';
    COMMA  = ',';
+   LBRACKET = '[';
+   RBRACKET = ']';
    SINGLE_QUOTE = '\'';
    DOUBLE_QUOTE = '"';
+   SUBTRACT = '--';
+   CONCAT = '++';
+
+   TRUE = 'true';
+   FALSE = 'false';
+
+   MOD = 'mod';
+   IDIV = 'div';
+   EXP = '^';
     
    // imaginary
    DEDENT     = '<dedent>';
    DEFINITION = '<definition>';
    TUPLE      = '<tuple>';
+   LIST       = '<list>';
+   SECTION    = '<section>';
 }
 
 @lexer::members {
@@ -90,13 +104,17 @@ expr1: expr2 (OR^ expression)*;
 
 expr2: expr3 (AND^ expression)*;
 
-expr3: expr4 (relop^ expression)*;
+expr3: expr4 (relop expression)*;
 
-expr4: expr5 ((ADD^|MIN^) expr5)*;
+expr4: expr5 ((ADD^|MIN^|CONCAT^|SUBTRACT^) expr5)*;
 
 expr5: expr6 ((DIV^|MUL^) expr6)*;
 
-expr6: aexpr+;
+expr6: expr7 ((IDIV^|MOD^) expr7)*;
+
+expr7: expr8 ((EXP^) expr8)*;
+
+expr8: aexpr+;
 
 aexpr
    : ID
@@ -104,21 +122,39 @@ aexpr
 	 | FLOAT
    | CHAR
    | STRING
-   | LPAREN! expression RPAREN!
-   | LPAREN expression (COMMA expression)* RPAREN
+   | NOT expression
+   | boolean
+   | section
+   | LPAREN expression (COMMA expression)+ RPAREN
      -> ^(TUPLE expression*)
+   | LPAREN! expression RPAREN!
+   | LBRACKET expression? (COMMA expression)* RBRACKET
+     -> ^(LIST expression*)
 ;
+
+section
+  : LPAREN operator RPAREN
+   -> ^(SECTION operator)
+  | LPAREN operator expression RPAREN
+   -> ^(SECTION operator expression)
+  | LPAREN expression operator RPAREN
+   -> ^(SECTION expression operator)
+;
+fragment operator: OR|AND|LT|LTE|EQ|NEQ|GTE|GT|ADD|MIN|CONCAT|SUBTRACT|DIV|MUL|IDIV|MOD|EXP;
+
+boolean: TRUE | FALSE;
 
 relop: LT | LTE | EQ | NEQ | GTE | GT;
 
-INT: ('0'..'9')+;
-FLOAT: INT DOT INT;
+INT: (MIN | ADD)? NUMERIC+;
+FLOAT: (MIN | ADD)? NUMERIC+ DOT NUMERIC+;
+fragment NUMERIC: ('0'..'9');
 
 CHAR: (SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE);
 STRING: (SINGLE_QUOTE ALPHANUMERIC* SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC* DOUBLE_QUOTE);
 fragment ALPHANUMERIC: ('a'..'z' | 'A'..'Z' | '0'..'9' | ' ');
 
-ID: ('a'..'z' | 'A' .. 'Z') ('a'..'z' | 'A'..'Z' | '0'..'9')* ('?' | '!')?;
+ID: ('a'..'z' | 'A' .. 'Z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_' | '.' | '-')* ('?' | '!')?;
 
 WHITESPACE: (' ' | '\t' | '\r' | '\n')+ {
   $channel=HIDDEN;
