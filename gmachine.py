@@ -14,7 +14,6 @@ class PrecompiledNode:
   def parameters(self):
     return self.args
 
-
 # Symbol Table
 class SymbolTable:
   "this class maintains a registry of combinators so that we have access to information about it."
@@ -228,10 +227,7 @@ class Code:
     return str(self)
 
   def __str__(self):
-    result = ''
-    for i in self.instructions:
-      result += '%s\n' % (code_to_str(i))
-    return result
+    return '\n'.join(map(code_to_str, self.instructions))
 
 def code_to_str(instr):
   "small helper function to prettyprint a instruction without needing a Code instance"
@@ -827,9 +823,9 @@ def run(state, verbose=False):
         k = len(state.stack) - 1
         if k >= n.n:
           aa = []
-          for i in range(0, n.n + 1):
+          for l in range(0, n.n + 1):
             ai = state.stack.pop()
-            if i > 0:
+            if l > 0:
               aa.insert(0, state.heap[ai].a1)
           state.stack.push(ai)
           state.stack.append(aa)
