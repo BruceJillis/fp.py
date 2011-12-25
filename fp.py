@@ -45,8 +45,8 @@ def transform(ast, prettyprint):
 			print
 
 	show('before', ast)
-	lambdasplitter.visit(ast)
-	show('lambda splitter', ast)
+	# lambdasplitter.visit(ast)
+	# show('lambda splitter', ast)
 	lambdalifter.visit(ast)
 	show('lambda lifter', ast)
 	caselifter.visit(ast)
@@ -74,7 +74,7 @@ parser.add_argument('--print-code', action='append', dest="printcode", default=[
 parser.add_argument('--show-transformations', action='store_true', dest="show_transformations", default=[], help="prettyprint the program before, during and after the transformation step")
 args = parser.parse_args()
 
-# symbol table for global registration of info 
+# symbol table for global registration of info
 symtab = SymbolTable()
 
 # phases of the compiler
@@ -112,7 +112,7 @@ if args.coverage:
 	exit()
 
 # do actual work: compile all the supplied files including the include directories (recursively if necessary)
-# do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and 
+# do this in two phases to make sure we have all needed info (we need to know all combinators in a file, and
 # across files) before we start compilation
 if len(args.file) == 0:
 	parser.error("no files supplied")
@@ -130,12 +130,18 @@ for filename in args.file:
 	identification.visit(ast)
 	# prettyprinter.visit(ast)
 	asts.append(ast)
+print ast.toStringTree()
 # compile all the asts (files)
 for ast in asts:
 	codegeneration.visit(ast)
 # print any code sequences the user wants to see
 for combinator in args.printcode:
 	printcode(combinator)
+
+print symtab.data['main'].code
+print
+print symtab.data['$sc1'].code
+
 # construct initial state and run the resulting program
 state = State(symtab)
 print	'result:', run(state, args.verbose)

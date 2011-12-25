@@ -8,7 +8,7 @@ class PrettyPrinter(Visitor):
 	def visit_ProgramNode(self, node):
 		for c in node.combinators():
 			self.visit(c)
-		
+
 	def visit_CombinatorNode(self, node):
 		print node.name(),
 		for p in node.parameters():
@@ -189,7 +189,7 @@ class CompilationScheme(Visitor):
 		self.symtab = symtab
 		self.facade = facade
 		self.code = None
-	
+
 	def select(self, scheme):
 		"select a new scheme"
 		self.facade.select(scheme)
@@ -261,7 +261,7 @@ class CompileE(CompilationScheme):
 			u -= 1
 		self.visit('E', node.body(), env = env)
 		self.code.Slide(count)
-	
+
 	def visit_CaseNode(self, node, *args, **kwargs):
 		self.visit('E', node.condition(), *args, **kwargs)
 		cases = {}

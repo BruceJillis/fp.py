@@ -1,1 +1,2 @@
-main = (4+2)*5+2-5
+#square: main = letrec square = \n.n*n in square 6;
+main = letrec avg = \a b.(a+b)/2 in (avg 2 6)

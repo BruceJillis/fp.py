@@ -4,34 +4,35 @@ from CoreLexer import ID, APPLICATION
 from decimal import *
 
 def mk_ap_chain(list_lst):
-	"helper function to: parse a linear list of ASTNodes into an application spine and construct (un)saturated constructors"
-	# collapse all constructor nodes, assume there are enough arguments to saturate it
-	if len(list_lst) >= 2:
-		i = 0
-		while i < len(list_lst):
-			if list_lst[i].__class__ == ConstructorNode and not list_lst[i].saturated() and len(list_lst[i].expressions()) == 0:
-				for j in range(1, list_lst[i].arity()+1):
-					if j > len(list_lst):
-						break;
-					list_lst[i].addChild(list_lst[i+1])
-					del list_lst[i+1]
-			i += 1
-	# check again if the list has more then 1 element, constructor reduction could have dropped it to 1
-	# format linear list as application spine
-	if len(list_lst) >= 2:
-		# now collapse the remaining nodes into an application spine
-		chain = ApplicationNode(APPLICATION)
-		list_lst.reverse()
-		chain.addChild(list_lst.pop())         
-		chain.addChild(list_lst.pop())
-		while len(list_lst) > 0:
-			ap = ApplicationNode(APPLICATION)
-			ap.addChild(chain)
-			ap.addChild(list_lst.pop())
-			chain = ap
-		return chain
-	else:
-		return list_lst[0]
+  "helper function to: parse a linear list of ASTNodes into an application spine and construct (un)saturated constructors"
+  print list_lst
+  # collapse all constructor nodes, assume there are enough arguments to saturate it
+  if len(list_lst) >= 2:
+    i = 0
+    while i < len(list_lst):
+      if list_lst[i].__class__ == ConstructorNode and not list_lst[i].saturated() and len(list_lst[i].expressions()) == 0:
+        for j in range(1, list_lst[i].arity()+1):
+          if j > len(list_lst):
+            break;
+          list_lst[i].addChild(list_lst[i+1])
+          del list_lst[i+1]
+      i += 1
+  # check again if the list has more then 1 element, constructor reduction could have dropped it to 1
+  # format linear list as application spine
+  if len(list_lst) >= 2:
+    # now collapse the remaining nodes into an application spine
+    chain = ApplicationNode(APPLICATION)
+    list_lst.reverse()
+    chain.addChild(list_lst.pop())
+    chain.addChild(list_lst.pop())
+    while len(list_lst) > 0:
+      ap = ApplicationNode(APPLICATION)
+      ap.addChild(chain)
+      ap.addChild(list_lst.pop())
+      chain = ap
+    return chain
+  else:
+    return list_lst[0]
 
 class ASTNode(CommonTree):
 	def __init__(self, payload):
@@ -39,7 +40,7 @@ class ASTNode(CommonTree):
 			CommonTree.__init__(self, CommonToken(type=payload, text=self.spelling))
 		else:
 			CommonTree.__init__(self, payload)
-	
+
 	def __repr__(self):
 		return self.toString()
 
@@ -61,7 +62,7 @@ class CombinatorNode(ASTNode):
 		if len(self.children) == 2:
 			return []
 		return self.children[1:-1]
-	
+
 	def body(self):
 		return self.children[-1]
 
@@ -72,7 +73,7 @@ class LambdaNode(ASTNode):
 
 	def parameters(self):
 		return self.children[0:-1]
-	
+
 	def body(self):
 		return self.children[-1]
 
@@ -112,13 +113,13 @@ class CaseNode(ASTNode):
 
 	def condition(self):
 		return self.children[0]
-	
+
 	def alternatives(self):
 		return self.children[1:]
 
 class AlternativeNode(ASTNode):
 	spelling = 'ALTERNATIVE'
-	
+
 	def tag(self):
 		return self.children[0].value()
 
@@ -140,10 +141,10 @@ class ConstructorNode(ASTNode):
 	def expressions(self):
 		return self.children[2:]
 
-	def saturated(self):		
+	def saturated(self):
 		return self.arity() != 0 and len(self.expressions()) != 0 and self.arity() == len(self.expressions())
 
-# Binary Operators 
+# Binary Operators
 
 class BinaryNode(ASTNode):
 	def left(self):

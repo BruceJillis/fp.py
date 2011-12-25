@@ -19,7 +19,7 @@ class	Environment:
 
 	def	count(self):
 		return len(self.mapping.keys())
-	
+
 	def merge_from(self, env, frm):
 		for m in env.mapping:
 			self.add_at(m, frm)
