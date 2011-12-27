@@ -58,8 +58,8 @@ tokens {
    SECTION    = '<section>';
    BODY       = '<body>';
    TYPE       = '<type>';
-   MUL        = '<mul>';
    GENERIC    = '<generic>';
+   PART       = '<part>';
 }
 
 @header {
@@ -109,21 +109,24 @@ tokens {
 }
 
 program: 
-  ((typedef) DEDENT)* expression EOF
-  -> ^(PROGRAM<ProgramNode> typedef* expression)
+  ((typedef|definition) DEDENT)* expression EOF
+  -> ^(PROGRAM<ProgramNode> typedef* definition* expression)
 ;
 
 definition
   // scalar definition
-  : ID parameter* body*
-    -> ^(DEFINITION<MirandaDefinitionNode> ID parameter* body*)
+  : ID pattern* body*
+    -> ^(DEFINITION<MirandaDefinitionNode> ID pattern* body*)
   // conformal definition
 ;
 
 typedef
-  : ID STARS* TYPE_IS
-    -> ^(TYPE ^(ID STARS*))
+  : ID STARS* TYPE_IS part (OR part)*
+    -> ^(TYPE ^(ID STARS*) part*)
 ;
+fragment part: {self.input.LT(1).text[0].isupper()}? ID typelist? -> ^(PART ID typelist?);
+fragment generic: LPAREN!? ID STARS* RPAREN!?;
+fragment typelist: (NUM_TYPE|CHAR_TYPE|generic|STARS)+;
 
 STARS: '*'+;
 
@@ -135,8 +138,8 @@ guard: COMMA (expression|OTHERWISE);
 
 where: WHERE definition (DEDENT! definition)* ;
 
-parameter
-  : basic ((COLON|ADD)^ parameter)?
+pattern
+  : basic ((COLON|ADD)^ pattern)?
 ;
   
 basic
@@ -146,7 +149,7 @@ basic
   | boolean
   | list
   | tuple
-  | LPAREN! parameter RPAREN!
+  | LPAREN! pattern* RPAREN!
 ;
 
 expression: expr0;
@@ -207,7 +210,7 @@ section
   | LPAREN expression operator RPAREN
    -> ^(SECTION expression operator)
 ;
-fragment operator: OR|AND|LT|LTE|EQ|NEQ|GTE|GT|ADD|MIN|CONCAT|SUBTRACT|DIV|MUL|IDIV|MOD|EXP;
+fragment operator: OR|AND|LT|LTE|EQ|NEQ|GTE|GT|ADD|MIN|CONCAT|SUBTRACT|DIV|{len(self.input.LT(1).text) == 1}? STARS|IDIV|MOD|EXP;
 
 boolean: TRUE | FALSE;
 
