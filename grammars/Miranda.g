@@ -35,6 +35,7 @@ tokens {
    DOUBLE_QUOTE = '"';
    SUBTRACT = '--';
    CONCAT = '++';
+   TYPEDEF = '::=';
 
    TRUE = 'true';
    FALSE = 'false';
@@ -53,11 +54,11 @@ tokens {
    TUPLE      = '<tuple>';
    LIST       = '<list>';
    SECTION    = '<section>';
-   GUARD      = '<guard>';
+   BODY       = '<body>';
 }
 
 @header {
-  from ast import mk_ap_chain, IntNode, FloatNode, IdentifierNode, CharNode, AddNode, MinNode, MulNode, DivNode
+  from ast import mk_ap_chain, IntNode, FloatNode, IdentifierNode, CharNode, AddNode, MinNode, MulNode, DivNode, OrNode, AndNode
   from miranda_ast import *
 }
 
@@ -87,9 +88,9 @@ tokens {
           continue
         
         if self._state.token.type == IS:
-          self.offside.push(self._state.token.getLine(), self._state.token.getCharPositionInLine())
+          self.offside.push(self._state.token)
         else:
-          if self.offside.compare(self._state.token.getLine(), self._state.token.getCharPositionInLine()):
+          if self.offside.compare(self._state.token):
             # emit a dedent token
             self.next = self._state.token
             return CommonToken(type=DEDENT, text='DEDENT')
@@ -107,12 +108,20 @@ program:
   -> ^(PROGRAM<ProgramNode> definition* expression)
 ;
 
-definition: 
-  ID parameter* IS expression guard? 
-  -> ^(DEFINITION<MirandaDefinitionNode> ID parameter* expression guard?)
+definition
+  // scalar definition
+  : ID parameter* body*
+    -> ^(DEFINITION<MirandaDefinitionNode> ID parameter* body*)
+  // conformal definition
+;
+
+body: IS expression guard? where?
+      -> ^(BODY expression guard? where?)
 ;
 
 guard: COMMA (expression|OTHERWISE);
+
+where: WHERE definition (DEDENT! definition)* ;
 
 parameter
   : basic ((COLON|ADD)^ parameter)?
@@ -130,21 +139,21 @@ basic
 
 expression: expr0;
 
-expr0: expr1 ((CONCAT^|SUBTRACT^|COLON^) expr0)?;
+expr0: expr1 ((CONCAT<ConcatNode>^|SUBTRACT<SubtractNode>^|COLON<ColonNode>^) expr0)?;
 
-expr1: expr2 (OR^ expression)*;
+expr1: expr2 (OR<OrNode>^ expression)*;
 
-expr2: expr3 (AND^ expression)*;
+expr2: expr3 (AND<AndNode>^ expression)*;
 
 expr3: expr4 ((LT|LTE|EQ|NEQ|GTE|GT)^ expression)*;
 
-expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expr5)*;
+expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
 
-expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expr6)*;
+expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
 
-expr6: expr7 ((IDIV^|MOD^) expr7)*;
+expr6: expr7 ((IDIV^|MOD^) expression)*;
 
-expr7: expr8 ((EXP^) expr8)*;
+expr7: expr8 ((EXP^) expression)*;
 
 expr8: aexpr+ {
   chain = mk_ap_chain(root_0.children)

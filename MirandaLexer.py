@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Miranda.g 2011-12-25 23:51:10
+# $ANTLR 3.4 grammars/Miranda.g 2011-12-27 08:51:47
 
 import sys
 from antlr3 import *
@@ -14,23 +14,23 @@ EOF=-1
 ADD=4
 ALPHANUMERIC=5
 AND=6
-CHAR=7
-COLON=8
-COMMA=9
-COMMENT=10
-CONCAT=11
-DEDENT=12
-DEFINITION=13
-DIV=14
-DOT=15
-DOUBLE_QUOTE=16
-EQ=17
-EXP=18
-FALSE=19
-FLOAT=20
-GT=21
-GTE=22
-GUARD=23
+BODY=7
+CHAR=8
+COLON=9
+COMMA=10
+COMMENT=11
+CONCAT=12
+DEDENT=13
+DEFINITION=14
+DIV=15
+DOT=16
+DOUBLE_QUOTE=17
+EQ=18
+EXP=19
+FALSE=20
+FLOAT=21
+GT=22
+GTE=23
 ID=24
 IDIV=25
 INT=26
@@ -57,8 +57,9 @@ STRING=46
 SUBTRACT=47
 TRUE=48
 TUPLE=49
-WHERE=50
-WHITESPACE=51
+TYPEDEF=50
+WHERE=51
+WHITESPACE=52
 
 
 class MirandaLexer(Lexer):
@@ -112,9 +113,9 @@ class MirandaLexer(Lexer):
             continue
           
           if self._state.token.type == IS:
-            self.offside.push(self._state.token.getLine(), self._state.token.getCharPositionInLine())
+            self.offside.push(self._state.token)
           else:
-            if self.offside.compare(self._state.token.getLine(), self._state.token.getCharPositionInLine()):
+            if self.offside.compare(self._state.token):
               # emit a dedent token
               self.next = self._state.token
               return CommonToken(type=DEDENT, text='DEDENT')
@@ -171,14 +172,37 @@ class MirandaLexer(Lexer):
 
 
 
+    # $ANTLR start "BODY"
+    def mBODY(self, ):
+        try:
+            _type = BODY
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Miranda.g:48:6: ( '<body>' )
+            # grammars/Miranda.g:48:8: '<body>'
+            pass 
+            self.match("<body>")
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "BODY"
+
+
+
     # $ANTLR start "COLON"
     def mCOLON(self, ):
         try:
             _type = COLON
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:48:7: ( ':' )
-            # grammars/Miranda.g:48:9: ':'
+            # grammars/Miranda.g:49:7: ( ':' )
+            # grammars/Miranda.g:49:9: ':'
             pass 
             self.match(58)
 
@@ -199,8 +223,8 @@ class MirandaLexer(Lexer):
             _type = COMMA
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:49:7: ( ',' )
-            # grammars/Miranda.g:49:9: ','
+            # grammars/Miranda.g:50:7: ( ',' )
+            # grammars/Miranda.g:50:9: ','
             pass 
             self.match(44)
 
@@ -221,8 +245,8 @@ class MirandaLexer(Lexer):
             _type = CONCAT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:50:8: ( '++' )
-            # grammars/Miranda.g:50:10: '++'
+            # grammars/Miranda.g:51:8: ( '++' )
+            # grammars/Miranda.g:51:10: '++'
             pass 
             self.match("++")
 
@@ -244,8 +268,8 @@ class MirandaLexer(Lexer):
             _type = DEDENT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:51:8: ( '<dedent>' )
-            # grammars/Miranda.g:51:10: '<dedent>'
+            # grammars/Miranda.g:52:8: ( '<dedent>' )
+            # grammars/Miranda.g:52:10: '<dedent>'
             pass 
             self.match("<dedent>")
 
@@ -267,8 +291,8 @@ class MirandaLexer(Lexer):
             _type = DEFINITION
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:52:12: ( '<definition>' )
-            # grammars/Miranda.g:52:14: '<definition>'
+            # grammars/Miranda.g:53:12: ( '<definition>' )
+            # grammars/Miranda.g:53:14: '<definition>'
             pass 
             self.match("<definition>")
 
@@ -290,8 +314,8 @@ class MirandaLexer(Lexer):
             _type = DIV
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:53:5: ( '/' )
-            # grammars/Miranda.g:53:7: '/'
+            # grammars/Miranda.g:54:5: ( '/' )
+            # grammars/Miranda.g:54:7: '/'
             pass 
             self.match(47)
 
@@ -312,8 +336,8 @@ class MirandaLexer(Lexer):
             _type = DOT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:54:5: ( '.' )
-            # grammars/Miranda.g:54:7: '.'
+            # grammars/Miranda.g:55:5: ( '.' )
+            # grammars/Miranda.g:55:7: '.'
             pass 
             self.match(46)
 
@@ -334,8 +358,8 @@ class MirandaLexer(Lexer):
             _type = DOUBLE_QUOTE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:55:14: ( '\"' )
-            # grammars/Miranda.g:55:16: '\"'
+            # grammars/Miranda.g:56:14: ( '\"' )
+            # grammars/Miranda.g:56:16: '\"'
             pass 
             self.match(34)
 
@@ -356,8 +380,8 @@ class MirandaLexer(Lexer):
             _type = EQ
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:56:4: ( '==' )
-            # grammars/Miranda.g:56:6: '=='
+            # grammars/Miranda.g:57:4: ( '==' )
+            # grammars/Miranda.g:57:6: '=='
             pass 
             self.match("==")
 
@@ -379,8 +403,8 @@ class MirandaLexer(Lexer):
             _type = EXP
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:57:5: ( '^' )
-            # grammars/Miranda.g:57:7: '^'
+            # grammars/Miranda.g:58:5: ( '^' )
+            # grammars/Miranda.g:58:7: '^'
             pass 
             self.match(94)
 
@@ -401,8 +425,8 @@ class MirandaLexer(Lexer):
             _type = FALSE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:58:7: ( 'false' )
-            # grammars/Miranda.g:58:9: 'false'
+            # grammars/Miranda.g:59:7: ( 'false' )
+            # grammars/Miranda.g:59:9: 'false'
             pass 
             self.match("false")
 
@@ -424,8 +448,8 @@ class MirandaLexer(Lexer):
             _type = GT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:59:4: ( '>' )
-            # grammars/Miranda.g:59:6: '>'
+            # grammars/Miranda.g:60:4: ( '>' )
+            # grammars/Miranda.g:60:6: '>'
             pass 
             self.match(62)
 
@@ -446,8 +470,8 @@ class MirandaLexer(Lexer):
             _type = GTE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:60:5: ( '>=' )
-            # grammars/Miranda.g:60:7: '>='
+            # grammars/Miranda.g:61:5: ( '>=' )
+            # grammars/Miranda.g:61:7: '>='
             pass 
             self.match(">=")
 
@@ -460,29 +484,6 @@ class MirandaLexer(Lexer):
             pass
 
     # $ANTLR end "GTE"
-
-
-
-    # $ANTLR start "GUARD"
-    def mGUARD(self, ):
-        try:
-            _type = GUARD
-            _channel = DEFAULT_CHANNEL
-
-            # grammars/Miranda.g:61:7: ( '<guard>' )
-            # grammars/Miranda.g:61:9: '<guard>'
-            pass 
-            self.match("<guard>")
-
-
-
-
-            self._state.type = _type
-            self._state.channel = _channel
-        finally:
-            pass
-
-    # $ANTLR end "GUARD"
 
 
 
@@ -981,14 +982,37 @@ class MirandaLexer(Lexer):
 
 
 
+    # $ANTLR start "TYPEDEF"
+    def mTYPEDEF(self, ):
+        try:
+            _type = TYPEDEF
+            _channel = DEFAULT_CHANNEL
+
+            # grammars/Miranda.g:84:9: ( '::=' )
+            # grammars/Miranda.g:84:11: '::='
+            pass 
+            self.match("::=")
+
+
+
+
+            self._state.type = _type
+            self._state.channel = _channel
+        finally:
+            pass
+
+    # $ANTLR end "TYPEDEF"
+
+
+
     # $ANTLR start "WHERE"
     def mWHERE(self, ):
         try:
             _type = WHERE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:84:7: ( 'where' )
-            # grammars/Miranda.g:84:9: 'where'
+            # grammars/Miranda.g:85:7: ( 'where' )
+            # grammars/Miranda.g:85:9: 'where'
             pass 
             self.match("where")
 
@@ -1010,10 +1034,10 @@ class MirandaLexer(Lexer):
             _type = INT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:193:4: ( ( MIN )? ( NUMERIC )+ )
-            # grammars/Miranda.g:193:6: ( MIN )? ( NUMERIC )+
+            # grammars/Miranda.g:202:4: ( ( MIN )? ( NUMERIC )+ )
+            # grammars/Miranda.g:202:6: ( MIN )? ( NUMERIC )+
             pass 
-            # grammars/Miranda.g:193:6: ( MIN )?
+            # grammars/Miranda.g:202:6: ( MIN )?
             alt1 = 2
             LA1_0 = self.input.LA(1)
 
@@ -1034,7 +1058,7 @@ class MirandaLexer(Lexer):
 
 
 
-            # grammars/Miranda.g:193:11: ( NUMERIC )+
+            # grammars/Miranda.g:202:11: ( NUMERIC )+
             cnt2 = 0
             while True: #loop2
                 alt2 = 2
@@ -1084,10 +1108,10 @@ class MirandaLexer(Lexer):
             _type = FLOAT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:194:6: ( ( MIN )? ( NUMERIC )+ DOT ( NUMERIC )+ )
-            # grammars/Miranda.g:194:8: ( MIN )? ( NUMERIC )+ DOT ( NUMERIC )+
+            # grammars/Miranda.g:203:6: ( ( MIN )? ( NUMERIC )+ DOT ( NUMERIC )+ )
+            # grammars/Miranda.g:203:8: ( MIN )? ( NUMERIC )+ DOT ( NUMERIC )+
             pass 
-            # grammars/Miranda.g:194:8: ( MIN )?
+            # grammars/Miranda.g:203:8: ( MIN )?
             alt3 = 2
             LA3_0 = self.input.LA(1)
 
@@ -1108,7 +1132,7 @@ class MirandaLexer(Lexer):
 
 
 
-            # grammars/Miranda.g:194:13: ( NUMERIC )+
+            # grammars/Miranda.g:203:13: ( NUMERIC )+
             cnt4 = 0
             while True: #loop4
                 alt4 = 2
@@ -1144,7 +1168,7 @@ class MirandaLexer(Lexer):
             self.mDOT()
 
 
-            # grammars/Miranda.g:194:26: ( NUMERIC )+
+            # grammars/Miranda.g:203:26: ( NUMERIC )+
             cnt5 = 0
             while True: #loop5
                 alt5 = 2
@@ -1191,7 +1215,7 @@ class MirandaLexer(Lexer):
     # $ANTLR start "NUMERIC"
     def mNUMERIC(self, ):
         try:
-            # grammars/Miranda.g:195:17: ( ( '0' .. '9' ) )
+            # grammars/Miranda.g:204:17: ( ( '0' .. '9' ) )
             # grammars/Miranda.g:
             pass 
             if (48 <= self.input.LA(1) <= 57):
@@ -1219,10 +1243,10 @@ class MirandaLexer(Lexer):
             _type = CHAR
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:197:5: ( ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE ) )
-            # grammars/Miranda.g:197:7: ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE )
+            # grammars/Miranda.g:206:5: ( ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE ) )
+            # grammars/Miranda.g:206:7: ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE )
             pass 
-            # grammars/Miranda.g:197:7: ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE )
+            # grammars/Miranda.g:206:7: ( SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE | DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE )
             alt6 = 2
             LA6_0 = self.input.LA(1)
 
@@ -1237,7 +1261,7 @@ class MirandaLexer(Lexer):
 
 
             if alt6 == 1:
-                # grammars/Miranda.g:197:8: SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE
+                # grammars/Miranda.g:206:8: SINGLE_QUOTE ALPHANUMERIC SINGLE_QUOTE
                 pass 
                 self.mSINGLE_QUOTE()
 
@@ -1250,7 +1274,7 @@ class MirandaLexer(Lexer):
 
 
             elif alt6 == 2:
-                # grammars/Miranda.g:197:49: DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE
+                # grammars/Miranda.g:206:49: DOUBLE_QUOTE ALPHANUMERIC DOUBLE_QUOTE
                 pass 
                 self.mDOUBLE_QUOTE()
 
@@ -1281,10 +1305,10 @@ class MirandaLexer(Lexer):
             _type = STRING
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:198:7: ( ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE ) )
-            # grammars/Miranda.g:198:9: ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE )
+            # grammars/Miranda.g:207:7: ( ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE ) )
+            # grammars/Miranda.g:207:9: ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE )
             pass 
-            # grammars/Miranda.g:198:9: ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE )
+            # grammars/Miranda.g:207:9: ( SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE | DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE )
             alt9 = 2
             LA9_0 = self.input.LA(1)
 
@@ -1299,12 +1323,12 @@ class MirandaLexer(Lexer):
 
 
             if alt9 == 1:
-                # grammars/Miranda.g:198:10: SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE
+                # grammars/Miranda.g:207:10: SINGLE_QUOTE ( ALPHANUMERIC )* SINGLE_QUOTE
                 pass 
                 self.mSINGLE_QUOTE()
 
 
-                # grammars/Miranda.g:198:23: ( ALPHANUMERIC )*
+                # grammars/Miranda.g:207:23: ( ALPHANUMERIC )*
                 while True: #loop7
                     alt7 = 2
                     LA7_0 = self.input.LA(1)
@@ -1335,12 +1359,12 @@ class MirandaLexer(Lexer):
 
 
             elif alt9 == 2:
-                # grammars/Miranda.g:198:52: DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE
+                # grammars/Miranda.g:207:52: DOUBLE_QUOTE ( ALPHANUMERIC )* DOUBLE_QUOTE
                 pass 
                 self.mDOUBLE_QUOTE()
 
 
-                # grammars/Miranda.g:198:65: ( ALPHANUMERIC )*
+                # grammars/Miranda.g:207:65: ( ALPHANUMERIC )*
                 while True: #loop8
                     alt8 = 2
                     LA8_0 = self.input.LA(1)
@@ -1386,7 +1410,7 @@ class MirandaLexer(Lexer):
     # $ANTLR start "ALPHANUMERIC"
     def mALPHANUMERIC(self, ):
         try:
-            # grammars/Miranda.g:199:22: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' ) )
+            # grammars/Miranda.g:208:22: ( ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | ' ' ) )
             # grammars/Miranda.g:
             pass 
             if self.input.LA(1) == 32 or (48 <= self.input.LA(1) <= 57) or (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
@@ -1414,8 +1438,8 @@ class MirandaLexer(Lexer):
             _type = ID
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:201:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )* ( '?' | '!' )? )
-            # grammars/Miranda.g:201:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )* ( '?' | '!' )?
+            # grammars/Miranda.g:210:3: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )* ( '?' | '!' )? )
+            # grammars/Miranda.g:210:5: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )* ( '?' | '!' )?
             pass 
             if (65 <= self.input.LA(1) <= 90) or (97 <= self.input.LA(1) <= 122):
                 self.input.consume()
@@ -1426,7 +1450,7 @@ class MirandaLexer(Lexer):
 
 
 
-            # grammars/Miranda.g:201:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )*
+            # grammars/Miranda.g:210:29: ( 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '_' | '.' )*
             while True: #loop10
                 alt10 = 2
                 LA10_0 = self.input.LA(1)
@@ -1452,7 +1476,7 @@ class MirandaLexer(Lexer):
                     break #loop10
 
 
-            # grammars/Miranda.g:201:75: ( '?' | '!' )?
+            # grammars/Miranda.g:210:75: ( '?' | '!' )?
             alt11 = 2
             LA11_0 = self.input.LA(1)
 
@@ -1490,10 +1514,10 @@ class MirandaLexer(Lexer):
             _type = WHITESPACE
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:203:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            # grammars/Miranda.g:203:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Miranda.g:212:11: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            # grammars/Miranda.g:212:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             pass 
-            # grammars/Miranda.g:203:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            # grammars/Miranda.g:212:13: ( ' ' | '\\t' | '\\r' | '\\n' )+
             cnt12 = 0
             while True: #loop12
                 alt12 = 2
@@ -1550,12 +1574,12 @@ class MirandaLexer(Lexer):
             _type = COMMENT
             _channel = DEFAULT_CHANNEL
 
-            # grammars/Miranda.g:207:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' ) )
-            # grammars/Miranda.g:207:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' )
+            # grammars/Miranda.g:216:8: ( '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' ) )
+            # grammars/Miranda.g:216:10: '#' (~ ( '\\n' | '\\r' ) )* ( ( '\\r' )? '\\n' )
             pass 
             self.match(35)
 
-            # grammars/Miranda.g:207:14: (~ ( '\\n' | '\\r' ) )*
+            # grammars/Miranda.g:216:14: (~ ( '\\n' | '\\r' ) )*
             while True: #loop13
                 alt13 = 2
                 LA13_0 = self.input.LA(1)
@@ -1581,17 +1605,17 @@ class MirandaLexer(Lexer):
                     break #loop13
 
 
-            # grammars/Miranda.g:207:32: ( ( '\\r' )? '\\n' )
-            # grammars/Miranda.g:207:33: ( '\\r' )? '\\n'
+            # grammars/Miranda.g:216:32: ( ( '\\r' )? '\\n' )
+            # grammars/Miranda.g:216:33: ( '\\r' )? '\\n'
             pass 
-            # grammars/Miranda.g:207:33: ( '\\r' )?
+            # grammars/Miranda.g:216:33: ( '\\r' )?
             alt14 = 2
             LA14_0 = self.input.LA(1)
 
             if (LA14_0 == 13) :
                 alt14 = 1
             if alt14 == 1:
-                # grammars/Miranda.g:207:33: '\\r'
+                # grammars/Miranda.g:216:33: '\\r'
                 pass 
                 self.match(13)
 
@@ -1620,8 +1644,8 @@ class MirandaLexer(Lexer):
 
 
     def mTokens(self):
-        # grammars/Miranda.g:1:8: ( ADD | AND | COLON | COMMA | CONCAT | DEDENT | DEFINITION | DIV | DOT | DOUBLE_QUOTE | EQ | EXP | FALSE | GT | GTE | GUARD | IDIV | IS | LBRACKET | LIST | LPAREN | LT | LTE | MIN | MOD | MUL | NEQ | NOT | OR | OTHERWISE | PROGRAM | RBRACKET | RPAREN | SECTION | SINGLE_QUOTE | SUBTRACT | TRUE | TUPLE | WHERE | INT | FLOAT | CHAR | STRING | ID | WHITESPACE | COMMENT )
-        alt15 = 46
+        # grammars/Miranda.g:1:8: ( ADD | AND | BODY | COLON | COMMA | CONCAT | DEDENT | DEFINITION | DIV | DOT | DOUBLE_QUOTE | EQ | EXP | FALSE | GT | GTE | IDIV | IS | LBRACKET | LIST | LPAREN | LT | LTE | MIN | MOD | MUL | NEQ | NOT | OR | OTHERWISE | PROGRAM | RBRACKET | RPAREN | SECTION | SINGLE_QUOTE | SUBTRACT | TRUE | TUPLE | TYPEDEF | WHERE | INT | FLOAT | CHAR | STRING | ID | WHITESPACE | COMMENT )
+        alt15 = 47
         alt15 = self.dfa15.predict(self.input)
         if alt15 == 1:
             # grammars/Miranda.g:1:10: ADD
@@ -1638,308 +1662,315 @@ class MirandaLexer(Lexer):
 
 
         elif alt15 == 3:
-            # grammars/Miranda.g:1:18: COLON
+            # grammars/Miranda.g:1:18: BODY
+            pass 
+            self.mBODY()
+
+
+
+        elif alt15 == 4:
+            # grammars/Miranda.g:1:23: COLON
             pass 
             self.mCOLON()
 
 
 
-        elif alt15 == 4:
-            # grammars/Miranda.g:1:24: COMMA
+        elif alt15 == 5:
+            # grammars/Miranda.g:1:29: COMMA
             pass 
             self.mCOMMA()
 
 
 
-        elif alt15 == 5:
-            # grammars/Miranda.g:1:30: CONCAT
+        elif alt15 == 6:
+            # grammars/Miranda.g:1:35: CONCAT
             pass 
             self.mCONCAT()
 
 
 
-        elif alt15 == 6:
-            # grammars/Miranda.g:1:37: DEDENT
+        elif alt15 == 7:
+            # grammars/Miranda.g:1:42: DEDENT
             pass 
             self.mDEDENT()
 
 
 
-        elif alt15 == 7:
-            # grammars/Miranda.g:1:44: DEFINITION
+        elif alt15 == 8:
+            # grammars/Miranda.g:1:49: DEFINITION
             pass 
             self.mDEFINITION()
 
 
 
-        elif alt15 == 8:
-            # grammars/Miranda.g:1:55: DIV
+        elif alt15 == 9:
+            # grammars/Miranda.g:1:60: DIV
             pass 
             self.mDIV()
 
 
 
-        elif alt15 == 9:
-            # grammars/Miranda.g:1:59: DOT
+        elif alt15 == 10:
+            # grammars/Miranda.g:1:64: DOT
             pass 
             self.mDOT()
 
 
 
-        elif alt15 == 10:
-            # grammars/Miranda.g:1:63: DOUBLE_QUOTE
+        elif alt15 == 11:
+            # grammars/Miranda.g:1:68: DOUBLE_QUOTE
             pass 
             self.mDOUBLE_QUOTE()
 
 
 
-        elif alt15 == 11:
-            # grammars/Miranda.g:1:76: EQ
+        elif alt15 == 12:
+            # grammars/Miranda.g:1:81: EQ
             pass 
             self.mEQ()
 
 
 
-        elif alt15 == 12:
-            # grammars/Miranda.g:1:79: EXP
+        elif alt15 == 13:
+            # grammars/Miranda.g:1:84: EXP
             pass 
             self.mEXP()
 
 
 
-        elif alt15 == 13:
-            # grammars/Miranda.g:1:83: FALSE
+        elif alt15 == 14:
+            # grammars/Miranda.g:1:88: FALSE
             pass 
             self.mFALSE()
 
 
 
-        elif alt15 == 14:
-            # grammars/Miranda.g:1:89: GT
+        elif alt15 == 15:
+            # grammars/Miranda.g:1:94: GT
             pass 
             self.mGT()
 
 
 
-        elif alt15 == 15:
-            # grammars/Miranda.g:1:92: GTE
+        elif alt15 == 16:
+            # grammars/Miranda.g:1:97: GTE
             pass 
             self.mGTE()
 
 
 
-        elif alt15 == 16:
-            # grammars/Miranda.g:1:96: GUARD
-            pass 
-            self.mGUARD()
-
-
-
         elif alt15 == 17:
-            # grammars/Miranda.g:1:102: IDIV
+            # grammars/Miranda.g:1:101: IDIV
             pass 
             self.mIDIV()
 
 
 
         elif alt15 == 18:
-            # grammars/Miranda.g:1:107: IS
+            # grammars/Miranda.g:1:106: IS
             pass 
             self.mIS()
 
 
 
         elif alt15 == 19:
-            # grammars/Miranda.g:1:110: LBRACKET
+            # grammars/Miranda.g:1:109: LBRACKET
             pass 
             self.mLBRACKET()
 
 
 
         elif alt15 == 20:
-            # grammars/Miranda.g:1:119: LIST
+            # grammars/Miranda.g:1:118: LIST
             pass 
             self.mLIST()
 
 
 
         elif alt15 == 21:
-            # grammars/Miranda.g:1:124: LPAREN
+            # grammars/Miranda.g:1:123: LPAREN
             pass 
             self.mLPAREN()
 
 
 
         elif alt15 == 22:
-            # grammars/Miranda.g:1:131: LT
+            # grammars/Miranda.g:1:130: LT
             pass 
             self.mLT()
 
 
 
         elif alt15 == 23:
-            # grammars/Miranda.g:1:134: LTE
+            # grammars/Miranda.g:1:133: LTE
             pass 
             self.mLTE()
 
 
 
         elif alt15 == 24:
-            # grammars/Miranda.g:1:138: MIN
+            # grammars/Miranda.g:1:137: MIN
             pass 
             self.mMIN()
 
 
 
         elif alt15 == 25:
-            # grammars/Miranda.g:1:142: MOD
+            # grammars/Miranda.g:1:141: MOD
             pass 
             self.mMOD()
 
 
 
         elif alt15 == 26:
-            # grammars/Miranda.g:1:146: MUL
+            # grammars/Miranda.g:1:145: MUL
             pass 
             self.mMUL()
 
 
 
         elif alt15 == 27:
-            # grammars/Miranda.g:1:150: NEQ
+            # grammars/Miranda.g:1:149: NEQ
             pass 
             self.mNEQ()
 
 
 
         elif alt15 == 28:
-            # grammars/Miranda.g:1:154: NOT
+            # grammars/Miranda.g:1:153: NOT
             pass 
             self.mNOT()
 
 
 
         elif alt15 == 29:
-            # grammars/Miranda.g:1:158: OR
+            # grammars/Miranda.g:1:157: OR
             pass 
             self.mOR()
 
 
 
         elif alt15 == 30:
-            # grammars/Miranda.g:1:161: OTHERWISE
+            # grammars/Miranda.g:1:160: OTHERWISE
             pass 
             self.mOTHERWISE()
 
 
 
         elif alt15 == 31:
-            # grammars/Miranda.g:1:171: PROGRAM
+            # grammars/Miranda.g:1:170: PROGRAM
             pass 
             self.mPROGRAM()
 
 
 
         elif alt15 == 32:
-            # grammars/Miranda.g:1:179: RBRACKET
+            # grammars/Miranda.g:1:178: RBRACKET
             pass 
             self.mRBRACKET()
 
 
 
         elif alt15 == 33:
-            # grammars/Miranda.g:1:188: RPAREN
+            # grammars/Miranda.g:1:187: RPAREN
             pass 
             self.mRPAREN()
 
 
 
         elif alt15 == 34:
-            # grammars/Miranda.g:1:195: SECTION
+            # grammars/Miranda.g:1:194: SECTION
             pass 
             self.mSECTION()
 
 
 
         elif alt15 == 35:
-            # grammars/Miranda.g:1:203: SINGLE_QUOTE
+            # grammars/Miranda.g:1:202: SINGLE_QUOTE
             pass 
             self.mSINGLE_QUOTE()
 
 
 
         elif alt15 == 36:
-            # grammars/Miranda.g:1:216: SUBTRACT
+            # grammars/Miranda.g:1:215: SUBTRACT
             pass 
             self.mSUBTRACT()
 
 
 
         elif alt15 == 37:
-            # grammars/Miranda.g:1:225: TRUE
+            # grammars/Miranda.g:1:224: TRUE
             pass 
             self.mTRUE()
 
 
 
         elif alt15 == 38:
-            # grammars/Miranda.g:1:230: TUPLE
+            # grammars/Miranda.g:1:229: TUPLE
             pass 
             self.mTUPLE()
 
 
 
         elif alt15 == 39:
-            # grammars/Miranda.g:1:236: WHERE
+            # grammars/Miranda.g:1:235: TYPEDEF
+            pass 
+            self.mTYPEDEF()
+
+
+
+        elif alt15 == 40:
+            # grammars/Miranda.g:1:243: WHERE
             pass 
             self.mWHERE()
 
 
 
-        elif alt15 == 40:
-            # grammars/Miranda.g:1:242: INT
+        elif alt15 == 41:
+            # grammars/Miranda.g:1:249: INT
             pass 
             self.mINT()
 
 
 
-        elif alt15 == 41:
-            # grammars/Miranda.g:1:246: FLOAT
+        elif alt15 == 42:
+            # grammars/Miranda.g:1:253: FLOAT
             pass 
             self.mFLOAT()
 
 
 
-        elif alt15 == 42:
-            # grammars/Miranda.g:1:252: CHAR
+        elif alt15 == 43:
+            # grammars/Miranda.g:1:259: CHAR
             pass 
             self.mCHAR()
 
 
 
-        elif alt15 == 43:
-            # grammars/Miranda.g:1:257: STRING
+        elif alt15 == 44:
+            # grammars/Miranda.g:1:264: STRING
             pass 
             self.mSTRING()
 
 
 
-        elif alt15 == 44:
-            # grammars/Miranda.g:1:264: ID
+        elif alt15 == 45:
+            # grammars/Miranda.g:1:271: ID
             pass 
             self.mID()
 
 
 
-        elif alt15 == 45:
-            # grammars/Miranda.g:1:267: WHITESPACE
+        elif alt15 == 46:
+            # grammars/Miranda.g:1:274: WHITESPACE
             pass 
             self.mWHITESPACE()
 
 
 
-        elif alt15 == 46:
-            # grammars/Miranda.g:1:278: COMMENT
+        elif alt15 == 47:
+            # grammars/Miranda.g:1:285: COMMENT
             pass 
             self.mCOMMENT()
 
@@ -1953,166 +1984,168 @@ class MirandaLexer(Lexer):
     # lookup tables for DFA #15
 
     DFA15_eot = DFA.unpack(
-        u"\1\uffff\1\41\3\uffff\1\50\2\uffff\1\51\1\55\1\uffff\1\35\1\60"
-        u"\1\35\2\uffff\1\63\1\35\1\uffff\1\66\1\uffff\2\35\2\uffff\1\71"
-        u"\2\35\1\75\21\uffff\1\35\2\uffff\1\35\2\uffff\1\35\2\uffff\2\35"
-        u"\2\uffff\2\35\4\uffff\1\35\1\115\1\116\2\35\1\uffff\2\35\3\uffff"
-        u"\1\35\2\uffff\2\35\1\126\1\35\1\130\2\35\1\uffff\1\133\1\uffff"
-        u"\2\35\1\uffff\1\35\1\137\1\35\1\uffff\1\141\1\uffff"
+        u"\1\uffff\1\41\1\uffff\1\50\1\52\3\uffff\1\53\1\57\1\uffff\1\35"
+        u"\1\62\1\35\2\uffff\1\65\1\35\1\uffff\1\70\1\uffff\2\35\2\uffff"
+        u"\1\73\2\35\1\77\23\uffff\1\35\2\uffff\1\35\2\uffff\1\35\2\uffff"
+        u"\2\35\2\uffff\2\35\4\uffff\1\35\1\117\1\120\2\35\1\uffff\2\35\3"
+        u"\uffff\1\35\2\uffff\2\35\1\130\1\35\1\132\2\35\1\uffff\1\135\1"
+        u"\uffff\2\35\1\uffff\1\35\1\141\1\35\1\uffff\1\143\1\uffff"
         )
 
     DFA15_eof = DFA.unpack(
-        u"\142\uffff"
+        u"\144\uffff"
         )
 
     DFA15_min = DFA.unpack(
-        u"\1\11\1\53\3\uffff\1\75\2\uffff\1\40\1\75\1\uffff\1\141\1\75\1"
-        u"\151\2\uffff\1\55\1\157\1\uffff\1\75\1\uffff\1\164\1\162\2\uffff"
-        u"\1\40\1\162\1\150\1\56\5\uffff\1\145\7\uffff\1\40\3\uffff\1\154"
-        u"\2\uffff\1\166\2\uffff\1\144\2\uffff\1\150\1\157\1\uffff\1\40\1"
-        u"\165\1\145\2\uffff\1\144\1\uffff\1\163\2\41\1\145\1\147\1\uffff"
-        u"\1\145\1\162\3\uffff\1\145\2\uffff\2\162\1\41\1\145\1\41\1\167"
-        u"\1\141\1\uffff\1\41\1\uffff\1\151\1\155\1\uffff\1\163\1\41\1\145"
-        u"\1\uffff\1\41\1\uffff"
+        u"\1\11\1\53\1\uffff\1\75\1\72\3\uffff\1\40\1\75\1\uffff\1\141\1"
+        u"\75\1\151\2\uffff\1\55\1\157\1\uffff\1\75\1\uffff\1\164\1\162\2"
+        u"\uffff\1\40\1\162\1\150\1\56\6\uffff\1\145\10\uffff\1\40\3\uffff"
+        u"\1\154\2\uffff\1\166\2\uffff\1\144\2\uffff\1\150\1\157\1\uffff"
+        u"\1\40\1\165\1\145\2\uffff\1\144\1\uffff\1\163\2\41\1\145\1\147"
+        u"\1\uffff\1\145\1\162\3\uffff\1\145\2\uffff\2\162\1\41\1\145\1\41"
+        u"\1\167\1\141\1\uffff\1\41\1\uffff\1\151\1\155\1\uffff\1\163\1\41"
+        u"\1\145\1\uffff\1\41\1\uffff"
         )
 
     DFA15_max = DFA.unpack(
-        u"\1\174\1\53\3\uffff\1\164\2\uffff\1\172\1\75\1\uffff\1\141\1\75"
-        u"\1\151\2\uffff\1\71\1\157\1\uffff\1\75\1\uffff\1\164\1\162\2\uffff"
-        u"\1\172\1\162\1\150\1\71\5\uffff\1\145\7\uffff\1\172\3\uffff\1\154"
-        u"\2\uffff\1\166\2\uffff\1\144\2\uffff\1\150\1\157\1\uffff\1\172"
-        u"\1\165\1\145\2\uffff\1\146\1\uffff\1\163\2\172\1\145\1\147\1\uffff"
-        u"\1\145\1\162\3\uffff\1\145\2\uffff\2\162\1\172\1\145\1\172\1\167"
-        u"\1\141\1\uffff\1\172\1\uffff\1\151\1\155\1\uffff\1\163\1\172\1"
-        u"\145\1\uffff\1\172\1\uffff"
+        u"\1\174\1\53\1\uffff\1\164\1\72\3\uffff\1\172\1\75\1\uffff\1\141"
+        u"\1\75\1\151\2\uffff\1\71\1\157\1\uffff\1\75\1\uffff\1\164\1\162"
+        u"\2\uffff\1\172\1\162\1\150\1\71\6\uffff\1\145\10\uffff\1\172\3"
+        u"\uffff\1\154\2\uffff\1\166\2\uffff\1\144\2\uffff\1\150\1\157\1"
+        u"\uffff\1\172\1\165\1\145\2\uffff\1\146\1\uffff\1\163\2\172\1\145"
+        u"\1\147\1\uffff\1\145\1\162\3\uffff\1\145\2\uffff\2\162\1\172\1"
+        u"\145\1\172\1\167\1\141\1\uffff\1\172\1\uffff\1\151\1\155\1\uffff"
+        u"\1\163\1\172\1\145\1\uffff\1\172\1\uffff"
         )
 
     DFA15_accept = DFA.unpack(
-        u"\2\uffff\1\2\1\3\1\4\1\uffff\1\10\1\11\2\uffff\1\14\3\uffff\1\23"
-        u"\1\25\2\uffff\1\32\1\uffff\1\35\2\uffff\1\40\1\41\4\uffff\1\54"
-        u"\1\55\1\56\1\5\1\1\1\uffff\1\20\1\24\1\27\1\42\1\46\1\26\1\12\1"
-        u"\uffff\1\53\1\13\1\22\1\uffff\1\17\1\16\1\uffff\1\44\1\30\1\uffff"
-        u"\1\33\1\34\2\uffff\1\43\3\uffff\1\50\1\51\1\uffff\1\52\5\uffff"
-        u"\1\52\2\uffff\1\6\1\7\1\52\1\uffff\1\21\1\31\7\uffff\1\45\1\uffff"
-        u"\1\15\2\uffff\1\47\3\uffff\1\37\1\uffff\1\36"
+        u"\2\uffff\1\2\2\uffff\1\5\1\11\1\12\2\uffff\1\15\3\uffff\1\23\1"
+        u"\25\2\uffff\1\32\1\uffff\1\35\2\uffff\1\40\1\41\4\uffff\1\55\1"
+        u"\56\1\57\1\6\1\1\1\3\1\uffff\1\24\1\27\1\42\1\46\1\26\1\47\1\4"
+        u"\1\13\1\uffff\1\54\1\14\1\22\1\uffff\1\20\1\17\1\uffff\1\44\1\30"
+        u"\1\uffff\1\33\1\34\2\uffff\1\43\3\uffff\1\51\1\52\1\uffff\1\53"
+        u"\5\uffff\1\53\2\uffff\1\7\1\10\1\53\1\uffff\1\21\1\31\7\uffff\1"
+        u"\45\1\uffff\1\16\2\uffff\1\50\3\uffff\1\37\1\uffff\1\36"
         )
 
     DFA15_special = DFA.unpack(
-        u"\142\uffff"
+        u"\144\uffff"
         )
 
 
     DFA15_transition = [
         DFA.unpack(u"\2\36\2\uffff\1\36\22\uffff\1\36\1\23\1\10\1\37\2\uffff"
-        u"\1\2\1\31\1\17\1\30\1\22\1\1\1\4\1\20\1\7\1\6\12\34\1\3\1\uffff"
-        u"\1\5\1\11\1\14\2\uffff\32\35\1\16\1\uffff\1\27\1\12\2\uffff\3\35"
+        u"\1\2\1\31\1\17\1\30\1\22\1\1\1\5\1\20\1\7\1\6\12\34\1\4\1\uffff"
+        u"\1\3\1\11\1\14\2\uffff\32\35\1\16\1\uffff\1\27\1\12\2\uffff\3\35"
         u"\1\15\1\35\1\13\6\35\1\21\1\35\1\25\1\26\3\35\1\32\2\35\1\33\3"
         u"\35\1\uffff\1\24"),
         DFA.unpack(u"\1\40"),
         DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\45\46\uffff\1\42\2\uffff\1\43\4\uffff\1\44\6\uffff"
+        DFA.unpack(u"\1\45\44\uffff\1\42\1\uffff\1\43\7\uffff\1\44\6\uffff"
         u"\1\46\1\47"),
+        DFA.unpack(u"\1\51"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\52\1\uffff\1\53\15\uffff\12\52\7\uffff\32\52\6\uffff"
-        u"\32\52"),
-        DFA.unpack(u"\1\54"),
         DFA.unpack(u""),
+        DFA.unpack(u"\1\54\1\uffff\1\55\15\uffff\12\54\7\uffff\32\54\6\uffff"
+        u"\32\54"),
         DFA.unpack(u"\1\56"),
-        DFA.unpack(u"\1\57"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\60"),
         DFA.unpack(u"\1\61"),
+        DFA.unpack(u"\1\63"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\62\2\uffff\12\34"),
-        DFA.unpack(u"\1\64"),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\65"),
+        DFA.unpack(u"\1\64\2\uffff\12\34"),
+        DFA.unpack(u"\1\66"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\67"),
-        DFA.unpack(u"\1\70"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\71"),
+        DFA.unpack(u"\1\72"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\72\6\uffff\1\53\10\uffff\12\72\7\uffff\32\72\6\uffff"
-        u"\32\72"),
-        DFA.unpack(u"\1\73"),
-        DFA.unpack(u"\1\74"),
-        DFA.unpack(u"\1\76\1\uffff\12\34"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\77"),
+        DFA.unpack(u"\1\74\6\uffff\1\55\10\uffff\12\74\7\uffff\32\74\6\uffff"
+        u"\32\74"),
+        DFA.unpack(u"\1\75"),
+        DFA.unpack(u"\1\76"),
+        DFA.unpack(u"\1\100\1\uffff\12\34"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\53\1\uffff\1\100\15\uffff\12\53\7\uffff\32\53\6"
-        u"\uffff\32\53"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\101"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\102"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\55\1\uffff\1\102\15\uffff\12\55\7\uffff\32\55\6"
+        u"\uffff\32\55"),
+        DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\103"),
         DFA.unpack(u""),
         DFA.unpack(u""),
         DFA.unpack(u"\1\104"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u"\1\105"),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\53\6\uffff\1\106\10\uffff\12\53\7\uffff\32\53\6"
-        u"\uffff\32\53"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\106"),
         DFA.unpack(u"\1\107"),
-        DFA.unpack(u"\1\110"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\55\6\uffff\1\110\10\uffff\12\55\7\uffff\32\55\6"
+        u"\uffff\32\55"),
+        DFA.unpack(u"\1\111"),
+        DFA.unpack(u"\1\112"),
         DFA.unpack(u""),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\111\1\uffff\1\112"),
+        DFA.unpack(u"\1\113\1\uffff\1\114"),
         DFA.unpack(u""),
-        DFA.unpack(u"\1\114"),
+        DFA.unpack(u"\1\116"),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),
-        DFA.unpack(u"\1\117"),
-        DFA.unpack(u"\1\120"),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\121"),
         DFA.unpack(u"\1\122"),
         DFA.unpack(u""),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\123"),
-        DFA.unpack(u""),
-        DFA.unpack(u""),
         DFA.unpack(u"\1\124"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
         DFA.unpack(u"\1\125"),
-        DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
-        u"\32\35\4\uffff\1\35\1\uffff\32\35"),
+        DFA.unpack(u""),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\126"),
         DFA.unpack(u"\1\127"),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),
         DFA.unpack(u"\1\131"),
-        DFA.unpack(u"\1\132"),
+        DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
+        u"\32\35\4\uffff\1\35\1\uffff\32\35"),
+        DFA.unpack(u"\1\133"),
+        DFA.unpack(u"\1\134"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),
-        DFA.unpack(u""),
-        DFA.unpack(u"\1\134"),
-        DFA.unpack(u"\1\135"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\136"),
+        DFA.unpack(u"\1\137"),
+        DFA.unpack(u""),
+        DFA.unpack(u"\1\140"),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),
-        DFA.unpack(u"\1\140"),
+        DFA.unpack(u"\1\142"),
         DFA.unpack(u""),
         DFA.unpack(u"\1\35\14\uffff\1\35\1\uffff\12\35\5\uffff\1\35\1\uffff"
         u"\32\35\4\uffff\1\35\1\uffff\32\35"),

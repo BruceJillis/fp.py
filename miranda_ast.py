@@ -1,5 +1,5 @@
 from antlr3.tree import CommonTree, CommonToken
-from ast import ASTNode
+from ast import ASTNode, BinaryNode
 
 class ProgramNode(ASTNode):
   spelling = 'PROGRAM'
@@ -21,3 +21,12 @@ class MirandaDefinitionNode(ASTNode):
 
 	def body(self):
 		return self.children[-1]
+
+class ConcatNode(BinaryNode):
+  pass
+
+class SubtractNode(BinaryNode):
+  pass
+
+class ColonNode(BinaryNode):
+  pass
