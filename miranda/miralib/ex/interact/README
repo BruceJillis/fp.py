@@ -1,0 +1,8 @@
+This is a package for doing interactive input/output in Miranda, written
+by  Simon  Thompson  of  the  University  of  Kent.  The main package is
+interaction.m - to include it in one of your scripts say
+	%include <ex/interact/interaction.m>
+it uses a script containing auxiliary definitions called  inter_basics.m
+but you do not need to include the latter explicitly.
+
+interact.pdf is a paper explaining the package.

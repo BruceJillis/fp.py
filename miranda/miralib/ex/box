@@ -1,0 +1,9 @@
+#! /usr/bin/mira -exp
+[Stdout (do_box $-)]
+%include <ex/box.m>
+
+||This is a program for reboxing comments in Miranda scripts.  Intended
+||to be used from within `vi', by the `!' command - acts on its standard
+||input. 
+
+||See box.m for some comments.  Contributed by John Cupitt.

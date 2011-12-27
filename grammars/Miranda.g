@@ -17,7 +17,6 @@ tokens {
    GTE    = '>=';
    ADD    = '+';
    MIN    = '-';
-   MUL    = '*';
    DIV    = '/';
    AND    = '&';
    OR     = '|';
@@ -35,7 +34,7 @@ tokens {
    DOUBLE_QUOTE = '"';
    SUBTRACT = '--';
    CONCAT = '++';
-   TYPEDEF = '::=';
+   TYPE_IS = '::=';
 
    TRUE = 'true';
    FALSE = 'false';
@@ -47,7 +46,10 @@ tokens {
    WHERE = 'where';
    OTHERWISE = 'otherwise';
    PROGRAM = 'program';
-    
+
+   CHAR_TYPE = 'char';
+   NUM_TYPE = 'num';
+
    // imaginary
    DEDENT     = '<dedent>';
    DEFINITION = '<definition>';
@@ -55,6 +57,9 @@ tokens {
    LIST       = '<list>';
    SECTION    = '<section>';
    BODY       = '<body>';
+   TYPE       = '<type>';
+   MUL        = '<mul>';
+   GENERIC    = '<generic>';
 }
 
 @header {
@@ -87,7 +92,7 @@ tokens {
         elif self._state.token == SKIP_TOKEN:
           continue
         
-        if self._state.token.type == IS:
+        if self._state.token.type in [IS, TYPE_IS]:
           self.offside.push(self._state.token)
         else:
           if self.offside.compare(self._state.token):
@@ -104,8 +109,8 @@ tokens {
 }
 
 program: 
-  (definition DEDENT)* expression EOF
-  -> ^(PROGRAM<ProgramNode> definition* expression)
+  ((typedef) DEDENT)* expression EOF
+  -> ^(PROGRAM<ProgramNode> typedef* expression)
 ;
 
 definition
@@ -114,6 +119,13 @@ definition
     -> ^(DEFINITION<MirandaDefinitionNode> ID parameter* body*)
   // conformal definition
 ;
+
+typedef
+  : ID STARS* TYPE_IS
+    -> ^(TYPE ^(ID STARS*))
+;
+
+STARS: '*'+;
 
 body: IS expression guard? where?
       -> ^(BODY expression guard? where?)
@@ -149,7 +161,7 @@ expr3: expr4 ((LT|LTE|EQ|NEQ|GTE|GT)^ expression)*;
 
 expr4: expr5 ((ADD<AddNode>^|MIN<MinNode>^) expression)*;
 
-expr5: expr6 ((DIV<DivNode>^|MUL<MulNode>^) expression)*;
+expr5: expr6 ((DIV<DivNode>^| {len(self.input.LT(1).text) == 1}? STARS<MulNode>^) expression)*;
 
 expr6: expr7 ((IDIV^|MOD^) expression)*;
 
