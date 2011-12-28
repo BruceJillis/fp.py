@@ -92,6 +92,7 @@ tokens {
         elif self._state.token == SKIP_TOKEN:
           continue
         
+        # if we are defining a function or type constructor
         if self._state.token.type in [IS, TYPE_IS]:
           self.offside.push(self._state.token)
         else:
@@ -117,7 +118,7 @@ definition
   // scalar definition
   : ID pattern* body*
     -> ^(DEFINITION<MirandaDefinitionNode> ID pattern* body*)
-  // conformal definition
+  // todo: conformal definition
 ;
 
 typedef
@@ -149,7 +150,7 @@ basic
   | boolean
   | list
   | tuple
-  | LPAREN! pattern* RPAREN!
+  | LPAREN! pattern^ pattern* RPAREN!
 ;
 
 expression: expr0;

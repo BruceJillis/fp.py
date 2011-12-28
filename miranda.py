@@ -1,10 +1,11 @@
 import antlr3
 import sys
 from collections import defaultdict
+# NOTE! CoreParser need to be imported before MirandParser since some tokens shadow each other
+from CoreParser import *
 from MirandaLexer import *
 from MirandaParser import *
 from common import Visitor, CompositeVisitor
-from CoreParser import *
 from ast import LetRecNode, DefinitionNode, LambdaNode
 
 class Offside:
@@ -19,10 +20,11 @@ class Offside:
       self.stack.append((line, start))
     else:
       _line, _start = self.stack[-1]
-      if line >= _line and start > _start:
+      if line == _line and start > _start and token.type == IS:
+        return
+      if line > _line  or (line == _line and start > _start):
         print 'INDENT', line, start
         self.stack[-1] = (line, start)
-        print self.stack
 
   def compare(self, token):
     line, start = token.getLine(), token.getCharPositionInLine()

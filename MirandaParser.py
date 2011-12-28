@@ -1,4 +1,4 @@
-# $ANTLR 3.4 grammars/Miranda.g 2011-12-27 23:24:25
+# $ANTLR 3.4 grammars/Miranda.g 2011-12-28 15:47:06
 
 import sys
 from antlr3 import *
@@ -132,7 +132,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "program"
-    # grammars/Miranda.g:111:1: program : ( ( typedef | definition ) DEDENT )* expression EOF -> ^( PROGRAM ( typedef )* ( definition )* expression ) ;
+    # grammars/Miranda.g:112:1: program : ( ( typedef | definition ) DEDENT )* expression EOF -> ^( PROGRAM ( typedef )* ( definition )* expression ) ;
     def program(self, ):
         retval = self.program_return()
         retval.start = self.input.LT(1)
@@ -167,10 +167,10 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:111:8: ( ( ( typedef | definition ) DEDENT )* expression EOF -> ^( PROGRAM ( typedef )* ( definition )* expression ) )
-                # grammars/Miranda.g:112:3: ( ( typedef | definition ) DEDENT )* expression EOF
+                # grammars/Miranda.g:112:8: ( ( ( typedef | definition ) DEDENT )* expression EOF -> ^( PROGRAM ( typedef )* ( definition )* expression ) )
+                # grammars/Miranda.g:113:3: ( ( typedef | definition ) DEDENT )* expression EOF
                 pass 
-                # grammars/Miranda.g:112:3: ( ( typedef | definition ) DEDENT )*
+                # grammars/Miranda.g:113:3: ( ( typedef | definition ) DEDENT )*
                 while True: #loop2
                     alt2 = 2
                     LA2_0 = self.input.LA(1)
@@ -185,9 +185,9 @@ class MirandaParser(Parser):
 
 
                     if alt2 == 1:
-                        # grammars/Miranda.g:112:4: ( typedef | definition ) DEDENT
+                        # grammars/Miranda.g:113:4: ( typedef | definition ) DEDENT
                         pass 
-                        # grammars/Miranda.g:112:4: ( typedef | definition )
+                        # grammars/Miranda.g:113:4: ( typedef | definition )
                         alt1 = 2
                         LA1_0 = self.input.LA(1)
 
@@ -219,7 +219,7 @@ class MirandaParser(Parser):
 
 
                         if alt1 == 1:
-                            # grammars/Miranda.g:112:5: typedef
+                            # grammars/Miranda.g:113:5: typedef
                             pass 
                             self._state.following.append(self.FOLLOW_typedef_in_program650)
                             typedef1 = self.typedef()
@@ -231,7 +231,7 @@ class MirandaParser(Parser):
 
 
                         elif alt1 == 2:
-                            # grammars/Miranda.g:112:13: definition
+                            # grammars/Miranda.g:113:13: definition
                             pass 
                             self._state.following.append(self.FOLLOW_definition_in_program652)
                             definition2 = self.definition()
@@ -283,21 +283,21 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 113:3: -> ^( PROGRAM ( typedef )* ( definition )* expression )
-                    # grammars/Miranda.g:113:6: ^( PROGRAM ( typedef )* ( definition )* expression )
+                    # 114:3: -> ^( PROGRAM ( typedef )* ( definition )* expression )
+                    # grammars/Miranda.g:114:6: ^( PROGRAM ( typedef )* ( definition )* expression )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     ProgramNode(PROGRAM)
                     , root_1)
 
-                    # grammars/Miranda.g:113:29: ( typedef )*
+                    # grammars/Miranda.g:114:29: ( typedef )*
                     while stream_typedef.hasNext():
                         self._adaptor.addChild(root_1, stream_typedef.nextTree())
 
 
                     stream_typedef.reset();
 
-                    # grammars/Miranda.g:113:38: ( definition )*
+                    # grammars/Miranda.g:114:38: ( definition )*
                     while stream_definition.hasNext():
                         self._adaptor.addChild(root_1, stream_definition.nextTree())
 
@@ -355,7 +355,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "definition"
-    # grammars/Miranda.g:116:1: definition : ID ( pattern )* ( body )* -> ^( DEFINITION ID ( pattern )* ( body )* ) ;
+    # grammars/Miranda.g:117:1: definition : ID ( pattern )* ( body )* -> ^( DEFINITION ID ( pattern )* ( body )* ) ;
     def definition(self, ):
         retval = self.definition_return()
         retval.start = self.input.LT(1)
@@ -384,15 +384,15 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:118:3: ( ID ( pattern )* ( body )* -> ^( DEFINITION ID ( pattern )* ( body )* ) )
-                # grammars/Miranda.g:118:5: ID ( pattern )* ( body )*
+                # grammars/Miranda.g:119:3: ( ID ( pattern )* ( body )* -> ^( DEFINITION ID ( pattern )* ( body )* ) )
+                # grammars/Miranda.g:119:5: ID ( pattern )* ( body )*
                 pass 
                 ID6 = self.match(self.input, ID, self.FOLLOW_ID_in_definition694) 
                 if self._state.backtracking == 0:
                     stream_ID.add(ID6)
 
 
-                # grammars/Miranda.g:118:8: ( pattern )*
+                # grammars/Miranda.g:119:8: ( pattern )*
                 while True: #loop3
                     alt3 = 2
                     LA3_0 = self.input.LA(1)
@@ -402,7 +402,7 @@ class MirandaParser(Parser):
 
 
                     if alt3 == 1:
-                        # grammars/Miranda.g:118:8: pattern
+                        # grammars/Miranda.g:119:8: pattern
                         pass 
                         self._state.following.append(self.FOLLOW_pattern_in_definition696)
                         pattern7 = self.pattern()
@@ -417,7 +417,7 @@ class MirandaParser(Parser):
                         break #loop3
 
 
-                # grammars/Miranda.g:118:17: ( body )*
+                # grammars/Miranda.g:119:17: ( body )*
                 while True: #loop4
                     alt4 = 2
                     LA4_0 = self.input.LA(1)
@@ -432,7 +432,7 @@ class MirandaParser(Parser):
 
 
                     if alt4 == 1:
-                        # grammars/Miranda.g:118:17: body
+                        # grammars/Miranda.g:119:17: body
                         pass 
                         self._state.following.append(self.FOLLOW_body_in_definition699)
                         body8 = self.body()
@@ -463,8 +463,8 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 119:5: -> ^( DEFINITION ID ( pattern )* ( body )* )
-                    # grammars/Miranda.g:119:8: ^( DEFINITION ID ( pattern )* ( body )* )
+                    # 120:5: -> ^( DEFINITION ID ( pattern )* ( body )* )
+                    # grammars/Miranda.g:120:8: ^( DEFINITION ID ( pattern )* ( body )* )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     MirandaDefinitionNode(DEFINITION)
@@ -474,14 +474,14 @@ class MirandaParser(Parser):
                     stream_ID.nextNode()
                     )
 
-                    # grammars/Miranda.g:119:47: ( pattern )*
+                    # grammars/Miranda.g:120:47: ( pattern )*
                     while stream_pattern.hasNext():
                         self._adaptor.addChild(root_1, stream_pattern.nextTree())
 
 
                     stream_pattern.reset();
 
-                    # grammars/Miranda.g:119:56: ( body )*
+                    # grammars/Miranda.g:120:56: ( body )*
                     while stream_body.hasNext():
                         self._adaptor.addChild(root_1, stream_body.nextTree())
 
@@ -537,7 +537,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "typedef"
-    # grammars/Miranda.g:123:1: typedef : ID ( STARS )* TYPE_IS part ( OR part )* -> ^( TYPE ^( ID ( STARS )* ) ( part )* ) ;
+    # grammars/Miranda.g:124:1: typedef : ID ( STARS )* TYPE_IS part ( OR part )* -> ^( TYPE ^( ID ( STARS )* ) ( part )* ) ;
     def typedef(self, ):
         retval = self.typedef_return()
         retval.start = self.input.LT(1)
@@ -574,15 +574,15 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:124:3: ( ID ( STARS )* TYPE_IS part ( OR part )* -> ^( TYPE ^( ID ( STARS )* ) ( part )* ) )
-                # grammars/Miranda.g:124:5: ID ( STARS )* TYPE_IS part ( OR part )*
+                # grammars/Miranda.g:125:3: ( ID ( STARS )* TYPE_IS part ( OR part )* -> ^( TYPE ^( ID ( STARS )* ) ( part )* ) )
+                # grammars/Miranda.g:125:5: ID ( STARS )* TYPE_IS part ( OR part )*
                 pass 
                 ID9 = self.match(self.input, ID, self.FOLLOW_ID_in_typedef735) 
                 if self._state.backtracking == 0:
                     stream_ID.add(ID9)
 
 
-                # grammars/Miranda.g:124:8: ( STARS )*
+                # grammars/Miranda.g:125:8: ( STARS )*
                 while True: #loop5
                     alt5 = 2
                     LA5_0 = self.input.LA(1)
@@ -592,7 +592,7 @@ class MirandaParser(Parser):
 
 
                     if alt5 == 1:
-                        # grammars/Miranda.g:124:8: STARS
+                        # grammars/Miranda.g:125:8: STARS
                         pass 
                         STARS10 = self.match(self.input, STARS, self.FOLLOW_STARS_in_typedef737) 
                         if self._state.backtracking == 0:
@@ -617,7 +617,7 @@ class MirandaParser(Parser):
                     stream_part.add(part12.tree)
 
 
-                # grammars/Miranda.g:124:28: ( OR part )*
+                # grammars/Miranda.g:125:28: ( OR part )*
                 while True: #loop6
                     alt6 = 2
                     LA6_0 = self.input.LA(1)
@@ -627,7 +627,7 @@ class MirandaParser(Parser):
 
 
                     if alt6 == 1:
-                        # grammars/Miranda.g:124:29: OR part
+                        # grammars/Miranda.g:125:29: OR part
                         pass 
                         OR13 = self.match(self.input, OR, self.FOLLOW_OR_in_typedef745) 
                         if self._state.backtracking == 0:
@@ -663,20 +663,20 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 125:5: -> ^( TYPE ^( ID ( STARS )* ) ( part )* )
-                    # grammars/Miranda.g:125:8: ^( TYPE ^( ID ( STARS )* ) ( part )* )
+                    # 126:5: -> ^( TYPE ^( ID ( STARS )* ) ( part )* )
+                    # grammars/Miranda.g:126:8: ^( TYPE ^( ID ( STARS )* ) ( part )* )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     self._adaptor.createFromType(TYPE, "TYPE")
                     , root_1)
 
-                    # grammars/Miranda.g:125:15: ^( ID ( STARS )* )
+                    # grammars/Miranda.g:126:15: ^( ID ( STARS )* )
                     root_2 = self._adaptor.nil()
                     root_2 = self._adaptor.becomeRoot(
                     stream_ID.nextNode()
                     , root_2)
 
-                    # grammars/Miranda.g:125:20: ( STARS )*
+                    # grammars/Miranda.g:126:20: ( STARS )*
                     while stream_STARS.hasNext():
                         self._adaptor.addChild(root_2, 
                         stream_STARS.nextNode()
@@ -687,7 +687,7 @@ class MirandaParser(Parser):
 
                     self._adaptor.addChild(root_1, root_2)
 
-                    # grammars/Miranda.g:125:28: ( part )*
+                    # grammars/Miranda.g:126:28: ( part )*
                     while stream_part.hasNext():
                         self._adaptor.addChild(root_1, stream_part.nextTree())
 
@@ -743,7 +743,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "part"
-    # grammars/Miranda.g:127:10: fragment part :{...}? ID ( typelist )? -> ^( PART ID ( typelist )? ) ;
+    # grammars/Miranda.g:128:10: fragment part :{...}? ID ( typelist )? -> ^( PART ID ( typelist )? ) ;
     def part(self, ):
         retval = self.part_return()
         retval.start = self.input.LT(1)
@@ -769,8 +769,8 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:127:14: ({...}? ID ( typelist )? -> ^( PART ID ( typelist )? ) )
-                # grammars/Miranda.g:127:16: {...}? ID ( typelist )?
+                # grammars/Miranda.g:128:14: ({...}? ID ( typelist )? -> ^( PART ID ( typelist )? ) )
+                # grammars/Miranda.g:128:16: {...}? ID ( typelist )?
                 pass 
                 if not ((self.input.LT(1).text[0].isupper())):
                     if self._state.backtracking > 0:
@@ -785,14 +785,14 @@ class MirandaParser(Parser):
                     stream_ID.add(ID15)
 
 
-                # grammars/Miranda.g:127:57: ( typelist )?
+                # grammars/Miranda.g:128:57: ( typelist )?
                 alt7 = 2
                 LA7_0 = self.input.LA(1)
 
                 if (LA7_0 == CHAR_TYPE or LA7_0 == ID or LA7_0 == LPAREN or LA7_0 == NUM_TYPE or LA7_0 == STARS) :
                     alt7 = 1
                 if alt7 == 1:
-                    # grammars/Miranda.g:127:57: typelist
+                    # grammars/Miranda.g:128:57: typelist
                     pass 
                     self._state.following.append(self.FOLLOW_typelist_in_part782)
                     typelist16 = self.typelist()
@@ -821,8 +821,8 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 127:67: -> ^( PART ID ( typelist )? )
-                    # grammars/Miranda.g:127:70: ^( PART ID ( typelist )? )
+                    # 128:67: -> ^( PART ID ( typelist )? )
+                    # grammars/Miranda.g:128:70: ^( PART ID ( typelist )? )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     self._adaptor.createFromType(PART, "PART")
@@ -832,7 +832,7 @@ class MirandaParser(Parser):
                     stream_ID.nextNode()
                     )
 
-                    # grammars/Miranda.g:127:80: ( typelist )?
+                    # grammars/Miranda.g:128:80: ( typelist )?
                     if stream_typelist.hasNext():
                         self._adaptor.addChild(root_1, stream_typelist.nextTree())
 
@@ -888,7 +888,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "generic"
-    # grammars/Miranda.g:128:10: fragment generic : ( LPAREN !)? ID ( STARS )* ( RPAREN !)? ;
+    # grammars/Miranda.g:129:10: fragment generic : ( LPAREN !)? ID ( STARS )* ( RPAREN !)? ;
     def generic(self, ):
         retval = self.generic_return()
         retval.start = self.input.LT(1)
@@ -917,20 +917,20 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:128:17: ( ( LPAREN !)? ID ( STARS )* ( RPAREN !)? )
-                # grammars/Miranda.g:128:19: ( LPAREN !)? ID ( STARS )* ( RPAREN !)?
+                # grammars/Miranda.g:129:17: ( ( LPAREN !)? ID ( STARS )* ( RPAREN !)? )
+                # grammars/Miranda.g:129:19: ( LPAREN !)? ID ( STARS )* ( RPAREN !)?
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                # grammars/Miranda.g:128:25: ( LPAREN !)?
+                # grammars/Miranda.g:129:25: ( LPAREN !)?
                 alt8 = 2
                 LA8_0 = self.input.LA(1)
 
                 if (LA8_0 == LPAREN) :
                     alt8 = 1
                 if alt8 == 1:
-                    # grammars/Miranda.g:128:25: LPAREN !
+                    # grammars/Miranda.g:129:25: LPAREN !
                     pass 
                     LPAREN17 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_generic802)
 
@@ -944,7 +944,7 @@ class MirandaParser(Parser):
 
 
 
-                # grammars/Miranda.g:128:31: ( STARS )*
+                # grammars/Miranda.g:129:31: ( STARS )*
                 while True: #loop9
                     alt9 = 2
                     LA9_0 = self.input.LA(1)
@@ -959,7 +959,7 @@ class MirandaParser(Parser):
 
 
                     if alt9 == 1:
-                        # grammars/Miranda.g:128:31: STARS
+                        # grammars/Miranda.g:129:31: STARS
                         pass 
                         STARS19 = self.match(self.input, STARS, self.FOLLOW_STARS_in_generic808)
                         if self._state.backtracking == 0:
@@ -973,14 +973,14 @@ class MirandaParser(Parser):
                         break #loop9
 
 
-                # grammars/Miranda.g:128:44: ( RPAREN !)?
+                # grammars/Miranda.g:129:44: ( RPAREN !)?
                 alt10 = 2
                 LA10_0 = self.input.LA(1)
 
                 if (LA10_0 == RPAREN) :
                     alt10 = 1
                 if alt10 == 1:
-                    # grammars/Miranda.g:128:44: RPAREN !
+                    # grammars/Miranda.g:129:44: RPAREN !
                     pass 
                     RPAREN20 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_generic811)
 
@@ -1027,7 +1027,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "typelist"
-    # grammars/Miranda.g:129:10: fragment typelist : ( NUM_TYPE | CHAR_TYPE | generic | STARS )+ ;
+    # grammars/Miranda.g:130:10: fragment typelist : ( NUM_TYPE | CHAR_TYPE | generic | STARS )+ ;
     def typelist(self, ):
         retval = self.typelist_return()
         retval.start = self.input.LT(1)
@@ -1056,13 +1056,13 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:129:18: ( ( NUM_TYPE | CHAR_TYPE | generic | STARS )+ )
-                # grammars/Miranda.g:129:20: ( NUM_TYPE | CHAR_TYPE | generic | STARS )+
+                # grammars/Miranda.g:130:18: ( ( NUM_TYPE | CHAR_TYPE | generic | STARS )+ )
+                # grammars/Miranda.g:130:20: ( NUM_TYPE | CHAR_TYPE | generic | STARS )+
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                # grammars/Miranda.g:129:20: ( NUM_TYPE | CHAR_TYPE | generic | STARS )+
+                # grammars/Miranda.g:130:20: ( NUM_TYPE | CHAR_TYPE | generic | STARS )+
                 cnt11 = 0
                 while True: #loop11
                     alt11 = 5
@@ -1077,7 +1077,7 @@ class MirandaParser(Parser):
                         alt11 = 4
 
                     if alt11 == 1:
-                        # grammars/Miranda.g:129:21: NUM_TYPE
+                        # grammars/Miranda.g:130:21: NUM_TYPE
                         pass 
                         NUM_TYPE21 = self.match(self.input, NUM_TYPE, self.FOLLOW_NUM_TYPE_in_typelist822)
                         if self._state.backtracking == 0:
@@ -1088,7 +1088,7 @@ class MirandaParser(Parser):
 
 
                     elif alt11 == 2:
-                        # grammars/Miranda.g:129:30: CHAR_TYPE
+                        # grammars/Miranda.g:130:30: CHAR_TYPE
                         pass 
                         CHAR_TYPE22 = self.match(self.input, CHAR_TYPE, self.FOLLOW_CHAR_TYPE_in_typelist824)
                         if self._state.backtracking == 0:
@@ -1099,7 +1099,7 @@ class MirandaParser(Parser):
 
 
                     elif alt11 == 3:
-                        # grammars/Miranda.g:129:40: generic
+                        # grammars/Miranda.g:130:40: generic
                         pass 
                         self._state.following.append(self.FOLLOW_generic_in_typelist826)
                         generic23 = self.generic()
@@ -1111,7 +1111,7 @@ class MirandaParser(Parser):
 
 
                     elif alt11 == 4:
-                        # grammars/Miranda.g:129:48: STARS
+                        # grammars/Miranda.g:130:48: STARS
                         pass 
                         STARS24 = self.match(self.input, STARS, self.FOLLOW_STARS_in_typelist828)
                         if self._state.backtracking == 0:
@@ -1175,7 +1175,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "body"
-    # grammars/Miranda.g:133:1: body : IS expression ( guard )? ( where )? -> ^( BODY expression ( guard )? ( where )? ) ;
+    # grammars/Miranda.g:134:1: body : IS expression ( guard )? ( where )? -> ^( BODY expression ( guard )? ( where )? ) ;
     def body(self, ):
         retval = self.body_return()
         retval.start = self.input.LT(1)
@@ -1207,8 +1207,8 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:133:5: ( IS expression ( guard )? ( where )? -> ^( BODY expression ( guard )? ( where )? ) )
-                # grammars/Miranda.g:133:7: IS expression ( guard )? ( where )?
+                # grammars/Miranda.g:134:5: ( IS expression ( guard )? ( where )? -> ^( BODY expression ( guard )? ( where )? ) )
+                # grammars/Miranda.g:134:7: IS expression ( guard )? ( where )?
                 pass 
                 IS25 = self.match(self.input, IS, self.FOLLOW_IS_in_body845) 
                 if self._state.backtracking == 0:
@@ -1223,14 +1223,14 @@ class MirandaParser(Parser):
                     stream_expression.add(expression26.tree)
 
 
-                # grammars/Miranda.g:133:21: ( guard )?
+                # grammars/Miranda.g:134:21: ( guard )?
                 alt12 = 2
                 LA12_0 = self.input.LA(1)
 
                 if (LA12_0 == COMMA) :
                     alt12 = 1
                 if alt12 == 1:
-                    # grammars/Miranda.g:133:21: guard
+                    # grammars/Miranda.g:134:21: guard
                     pass 
                     self._state.following.append(self.FOLLOW_guard_in_body849)
                     guard27 = self.guard()
@@ -1243,14 +1243,14 @@ class MirandaParser(Parser):
 
 
 
-                # grammars/Miranda.g:133:28: ( where )?
+                # grammars/Miranda.g:134:28: ( where )?
                 alt13 = 2
                 LA13_0 = self.input.LA(1)
 
                 if (LA13_0 == WHERE) :
                     alt13 = 1
                 if alt13 == 1:
-                    # grammars/Miranda.g:133:28: where
+                    # grammars/Miranda.g:134:28: where
                     pass 
                     self._state.following.append(self.FOLLOW_where_in_body852)
                     where28 = self.where()
@@ -1279,8 +1279,8 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 134:7: -> ^( BODY expression ( guard )? ( where )? )
-                    # grammars/Miranda.g:134:10: ^( BODY expression ( guard )? ( where )? )
+                    # 135:7: -> ^( BODY expression ( guard )? ( where )? )
+                    # grammars/Miranda.g:135:10: ^( BODY expression ( guard )? ( where )? )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     self._adaptor.createFromType(BODY, "BODY")
@@ -1288,14 +1288,14 @@ class MirandaParser(Parser):
 
                     self._adaptor.addChild(root_1, stream_expression.nextTree())
 
-                    # grammars/Miranda.g:134:28: ( guard )?
+                    # grammars/Miranda.g:135:28: ( guard )?
                     if stream_guard.hasNext():
                         self._adaptor.addChild(root_1, stream_guard.nextTree())
 
 
                     stream_guard.reset();
 
-                    # grammars/Miranda.g:134:35: ( where )?
+                    # grammars/Miranda.g:135:35: ( where )?
                     if stream_where.hasNext():
                         self._adaptor.addChild(root_1, stream_where.nextTree())
 
@@ -1351,7 +1351,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "guard"
-    # grammars/Miranda.g:137:1: guard : COMMA ( expression | OTHERWISE ) ;
+    # grammars/Miranda.g:138:1: guard : COMMA ( expression | OTHERWISE ) ;
     def guard(self, ):
         retval = self.guard_return()
         retval.start = self.input.LT(1)
@@ -1378,8 +1378,8 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:137:6: ( COMMA ( expression | OTHERWISE ) )
-                # grammars/Miranda.g:137:8: COMMA ( expression | OTHERWISE )
+                # grammars/Miranda.g:138:6: ( COMMA ( expression | OTHERWISE ) )
+                # grammars/Miranda.g:138:8: COMMA ( expression | OTHERWISE )
                 pass 
                 root_0 = self._adaptor.nil()
 
@@ -1391,7 +1391,7 @@ class MirandaParser(Parser):
 
 
 
-                # grammars/Miranda.g:137:14: ( expression | OTHERWISE )
+                # grammars/Miranda.g:138:14: ( expression | OTHERWISE )
                 alt14 = 2
                 LA14_0 = self.input.LA(1)
 
@@ -1410,7 +1410,7 @@ class MirandaParser(Parser):
 
 
                 if alt14 == 1:
-                    # grammars/Miranda.g:137:15: expression
+                    # grammars/Miranda.g:138:15: expression
                     pass 
                     self._state.following.append(self.FOLLOW_expression_in_guard884)
                     expression30 = self.expression()
@@ -1422,7 +1422,7 @@ class MirandaParser(Parser):
 
 
                 elif alt14 == 2:
-                    # grammars/Miranda.g:137:26: OTHERWISE
+                    # grammars/Miranda.g:138:26: OTHERWISE
                     pass 
                     OTHERWISE31 = self.match(self.input, OTHERWISE, self.FOLLOW_OTHERWISE_in_guard886)
                     if self._state.backtracking == 0:
@@ -1474,7 +1474,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "where"
-    # grammars/Miranda.g:139:1: where : WHERE definition ( DEDENT ! definition )* ;
+    # grammars/Miranda.g:140:1: where : WHERE definition ( DEDENT ! definition )* ;
     def where(self, ):
         retval = self.where_return()
         retval.start = self.input.LT(1)
@@ -1503,8 +1503,8 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:139:6: ( WHERE definition ( DEDENT ! definition )* )
-                # grammars/Miranda.g:139:8: WHERE definition ( DEDENT ! definition )*
+                # grammars/Miranda.g:140:6: ( WHERE definition ( DEDENT ! definition )* )
+                # grammars/Miranda.g:140:8: WHERE definition ( DEDENT ! definition )*
                 pass 
                 root_0 = self._adaptor.nil()
 
@@ -1524,7 +1524,7 @@ class MirandaParser(Parser):
                     self._adaptor.addChild(root_0, definition33.tree)
 
 
-                # grammars/Miranda.g:139:25: ( DEDENT ! definition )*
+                # grammars/Miranda.g:140:25: ( DEDENT ! definition )*
                 while True: #loop15
                     alt15 = 2
                     LA15_0 = self.input.LA(1)
@@ -1539,7 +1539,7 @@ class MirandaParser(Parser):
 
 
                     if alt15 == 1:
-                        # grammars/Miranda.g:139:26: DEDENT ! definition
+                        # grammars/Miranda.g:140:26: DEDENT ! definition
                         pass 
                         DEDENT34 = self.match(self.input, DEDENT, self.FOLLOW_DEDENT_in_where899)
 
@@ -1596,7 +1596,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "pattern"
-    # grammars/Miranda.g:141:1: pattern : basic ( ( COLON | ADD ) ^ pattern )? ;
+    # grammars/Miranda.g:142:1: pattern : basic ( ( COLON | ADD ) ^ pattern )? ;
     def pattern(self, ):
         retval = self.pattern_return()
         retval.start = self.input.LT(1)
@@ -1623,8 +1623,8 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:142:3: ( basic ( ( COLON | ADD ) ^ pattern )? )
-                # grammars/Miranda.g:142:5: basic ( ( COLON | ADD ) ^ pattern )?
+                # grammars/Miranda.g:143:3: ( basic ( ( COLON | ADD ) ^ pattern )? )
+                # grammars/Miranda.g:143:5: basic ( ( COLON | ADD ) ^ pattern )?
                 pass 
                 root_0 = self._adaptor.nil()
 
@@ -1637,14 +1637,14 @@ class MirandaParser(Parser):
                     self._adaptor.addChild(root_0, basic36.tree)
 
 
-                # grammars/Miranda.g:142:11: ( ( COLON | ADD ) ^ pattern )?
+                # grammars/Miranda.g:143:11: ( ( COLON | ADD ) ^ pattern )?
                 alt16 = 2
                 LA16_0 = self.input.LA(1)
 
                 if (LA16_0 == ADD or LA16_0 == COLON) :
                     alt16 = 1
                 if alt16 == 1:
-                    # grammars/Miranda.g:142:12: ( COLON | ADD ) ^ pattern
+                    # grammars/Miranda.g:143:12: ( COLON | ADD ) ^ pattern
                     pass 
                     set37 = self.input.LT(1)
 
@@ -1719,7 +1719,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "basic"
-    # grammars/Miranda.g:145:1: basic : ( ID | INT | FLOAT | boolean | list | tuple | LPAREN ! ( pattern )* RPAREN !);
+    # grammars/Miranda.g:146:1: basic : ( ID | INT | FLOAT | boolean | list | tuple | LPAREN ! pattern ^ ( pattern )* RPAREN !);
     def basic(self, ):
         retval = self.basic_return()
         retval.start = self.input.LT(1)
@@ -1732,7 +1732,7 @@ class MirandaParser(Parser):
         INT40 = None
         FLOAT41 = None
         LPAREN45 = None
-        RPAREN47 = None
+        RPAREN48 = None
         boolean42 = None
 
         list43 = None
@@ -1741,12 +1741,14 @@ class MirandaParser(Parser):
 
         pattern46 = None
 
+        pattern47 = None
+
 
         ID39_tree = None
         INT40_tree = None
         FLOAT41_tree = None
         LPAREN45_tree = None
-        RPAREN47_tree = None
+        RPAREN48_tree = None
 
         success = False
 
@@ -1758,7 +1760,7 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:146:3: ( ID | INT | FLOAT | boolean | list | tuple | LPAREN ! ( pattern )* RPAREN !)
+                # grammars/Miranda.g:147:3: ( ID | INT | FLOAT | boolean | list | tuple | LPAREN ! pattern ^ ( pattern )* RPAREN !)
                 alt18 = 7
                 LA18 = self.input.LA(1)
                 if LA18 == ID:
@@ -1799,7 +1801,7 @@ class MirandaParser(Parser):
 
 
                 if alt18 == 1:
-                    # grammars/Miranda.g:146:5: ID
+                    # grammars/Miranda.g:147:5: ID
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1813,7 +1815,7 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 2:
-                    # grammars/Miranda.g:147:5: INT
+                    # grammars/Miranda.g:148:5: INT
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1827,7 +1829,7 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 3:
-                    # grammars/Miranda.g:148:5: FLOAT
+                    # grammars/Miranda.g:149:5: FLOAT
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1841,7 +1843,7 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 4:
-                    # grammars/Miranda.g:149:5: boolean
+                    # grammars/Miranda.g:150:5: boolean
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1856,7 +1858,7 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 5:
-                    # grammars/Miranda.g:150:5: list
+                    # grammars/Miranda.g:151:5: list
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1871,7 +1873,7 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 6:
-                    # grammars/Miranda.g:151:5: tuple
+                    # grammars/Miranda.g:152:5: tuple
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -1886,14 +1888,22 @@ class MirandaParser(Parser):
 
 
                 elif alt18 == 7:
-                    # grammars/Miranda.g:152:5: LPAREN ! ( pattern )* RPAREN !
+                    # grammars/Miranda.g:153:5: LPAREN ! pattern ^ ( pattern )* RPAREN !
                     pass 
                     root_0 = self._adaptor.nil()
 
 
                     LPAREN45 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_basic976)
 
-                    # grammars/Miranda.g:152:13: ( pattern )*
+                    self._state.following.append(self.FOLLOW_pattern_in_basic979)
+                    pattern46 = self.pattern()
+
+                    self._state.following.pop()
+                    if self._state.backtracking == 0:
+                        root_0 = self._adaptor.becomeRoot(pattern46.tree, root_0)
+
+
+                    # grammars/Miranda.g:153:22: ( pattern )*
                     while True: #loop17
                         alt17 = 2
                         LA17_0 = self.input.LA(1)
@@ -1903,14 +1913,14 @@ class MirandaParser(Parser):
 
 
                         if alt17 == 1:
-                            # grammars/Miranda.g:152:13: pattern
+                            # grammars/Miranda.g:153:22: pattern
                             pass 
-                            self._state.following.append(self.FOLLOW_pattern_in_basic979)
-                            pattern46 = self.pattern()
+                            self._state.following.append(self.FOLLOW_pattern_in_basic982)
+                            pattern47 = self.pattern()
 
                             self._state.following.pop()
                             if self._state.backtracking == 0:
-                                self._adaptor.addChild(root_0, pattern46.tree)
+                                self._adaptor.addChild(root_0, pattern47.tree)
 
 
 
@@ -1918,7 +1928,7 @@ class MirandaParser(Parser):
                             break #loop17
 
 
-                    RPAREN47 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_basic982)
+                    RPAREN48 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_basic985)
 
 
                 retval.stop = self.input.LT(-1)
@@ -1959,7 +1969,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expression"
-    # grammars/Miranda.g:155:1: expression : expr0 ;
+    # grammars/Miranda.g:156:1: expression : expr0 ;
     def expression(self, ):
         retval = self.expression_return()
         retval.start = self.input.LT(1)
@@ -1968,7 +1978,7 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        expr048 = None
+        expr049 = None
 
 
 
@@ -1982,18 +1992,18 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:155:11: ( expr0 )
-                # grammars/Miranda.g:155:13: expr0
+                # grammars/Miranda.g:156:11: ( expr0 )
+                # grammars/Miranda.g:156:13: expr0
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr0_in_expression991)
-                expr048 = self.expr0()
+                self._state.following.append(self.FOLLOW_expr0_in_expression994)
+                expr049 = self.expr0()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr048.tree)
+                    self._adaptor.addChild(root_0, expr049.tree)
 
 
 
@@ -2036,7 +2046,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr0"
-    # grammars/Miranda.g:157:1: expr0 : expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )? ;
+    # grammars/Miranda.g:158:1: expr0 : expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )? ;
     def expr0(self, ):
         retval = self.expr0_return()
         retval.start = self.input.LT(1)
@@ -2045,17 +2055,17 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        CONCAT50 = None
-        SUBTRACT51 = None
-        COLON52 = None
-        expr149 = None
+        CONCAT51 = None
+        SUBTRACT52 = None
+        COLON53 = None
+        expr150 = None
 
-        expr053 = None
+        expr054 = None
 
 
-        CONCAT50_tree = None
-        SUBTRACT51_tree = None
-        COLON52_tree = None
+        CONCAT51_tree = None
+        SUBTRACT52_tree = None
+        COLON53_tree = None
 
         success = False
 
@@ -2067,21 +2077,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:157:6: ( expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )? )
-                # grammars/Miranda.g:157:8: expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )?
+                # grammars/Miranda.g:158:6: ( expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )? )
+                # grammars/Miranda.g:158:8: expr1 ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )?
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr1_in_expr0998)
-                expr149 = self.expr1()
+                self._state.following.append(self.FOLLOW_expr1_in_expr01001)
+                expr150 = self.expr1()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr149.tree)
+                    self._adaptor.addChild(root_0, expr150.tree)
 
 
-                # grammars/Miranda.g:157:14: ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )?
+                # grammars/Miranda.g:158:14: ( ( CONCAT ^| SUBTRACT ^| COLON ^) expr0 )?
                 alt20 = 2
                 LA20 = self.input.LA(1)
                 if LA20 == CONCAT:
@@ -2100,9 +2110,9 @@ class MirandaParser(Parser):
                     if (self.synpred30_Miranda()) :
                         alt20 = 1
                 if alt20 == 1:
-                    # grammars/Miranda.g:157:15: ( CONCAT ^| SUBTRACT ^| COLON ^) expr0
+                    # grammars/Miranda.g:158:15: ( CONCAT ^| SUBTRACT ^| COLON ^) expr0
                     pass 
-                    # grammars/Miranda.g:157:15: ( CONCAT ^| SUBTRACT ^| COLON ^)
+                    # grammars/Miranda.g:158:15: ( CONCAT ^| SUBTRACT ^| COLON ^)
                     alt19 = 3
                     LA19 = self.input.LA(1)
                     if LA19 == CONCAT:
@@ -2122,46 +2132,46 @@ class MirandaParser(Parser):
 
 
                     if alt19 == 1:
-                        # grammars/Miranda.g:157:16: CONCAT ^
+                        # grammars/Miranda.g:158:16: CONCAT ^
                         pass 
-                        CONCAT50 = self.match(self.input, CONCAT, self.FOLLOW_CONCAT_in_expr01002)
+                        CONCAT51 = self.match(self.input, CONCAT, self.FOLLOW_CONCAT_in_expr01005)
                         if self._state.backtracking == 0:
-                            CONCAT50_tree = ConcatNode(CONCAT50) 
-                            root_0 = self._adaptor.becomeRoot(CONCAT50_tree, root_0)
+                            CONCAT51_tree = ConcatNode(CONCAT51) 
+                            root_0 = self._adaptor.becomeRoot(CONCAT51_tree, root_0)
 
 
 
 
                     elif alt19 == 2:
-                        # grammars/Miranda.g:157:36: SUBTRACT ^
+                        # grammars/Miranda.g:158:36: SUBTRACT ^
                         pass 
-                        SUBTRACT51 = self.match(self.input, SUBTRACT, self.FOLLOW_SUBTRACT_in_expr01008)
+                        SUBTRACT52 = self.match(self.input, SUBTRACT, self.FOLLOW_SUBTRACT_in_expr01011)
                         if self._state.backtracking == 0:
-                            SUBTRACT51_tree = SubtractNode(SUBTRACT51) 
-                            root_0 = self._adaptor.becomeRoot(SUBTRACT51_tree, root_0)
+                            SUBTRACT52_tree = SubtractNode(SUBTRACT52) 
+                            root_0 = self._adaptor.becomeRoot(SUBTRACT52_tree, root_0)
 
 
 
 
                     elif alt19 == 3:
-                        # grammars/Miranda.g:157:60: COLON ^
+                        # grammars/Miranda.g:158:60: COLON ^
                         pass 
-                        COLON52 = self.match(self.input, COLON, self.FOLLOW_COLON_in_expr01014)
+                        COLON53 = self.match(self.input, COLON, self.FOLLOW_COLON_in_expr01017)
                         if self._state.backtracking == 0:
-                            COLON52_tree = ColonNode(COLON52) 
-                            root_0 = self._adaptor.becomeRoot(COLON52_tree, root_0)
+                            COLON53_tree = ColonNode(COLON53) 
+                            root_0 = self._adaptor.becomeRoot(COLON53_tree, root_0)
 
 
 
 
 
 
-                    self._state.following.append(self.FOLLOW_expr0_in_expr01021)
-                    expr053 = self.expr0()
+                    self._state.following.append(self.FOLLOW_expr0_in_expr01024)
+                    expr054 = self.expr0()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, expr053.tree)
+                        self._adaptor.addChild(root_0, expr054.tree)
 
 
 
@@ -2207,7 +2217,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr1"
-    # grammars/Miranda.g:159:1: expr1 : expr2 ( OR ^ expression )* ;
+    # grammars/Miranda.g:160:1: expr1 : expr2 ( OR ^ expression )* ;
     def expr1(self, ):
         retval = self.expr1_return()
         retval.start = self.input.LT(1)
@@ -2216,13 +2226,13 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        OR55 = None
-        expr254 = None
+        OR56 = None
+        expr255 = None
 
-        expression56 = None
+        expression57 = None
 
 
-        OR55_tree = None
+        OR56_tree = None
 
         success = False
 
@@ -2234,21 +2244,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:159:6: ( expr2 ( OR ^ expression )* )
-                # grammars/Miranda.g:159:8: expr2 ( OR ^ expression )*
+                # grammars/Miranda.g:160:6: ( expr2 ( OR ^ expression )* )
+                # grammars/Miranda.g:160:8: expr2 ( OR ^ expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr2_in_expr11030)
-                expr254 = self.expr2()
+                self._state.following.append(self.FOLLOW_expr2_in_expr11033)
+                expr255 = self.expr2()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr254.tree)
+                    self._adaptor.addChild(root_0, expr255.tree)
 
 
-                # grammars/Miranda.g:159:14: ( OR ^ expression )*
+                # grammars/Miranda.g:160:14: ( OR ^ expression )*
                 while True: #loop21
                     alt21 = 2
                     LA21_0 = self.input.LA(1)
@@ -2263,21 +2273,21 @@ class MirandaParser(Parser):
 
 
                     if alt21 == 1:
-                        # grammars/Miranda.g:159:15: OR ^ expression
+                        # grammars/Miranda.g:160:15: OR ^ expression
                         pass 
-                        OR55 = self.match(self.input, OR, self.FOLLOW_OR_in_expr11033)
+                        OR56 = self.match(self.input, OR, self.FOLLOW_OR_in_expr11036)
                         if self._state.backtracking == 0:
-                            OR55_tree = OrNode(OR55) 
-                            root_0 = self._adaptor.becomeRoot(OR55_tree, root_0)
+                            OR56_tree = OrNode(OR56) 
+                            root_0 = self._adaptor.becomeRoot(OR56_tree, root_0)
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr11039)
-                        expression56 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr11042)
+                        expression57 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression56.tree)
+                            self._adaptor.addChild(root_0, expression57.tree)
 
 
 
@@ -2325,7 +2335,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr2"
-    # grammars/Miranda.g:161:1: expr2 : expr3 ( AND ^ expression )* ;
+    # grammars/Miranda.g:162:1: expr2 : expr3 ( AND ^ expression )* ;
     def expr2(self, ):
         retval = self.expr2_return()
         retval.start = self.input.LT(1)
@@ -2334,13 +2344,13 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        AND58 = None
-        expr357 = None
+        AND59 = None
+        expr358 = None
 
-        expression59 = None
+        expression60 = None
 
 
-        AND58_tree = None
+        AND59_tree = None
 
         success = False
 
@@ -2352,21 +2362,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:161:6: ( expr3 ( AND ^ expression )* )
-                # grammars/Miranda.g:161:8: expr3 ( AND ^ expression )*
+                # grammars/Miranda.g:162:6: ( expr3 ( AND ^ expression )* )
+                # grammars/Miranda.g:162:8: expr3 ( AND ^ expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr3_in_expr21048)
-                expr357 = self.expr3()
+                self._state.following.append(self.FOLLOW_expr3_in_expr21051)
+                expr358 = self.expr3()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr357.tree)
+                    self._adaptor.addChild(root_0, expr358.tree)
 
 
-                # grammars/Miranda.g:161:14: ( AND ^ expression )*
+                # grammars/Miranda.g:162:14: ( AND ^ expression )*
                 while True: #loop22
                     alt22 = 2
                     LA22_0 = self.input.LA(1)
@@ -2381,21 +2391,21 @@ class MirandaParser(Parser):
 
 
                     if alt22 == 1:
-                        # grammars/Miranda.g:161:15: AND ^ expression
+                        # grammars/Miranda.g:162:15: AND ^ expression
                         pass 
-                        AND58 = self.match(self.input, AND, self.FOLLOW_AND_in_expr21051)
+                        AND59 = self.match(self.input, AND, self.FOLLOW_AND_in_expr21054)
                         if self._state.backtracking == 0:
-                            AND58_tree = AndNode(AND58) 
-                            root_0 = self._adaptor.becomeRoot(AND58_tree, root_0)
+                            AND59_tree = AndNode(AND59) 
+                            root_0 = self._adaptor.becomeRoot(AND59_tree, root_0)
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr21057)
-                        expression59 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr21060)
+                        expression60 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression59.tree)
+                            self._adaptor.addChild(root_0, expression60.tree)
 
 
 
@@ -2443,7 +2453,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr3"
-    # grammars/Miranda.g:163:1: expr3 : expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )* ;
+    # grammars/Miranda.g:164:1: expr3 : expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )* ;
     def expr3(self, ):
         retval = self.expr3_return()
         retval.start = self.input.LT(1)
@@ -2452,13 +2462,13 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        set61 = None
-        expr460 = None
+        set62 = None
+        expr461 = None
 
-        expression62 = None
+        expression63 = None
 
 
-        set61_tree = None
+        set62_tree = None
 
         success = False
 
@@ -2470,21 +2480,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:163:6: ( expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )* )
-                # grammars/Miranda.g:163:8: expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )*
+                # grammars/Miranda.g:164:6: ( expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )* )
+                # grammars/Miranda.g:164:8: expr4 ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr4_in_expr31066)
-                expr460 = self.expr4()
+                self._state.following.append(self.FOLLOW_expr4_in_expr31069)
+                expr461 = self.expr4()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr460.tree)
+                    self._adaptor.addChild(root_0, expr461.tree)
 
 
-                # grammars/Miranda.g:163:14: ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )*
+                # grammars/Miranda.g:164:14: ( ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression )*
                 while True: #loop23
                     alt23 = 2
                     LA23 = self.input.LA(1)
@@ -2532,16 +2542,16 @@ class MirandaParser(Parser):
 
 
                     if alt23 == 1:
-                        # grammars/Miranda.g:163:15: ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression
+                        # grammars/Miranda.g:164:15: ( LT | LTE | EQ | NEQ | GTE | GT ) ^ expression
                         pass 
-                        set61 = self.input.LT(1)
+                        set62 = self.input.LT(1)
 
-                        set61 = self.input.LT(1)
+                        set62 = self.input.LT(1)
 
                         if self.input.LA(1) == EQ or (GT <= self.input.LA(1) <= GTE) or (LT <= self.input.LA(1) <= LTE) or self.input.LA(1) == NEQ:
                             self.input.consume()
                             if self._state.backtracking == 0:
-                                root_0 = self._adaptor.becomeRoot(self._adaptor.createWithPayload(set61), root_0)
+                                root_0 = self._adaptor.becomeRoot(self._adaptor.createWithPayload(set62), root_0)
 
                             self._state.errorRecovery = False
 
@@ -2556,12 +2566,12 @@ class MirandaParser(Parser):
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr31084)
-                        expression62 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr31087)
+                        expression63 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression62.tree)
+                            self._adaptor.addChild(root_0, expression63.tree)
 
 
 
@@ -2609,7 +2619,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr4"
-    # grammars/Miranda.g:165:1: expr4 : expr5 ( ( ADD ^| MIN ^) expression )* ;
+    # grammars/Miranda.g:166:1: expr4 : expr5 ( ( ADD ^| MIN ^) expression )* ;
     def expr4(self, ):
         retval = self.expr4_return()
         retval.start = self.input.LT(1)
@@ -2618,15 +2628,15 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        ADD64 = None
-        MIN65 = None
-        expr563 = None
+        ADD65 = None
+        MIN66 = None
+        expr564 = None
 
-        expression66 = None
+        expression67 = None
 
 
-        ADD64_tree = None
-        MIN65_tree = None
+        ADD65_tree = None
+        MIN66_tree = None
 
         success = False
 
@@ -2638,21 +2648,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:165:6: ( expr5 ( ( ADD ^| MIN ^) expression )* )
-                # grammars/Miranda.g:165:8: expr5 ( ( ADD ^| MIN ^) expression )*
+                # grammars/Miranda.g:166:6: ( expr5 ( ( ADD ^| MIN ^) expression )* )
+                # grammars/Miranda.g:166:8: expr5 ( ( ADD ^| MIN ^) expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr5_in_expr41093)
-                expr563 = self.expr5()
+                self._state.following.append(self.FOLLOW_expr5_in_expr41096)
+                expr564 = self.expr5()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr563.tree)
+                    self._adaptor.addChild(root_0, expr564.tree)
 
 
-                # grammars/Miranda.g:165:14: ( ( ADD ^| MIN ^) expression )*
+                # grammars/Miranda.g:166:14: ( ( ADD ^| MIN ^) expression )*
                 while True: #loop25
                     alt25 = 2
                     LA25_0 = self.input.LA(1)
@@ -2674,9 +2684,9 @@ class MirandaParser(Parser):
 
 
                     if alt25 == 1:
-                        # grammars/Miranda.g:165:15: ( ADD ^| MIN ^) expression
+                        # grammars/Miranda.g:166:15: ( ADD ^| MIN ^) expression
                         pass 
-                        # grammars/Miranda.g:165:15: ( ADD ^| MIN ^)
+                        # grammars/Miranda.g:166:15: ( ADD ^| MIN ^)
                         alt24 = 2
                         LA24_0 = self.input.LA(1)
 
@@ -2695,35 +2705,35 @@ class MirandaParser(Parser):
 
 
                         if alt24 == 1:
-                            # grammars/Miranda.g:165:16: ADD ^
+                            # grammars/Miranda.g:166:16: ADD ^
                             pass 
-                            ADD64 = self.match(self.input, ADD, self.FOLLOW_ADD_in_expr41097)
+                            ADD65 = self.match(self.input, ADD, self.FOLLOW_ADD_in_expr41100)
                             if self._state.backtracking == 0:
-                                ADD64_tree = AddNode(ADD64) 
-                                root_0 = self._adaptor.becomeRoot(ADD64_tree, root_0)
+                                ADD65_tree = AddNode(ADD65) 
+                                root_0 = self._adaptor.becomeRoot(ADD65_tree, root_0)
 
 
 
 
                         elif alt24 == 2:
-                            # grammars/Miranda.g:165:30: MIN ^
+                            # grammars/Miranda.g:166:30: MIN ^
                             pass 
-                            MIN65 = self.match(self.input, MIN, self.FOLLOW_MIN_in_expr41103)
+                            MIN66 = self.match(self.input, MIN, self.FOLLOW_MIN_in_expr41106)
                             if self._state.backtracking == 0:
-                                MIN65_tree = MinNode(MIN65) 
-                                root_0 = self._adaptor.becomeRoot(MIN65_tree, root_0)
+                                MIN66_tree = MinNode(MIN66) 
+                                root_0 = self._adaptor.becomeRoot(MIN66_tree, root_0)
 
 
 
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr41110)
-                        expression66 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr41113)
+                        expression67 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression66.tree)
+                            self._adaptor.addChild(root_0, expression67.tree)
 
 
 
@@ -2771,7 +2781,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr5"
-    # grammars/Miranda.g:167:1: expr5 : expr6 ( ( DIV ^|{...}? STARS ^) expression )* ;
+    # grammars/Miranda.g:168:1: expr5 : expr6 ( ( DIV ^|{...}? STARS ^) expression )* ;
     def expr5(self, ):
         retval = self.expr5_return()
         retval.start = self.input.LT(1)
@@ -2780,15 +2790,15 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        DIV68 = None
-        STARS69 = None
-        expr667 = None
+        DIV69 = None
+        STARS70 = None
+        expr668 = None
 
-        expression70 = None
+        expression71 = None
 
 
-        DIV68_tree = None
-        STARS69_tree = None
+        DIV69_tree = None
+        STARS70_tree = None
 
         success = False
 
@@ -2800,21 +2810,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:167:6: ( expr6 ( ( DIV ^|{...}? STARS ^) expression )* )
-                # grammars/Miranda.g:167:8: expr6 ( ( DIV ^|{...}? STARS ^) expression )*
+                # grammars/Miranda.g:168:6: ( expr6 ( ( DIV ^|{...}? STARS ^) expression )* )
+                # grammars/Miranda.g:168:8: expr6 ( ( DIV ^|{...}? STARS ^) expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr6_in_expr51119)
-                expr667 = self.expr6()
+                self._state.following.append(self.FOLLOW_expr6_in_expr51122)
+                expr668 = self.expr6()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr667.tree)
+                    self._adaptor.addChild(root_0, expr668.tree)
 
 
-                # grammars/Miranda.g:167:14: ( ( DIV ^|{...}? STARS ^) expression )*
+                # grammars/Miranda.g:168:14: ( ( DIV ^|{...}? STARS ^) expression )*
                 while True: #loop27
                     alt27 = 2
                     LA27_0 = self.input.LA(1)
@@ -2836,9 +2846,9 @@ class MirandaParser(Parser):
 
 
                     if alt27 == 1:
-                        # grammars/Miranda.g:167:15: ( DIV ^|{...}? STARS ^) expression
+                        # grammars/Miranda.g:168:15: ( DIV ^|{...}? STARS ^) expression
                         pass 
-                        # grammars/Miranda.g:167:15: ( DIV ^|{...}? STARS ^)
+                        # grammars/Miranda.g:168:15: ( DIV ^|{...}? STARS ^)
                         alt26 = 2
                         LA26_0 = self.input.LA(1)
 
@@ -2857,18 +2867,18 @@ class MirandaParser(Parser):
 
 
                         if alt26 == 1:
-                            # grammars/Miranda.g:167:16: DIV ^
+                            # grammars/Miranda.g:168:16: DIV ^
                             pass 
-                            DIV68 = self.match(self.input, DIV, self.FOLLOW_DIV_in_expr51123)
+                            DIV69 = self.match(self.input, DIV, self.FOLLOW_DIV_in_expr51126)
                             if self._state.backtracking == 0:
-                                DIV68_tree = DivNode(DIV68) 
-                                root_0 = self._adaptor.becomeRoot(DIV68_tree, root_0)
+                                DIV69_tree = DivNode(DIV69) 
+                                root_0 = self._adaptor.becomeRoot(DIV69_tree, root_0)
 
 
 
 
                         elif alt26 == 2:
-                            # grammars/Miranda.g:167:31: {...}? STARS ^
+                            # grammars/Miranda.g:168:31: {...}? STARS ^
                             pass 
                             if not ((len(self.input.LT(1).text) == 1)):
                                 if self._state.backtracking > 0:
@@ -2878,22 +2888,22 @@ class MirandaParser(Parser):
                                 raise FailedPredicateException(self.input, "expr5", "len(self.input.LT(1).text) == 1")
 
 
-                            STARS69 = self.match(self.input, STARS, self.FOLLOW_STARS_in_expr51132)
+                            STARS70 = self.match(self.input, STARS, self.FOLLOW_STARS_in_expr51135)
                             if self._state.backtracking == 0:
-                                STARS69_tree = MulNode(STARS69) 
-                                root_0 = self._adaptor.becomeRoot(STARS69_tree, root_0)
+                                STARS70_tree = MulNode(STARS70) 
+                                root_0 = self._adaptor.becomeRoot(STARS70_tree, root_0)
 
 
 
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr51139)
-                        expression70 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr51142)
+                        expression71 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression70.tree)
+                            self._adaptor.addChild(root_0, expression71.tree)
 
 
 
@@ -2941,7 +2951,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr6"
-    # grammars/Miranda.g:169:1: expr6 : expr7 ( ( IDIV ^| MOD ^) expression )* ;
+    # grammars/Miranda.g:170:1: expr6 : expr7 ( ( IDIV ^| MOD ^) expression )* ;
     def expr6(self, ):
         retval = self.expr6_return()
         retval.start = self.input.LT(1)
@@ -2950,15 +2960,15 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        IDIV72 = None
-        MOD73 = None
-        expr771 = None
+        IDIV73 = None
+        MOD74 = None
+        expr772 = None
 
-        expression74 = None
+        expression75 = None
 
 
-        IDIV72_tree = None
-        MOD73_tree = None
+        IDIV73_tree = None
+        MOD74_tree = None
 
         success = False
 
@@ -2970,21 +2980,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:169:6: ( expr7 ( ( IDIV ^| MOD ^) expression )* )
-                # grammars/Miranda.g:169:8: expr7 ( ( IDIV ^| MOD ^) expression )*
+                # grammars/Miranda.g:170:6: ( expr7 ( ( IDIV ^| MOD ^) expression )* )
+                # grammars/Miranda.g:170:8: expr7 ( ( IDIV ^| MOD ^) expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr7_in_expr61148)
-                expr771 = self.expr7()
+                self._state.following.append(self.FOLLOW_expr7_in_expr61151)
+                expr772 = self.expr7()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr771.tree)
+                    self._adaptor.addChild(root_0, expr772.tree)
 
 
-                # grammars/Miranda.g:169:14: ( ( IDIV ^| MOD ^) expression )*
+                # grammars/Miranda.g:170:14: ( ( IDIV ^| MOD ^) expression )*
                 while True: #loop29
                     alt29 = 2
                     LA29_0 = self.input.LA(1)
@@ -3006,9 +3016,9 @@ class MirandaParser(Parser):
 
 
                     if alt29 == 1:
-                        # grammars/Miranda.g:169:15: ( IDIV ^| MOD ^) expression
+                        # grammars/Miranda.g:170:15: ( IDIV ^| MOD ^) expression
                         pass 
-                        # grammars/Miranda.g:169:15: ( IDIV ^| MOD ^)
+                        # grammars/Miranda.g:170:15: ( IDIV ^| MOD ^)
                         alt28 = 2
                         LA28_0 = self.input.LA(1)
 
@@ -3027,35 +3037,35 @@ class MirandaParser(Parser):
 
 
                         if alt28 == 1:
-                            # grammars/Miranda.g:169:16: IDIV ^
+                            # grammars/Miranda.g:170:16: IDIV ^
                             pass 
-                            IDIV72 = self.match(self.input, IDIV, self.FOLLOW_IDIV_in_expr61152)
+                            IDIV73 = self.match(self.input, IDIV, self.FOLLOW_IDIV_in_expr61155)
                             if self._state.backtracking == 0:
-                                IDIV72_tree = self._adaptor.createWithPayload(IDIV72)
-                                root_0 = self._adaptor.becomeRoot(IDIV72_tree, root_0)
+                                IDIV73_tree = self._adaptor.createWithPayload(IDIV73)
+                                root_0 = self._adaptor.becomeRoot(IDIV73_tree, root_0)
 
 
 
 
                         elif alt28 == 2:
-                            # grammars/Miranda.g:169:22: MOD ^
+                            # grammars/Miranda.g:170:22: MOD ^
                             pass 
-                            MOD73 = self.match(self.input, MOD, self.FOLLOW_MOD_in_expr61155)
+                            MOD74 = self.match(self.input, MOD, self.FOLLOW_MOD_in_expr61158)
                             if self._state.backtracking == 0:
-                                MOD73_tree = self._adaptor.createWithPayload(MOD73)
-                                root_0 = self._adaptor.becomeRoot(MOD73_tree, root_0)
+                                MOD74_tree = self._adaptor.createWithPayload(MOD74)
+                                root_0 = self._adaptor.becomeRoot(MOD74_tree, root_0)
 
 
 
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr61159)
-                        expression74 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr61162)
+                        expression75 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression74.tree)
+                            self._adaptor.addChild(root_0, expression75.tree)
 
 
 
@@ -3103,7 +3113,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr7"
-    # grammars/Miranda.g:171:1: expr7 : expr8 ( ( EXP ^) expression )* ;
+    # grammars/Miranda.g:172:1: expr7 : expr8 ( ( EXP ^) expression )* ;
     def expr7(self, ):
         retval = self.expr7_return()
         retval.start = self.input.LT(1)
@@ -3112,13 +3122,13 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        EXP76 = None
-        expr875 = None
+        EXP77 = None
+        expr876 = None
 
-        expression77 = None
+        expression78 = None
 
 
-        EXP76_tree = None
+        EXP77_tree = None
 
         success = False
 
@@ -3130,21 +3140,21 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:171:6: ( expr8 ( ( EXP ^) expression )* )
-                # grammars/Miranda.g:171:8: expr8 ( ( EXP ^) expression )*
+                # grammars/Miranda.g:172:6: ( expr8 ( ( EXP ^) expression )* )
+                # grammars/Miranda.g:172:8: expr8 ( ( EXP ^) expression )*
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                self._state.following.append(self.FOLLOW_expr8_in_expr71168)
-                expr875 = self.expr8()
+                self._state.following.append(self.FOLLOW_expr8_in_expr71171)
+                expr876 = self.expr8()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    self._adaptor.addChild(root_0, expr875.tree)
+                    self._adaptor.addChild(root_0, expr876.tree)
 
 
-                # grammars/Miranda.g:171:14: ( ( EXP ^) expression )*
+                # grammars/Miranda.g:172:14: ( ( EXP ^) expression )*
                 while True: #loop30
                     alt30 = 2
                     LA30_0 = self.input.LA(1)
@@ -3159,27 +3169,27 @@ class MirandaParser(Parser):
 
 
                     if alt30 == 1:
-                        # grammars/Miranda.g:171:15: ( EXP ^) expression
+                        # grammars/Miranda.g:172:15: ( EXP ^) expression
                         pass 
-                        # grammars/Miranda.g:171:15: ( EXP ^)
-                        # grammars/Miranda.g:171:16: EXP ^
+                        # grammars/Miranda.g:172:15: ( EXP ^)
+                        # grammars/Miranda.g:172:16: EXP ^
                         pass 
-                        EXP76 = self.match(self.input, EXP, self.FOLLOW_EXP_in_expr71172)
+                        EXP77 = self.match(self.input, EXP, self.FOLLOW_EXP_in_expr71175)
                         if self._state.backtracking == 0:
-                            EXP76_tree = self._adaptor.createWithPayload(EXP76)
-                            root_0 = self._adaptor.becomeRoot(EXP76_tree, root_0)
+                            EXP77_tree = self._adaptor.createWithPayload(EXP77)
+                            root_0 = self._adaptor.becomeRoot(EXP77_tree, root_0)
 
 
 
 
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_expr71176)
-                        expression77 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_expr71179)
+                        expression78 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, expression77.tree)
+                            self._adaptor.addChild(root_0, expression78.tree)
 
 
 
@@ -3227,7 +3237,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "expr8"
-    # grammars/Miranda.g:173:1: expr8 : ( aexpr )+ ;
+    # grammars/Miranda.g:174:1: expr8 : ( aexpr )+ ;
     def expr8(self, ):
         retval = self.expr8_return()
         retval.start = self.input.LT(1)
@@ -3236,7 +3246,7 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        aexpr78 = None
+        aexpr79 = None
 
 
 
@@ -3250,13 +3260,13 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:173:6: ( ( aexpr )+ )
-                # grammars/Miranda.g:173:8: ( aexpr )+
+                # grammars/Miranda.g:174:6: ( ( aexpr )+ )
+                # grammars/Miranda.g:174:8: ( aexpr )+
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                # grammars/Miranda.g:173:8: ( aexpr )+
+                # grammars/Miranda.g:174:8: ( aexpr )+
                 cnt31 = 0
                 while True: #loop31
                     alt31 = 2
@@ -3326,14 +3336,14 @@ class MirandaParser(Parser):
 
 
                     if alt31 == 1:
-                        # grammars/Miranda.g:173:8: aexpr
+                        # grammars/Miranda.g:174:8: aexpr
                         pass 
-                        self._state.following.append(self.FOLLOW_aexpr_in_expr81185)
-                        aexpr78 = self.aexpr()
+                        self._state.following.append(self.FOLLOW_aexpr_in_expr81188)
+                        aexpr79 = self.aexpr()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            self._adaptor.addChild(root_0, aexpr78.tree)
+                            self._adaptor.addChild(root_0, aexpr79.tree)
 
 
 
@@ -3401,7 +3411,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "aexpr"
-    # grammars/Miranda.g:179:1: aexpr : ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | CHAR -> ^( CHAR ) | STRING | NOT expression | boolean | section | tuple | list | LPAREN ! expression RPAREN !);
+    # grammars/Miranda.g:180:1: aexpr : ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | CHAR -> ^( CHAR ) | STRING | NOT expression | boolean | section | tuple | list | LPAREN ! expression RPAREN !);
     def aexpr(self, ):
         retval = self.aexpr_return()
         retval.start = self.input.LT(1)
@@ -3410,35 +3420,35 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        ID79 = None
-        INT80 = None
-        FLOAT81 = None
-        CHAR82 = None
-        STRING83 = None
-        NOT84 = None
-        LPAREN90 = None
-        RPAREN92 = None
-        expression85 = None
+        ID80 = None
+        INT81 = None
+        FLOAT82 = None
+        CHAR83 = None
+        STRING84 = None
+        NOT85 = None
+        LPAREN91 = None
+        RPAREN93 = None
+        expression86 = None
 
-        boolean86 = None
+        boolean87 = None
 
-        section87 = None
+        section88 = None
 
-        tuple88 = None
+        tuple89 = None
 
-        list89 = None
+        list90 = None
 
-        expression91 = None
+        expression92 = None
 
 
-        ID79_tree = None
-        INT80_tree = None
-        FLOAT81_tree = None
-        CHAR82_tree = None
-        STRING83_tree = None
-        NOT84_tree = None
-        LPAREN90_tree = None
-        RPAREN92_tree = None
+        ID80_tree = None
+        INT81_tree = None
+        FLOAT82_tree = None
+        CHAR83_tree = None
+        STRING84_tree = None
+        NOT85_tree = None
+        LPAREN91_tree = None
+        RPAREN93_tree = None
         stream_CHAR = RewriteRuleTokenStream(self._adaptor, "token CHAR")
         stream_FLOAT = RewriteRuleTokenStream(self._adaptor, "token FLOAT")
         stream_INT = RewriteRuleTokenStream(self._adaptor, "token INT")
@@ -3454,7 +3464,7 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:180:3: ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | CHAR -> ^( CHAR ) | STRING | NOT expression | boolean | section | tuple | list | LPAREN ! expression RPAREN !)
+                # grammars/Miranda.g:181:3: ( ID -> ^( ID ) | INT -> ^( INT ) | FLOAT -> ^( FLOAT ) | CHAR -> ^( CHAR ) | STRING | NOT expression | boolean | section | tuple | list | LPAREN ! expression RPAREN !)
                 alt32 = 11
                 LA32 = self.input.LA(1)
                 if LA32 == ID:
@@ -3503,11 +3513,11 @@ class MirandaParser(Parser):
 
 
                 if alt32 == 1:
-                    # grammars/Miranda.g:180:5: ID
+                    # grammars/Miranda.g:181:5: ID
                     pass 
-                    ID79 = self.match(self.input, ID, self.FOLLOW_ID_in_aexpr1198) 
+                    ID80 = self.match(self.input, ID, self.FOLLOW_ID_in_aexpr1201) 
                     if self._state.backtracking == 0:
-                        stream_ID.add(ID79)
+                        stream_ID.add(ID80)
 
 
                     # AST Rewrite
@@ -3526,8 +3536,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 181:5: -> ^( ID )
-                        # grammars/Miranda.g:181:8: ^( ID )
+                        # 182:5: -> ^( ID )
+                        # grammars/Miranda.g:182:8: ^( ID )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         IdentifierNode(stream_ID.nextToken())
@@ -3544,11 +3554,11 @@ class MirandaParser(Parser):
 
 
                 elif alt32 == 2:
-                    # grammars/Miranda.g:182:5: INT
+                    # grammars/Miranda.g:183:5: INT
                     pass 
-                    INT80 = self.match(self.input, INT, self.FOLLOW_INT_in_aexpr1217) 
+                    INT81 = self.match(self.input, INT, self.FOLLOW_INT_in_aexpr1220) 
                     if self._state.backtracking == 0:
-                        stream_INT.add(INT80)
+                        stream_INT.add(INT81)
 
 
                     # AST Rewrite
@@ -3567,8 +3577,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 183:5: -> ^( INT )
-                        # grammars/Miranda.g:183:8: ^( INT )
+                        # 184:5: -> ^( INT )
+                        # grammars/Miranda.g:184:8: ^( INT )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         IntNode(stream_INT.nextToken())
@@ -3585,11 +3595,11 @@ class MirandaParser(Parser):
 
 
                 elif alt32 == 3:
-                    # grammars/Miranda.g:184:5: FLOAT
+                    # grammars/Miranda.g:185:5: FLOAT
                     pass 
-                    FLOAT81 = self.match(self.input, FLOAT, self.FOLLOW_FLOAT_in_aexpr1236) 
+                    FLOAT82 = self.match(self.input, FLOAT, self.FOLLOW_FLOAT_in_aexpr1239) 
                     if self._state.backtracking == 0:
-                        stream_FLOAT.add(FLOAT81)
+                        stream_FLOAT.add(FLOAT82)
 
 
                     # AST Rewrite
@@ -3608,8 +3618,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 185:5: -> ^( FLOAT )
-                        # grammars/Miranda.g:185:8: ^( FLOAT )
+                        # 186:5: -> ^( FLOAT )
+                        # grammars/Miranda.g:186:8: ^( FLOAT )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         FloatNode(stream_FLOAT.nextToken())
@@ -3626,11 +3636,11 @@ class MirandaParser(Parser):
 
 
                 elif alt32 == 4:
-                    # grammars/Miranda.g:186:5: CHAR
+                    # grammars/Miranda.g:187:5: CHAR
                     pass 
-                    CHAR82 = self.match(self.input, CHAR, self.FOLLOW_CHAR_in_aexpr1255) 
+                    CHAR83 = self.match(self.input, CHAR, self.FOLLOW_CHAR_in_aexpr1258) 
                     if self._state.backtracking == 0:
-                        stream_CHAR.add(CHAR82)
+                        stream_CHAR.add(CHAR83)
 
 
                     # AST Rewrite
@@ -3649,8 +3659,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 187:5: -> ^( CHAR )
-                        # grammars/Miranda.g:187:8: ^( CHAR )
+                        # 188:5: -> ^( CHAR )
+                        # grammars/Miranda.g:188:8: ^( CHAR )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         CharNode(stream_CHAR.nextToken())
@@ -3667,118 +3677,118 @@ class MirandaParser(Parser):
 
 
                 elif alt32 == 5:
-                    # grammars/Miranda.g:188:5: STRING
+                    # grammars/Miranda.g:189:5: STRING
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    STRING83 = self.match(self.input, STRING, self.FOLLOW_STRING_in_aexpr1274)
+                    STRING84 = self.match(self.input, STRING, self.FOLLOW_STRING_in_aexpr1277)
                     if self._state.backtracking == 0:
-                        STRING83_tree = self._adaptor.createWithPayload(STRING83)
-                        self._adaptor.addChild(root_0, STRING83_tree)
+                        STRING84_tree = self._adaptor.createWithPayload(STRING84)
+                        self._adaptor.addChild(root_0, STRING84_tree)
 
 
 
 
                 elif alt32 == 6:
-                    # grammars/Miranda.g:189:5: NOT expression
+                    # grammars/Miranda.g:190:5: NOT expression
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    NOT84 = self.match(self.input, NOT, self.FOLLOW_NOT_in_aexpr1280)
+                    NOT85 = self.match(self.input, NOT, self.FOLLOW_NOT_in_aexpr1283)
                     if self._state.backtracking == 0:
-                        NOT84_tree = self._adaptor.createWithPayload(NOT84)
-                        self._adaptor.addChild(root_0, NOT84_tree)
+                        NOT85_tree = self._adaptor.createWithPayload(NOT85)
+                        self._adaptor.addChild(root_0, NOT85_tree)
 
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_aexpr1282)
-                    expression85 = self.expression()
+                    self._state.following.append(self.FOLLOW_expression_in_aexpr1285)
+                    expression86 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, expression85.tree)
+                        self._adaptor.addChild(root_0, expression86.tree)
 
 
 
                 elif alt32 == 7:
-                    # grammars/Miranda.g:190:5: boolean
+                    # grammars/Miranda.g:191:5: boolean
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    self._state.following.append(self.FOLLOW_boolean_in_aexpr1288)
-                    boolean86 = self.boolean()
+                    self._state.following.append(self.FOLLOW_boolean_in_aexpr1291)
+                    boolean87 = self.boolean()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, boolean86.tree)
+                        self._adaptor.addChild(root_0, boolean87.tree)
 
 
 
                 elif alt32 == 8:
-                    # grammars/Miranda.g:191:5: section
+                    # grammars/Miranda.g:192:5: section
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    self._state.following.append(self.FOLLOW_section_in_aexpr1294)
-                    section87 = self.section()
+                    self._state.following.append(self.FOLLOW_section_in_aexpr1297)
+                    section88 = self.section()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, section87.tree)
+                        self._adaptor.addChild(root_0, section88.tree)
 
 
 
                 elif alt32 == 9:
-                    # grammars/Miranda.g:192:5: tuple
+                    # grammars/Miranda.g:193:5: tuple
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    self._state.following.append(self.FOLLOW_tuple_in_aexpr1300)
-                    tuple88 = self.tuple()
+                    self._state.following.append(self.FOLLOW_tuple_in_aexpr1303)
+                    tuple89 = self.tuple()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, tuple88.tree)
+                        self._adaptor.addChild(root_0, tuple89.tree)
 
 
 
                 elif alt32 == 10:
-                    # grammars/Miranda.g:193:5: list
+                    # grammars/Miranda.g:194:5: list
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    self._state.following.append(self.FOLLOW_list_in_aexpr1306)
-                    list89 = self.list()
+                    self._state.following.append(self.FOLLOW_list_in_aexpr1309)
+                    list90 = self.list()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, list89.tree)
+                        self._adaptor.addChild(root_0, list90.tree)
 
 
 
                 elif alt32 == 11:
-                    # grammars/Miranda.g:194:5: LPAREN ! expression RPAREN !
+                    # grammars/Miranda.g:195:5: LPAREN ! expression RPAREN !
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    LPAREN90 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_aexpr1312)
+                    LPAREN91 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_aexpr1315)
 
-                    self._state.following.append(self.FOLLOW_expression_in_aexpr1315)
-                    expression91 = self.expression()
+                    self._state.following.append(self.FOLLOW_expression_in_aexpr1318)
+                    expression92 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, expression91.tree)
+                        self._adaptor.addChild(root_0, expression92.tree)
 
 
-                    RPAREN92 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_aexpr1317)
+                    RPAREN93 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_aexpr1320)
 
 
                 retval.stop = self.input.LT(-1)
@@ -3819,7 +3829,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "tuple"
-    # grammars/Miranda.g:197:1: tuple : LPAREN expression ( COMMA expression )+ RPAREN -> ^( TUPLE ( expression )* ) ;
+    # grammars/Miranda.g:198:1: tuple : LPAREN expression ( COMMA expression )+ RPAREN -> ^( TUPLE ( expression )* ) ;
     def tuple(self, ):
         retval = self.tuple_return()
         retval.start = self.input.LT(1)
@@ -3828,17 +3838,17 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        LPAREN93 = None
-        COMMA95 = None
-        RPAREN97 = None
-        expression94 = None
+        LPAREN94 = None
+        COMMA96 = None
+        RPAREN98 = None
+        expression95 = None
 
-        expression96 = None
+        expression97 = None
 
 
-        LPAREN93_tree = None
-        COMMA95_tree = None
-        RPAREN97_tree = None
+        LPAREN94_tree = None
+        COMMA96_tree = None
+        RPAREN98_tree = None
         stream_RPAREN = RewriteRuleTokenStream(self._adaptor, "token RPAREN")
         stream_COMMA = RewriteRuleTokenStream(self._adaptor, "token COMMA")
         stream_LPAREN = RewriteRuleTokenStream(self._adaptor, "token LPAREN")
@@ -3853,23 +3863,23 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:197:6: ( LPAREN expression ( COMMA expression )+ RPAREN -> ^( TUPLE ( expression )* ) )
-                # grammars/Miranda.g:197:8: LPAREN expression ( COMMA expression )+ RPAREN
+                # grammars/Miranda.g:198:6: ( LPAREN expression ( COMMA expression )+ RPAREN -> ^( TUPLE ( expression )* ) )
+                # grammars/Miranda.g:198:8: LPAREN expression ( COMMA expression )+ RPAREN
                 pass 
-                LPAREN93 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_tuple1326) 
+                LPAREN94 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_tuple1329) 
                 if self._state.backtracking == 0:
-                    stream_LPAREN.add(LPAREN93)
+                    stream_LPAREN.add(LPAREN94)
 
 
-                self._state.following.append(self.FOLLOW_expression_in_tuple1328)
-                expression94 = self.expression()
+                self._state.following.append(self.FOLLOW_expression_in_tuple1331)
+                expression95 = self.expression()
 
                 self._state.following.pop()
                 if self._state.backtracking == 0:
-                    stream_expression.add(expression94.tree)
+                    stream_expression.add(expression95.tree)
 
 
-                # grammars/Miranda.g:197:26: ( COMMA expression )+
+                # grammars/Miranda.g:198:26: ( COMMA expression )+
                 cnt33 = 0
                 while True: #loop33
                     alt33 = 2
@@ -3880,19 +3890,19 @@ class MirandaParser(Parser):
 
 
                     if alt33 == 1:
-                        # grammars/Miranda.g:197:27: COMMA expression
+                        # grammars/Miranda.g:198:27: COMMA expression
                         pass 
-                        COMMA95 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_tuple1331) 
+                        COMMA96 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_tuple1334) 
                         if self._state.backtracking == 0:
-                            stream_COMMA.add(COMMA95)
+                            stream_COMMA.add(COMMA96)
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_tuple1333)
-                        expression96 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_tuple1336)
+                        expression97 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            stream_expression.add(expression96.tree)
+                            stream_expression.add(expression97.tree)
 
 
 
@@ -3910,9 +3920,9 @@ class MirandaParser(Parser):
                     cnt33 += 1
 
 
-                RPAREN97 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_tuple1337) 
+                RPAREN98 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_tuple1340) 
                 if self._state.backtracking == 0:
-                    stream_RPAREN.add(RPAREN97)
+                    stream_RPAREN.add(RPAREN98)
 
 
                 # AST Rewrite
@@ -3931,14 +3941,14 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 198:8: -> ^( TUPLE ( expression )* )
-                    # grammars/Miranda.g:198:11: ^( TUPLE ( expression )* )
+                    # 199:8: -> ^( TUPLE ( expression )* )
+                    # grammars/Miranda.g:199:11: ^( TUPLE ( expression )* )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     self._adaptor.createFromType(TUPLE, "TUPLE")
                     , root_1)
 
-                    # grammars/Miranda.g:198:19: ( expression )*
+                    # grammars/Miranda.g:199:19: ( expression )*
                     while stream_expression.hasNext():
                         self._adaptor.addChild(root_1, stream_expression.nextTree())
 
@@ -3994,7 +4004,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "list"
-    # grammars/Miranda.g:201:1: list : LBRACKET ( expression )? ( COMMA expression )* RBRACKET -> ^( LIST ( expression )* ) ;
+    # grammars/Miranda.g:202:1: list : LBRACKET ( expression )? ( COMMA expression )* RBRACKET -> ^( LIST ( expression )* ) ;
     def list(self, ):
         retval = self.list_return()
         retval.start = self.input.LT(1)
@@ -4003,17 +4013,17 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        LBRACKET98 = None
-        COMMA100 = None
-        RBRACKET102 = None
-        expression99 = None
+        LBRACKET99 = None
+        COMMA101 = None
+        RBRACKET103 = None
+        expression100 = None
 
-        expression101 = None
+        expression102 = None
 
 
-        LBRACKET98_tree = None
-        COMMA100_tree = None
-        RBRACKET102_tree = None
+        LBRACKET99_tree = None
+        COMMA101_tree = None
+        RBRACKET103_tree = None
         stream_LBRACKET = RewriteRuleTokenStream(self._adaptor, "token LBRACKET")
         stream_RBRACKET = RewriteRuleTokenStream(self._adaptor, "token RBRACKET")
         stream_COMMA = RewriteRuleTokenStream(self._adaptor, "token COMMA")
@@ -4028,35 +4038,35 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:201:5: ( LBRACKET ( expression )? ( COMMA expression )* RBRACKET -> ^( LIST ( expression )* ) )
-                # grammars/Miranda.g:201:7: LBRACKET ( expression )? ( COMMA expression )* RBRACKET
+                # grammars/Miranda.g:202:5: ( LBRACKET ( expression )? ( COMMA expression )* RBRACKET -> ^( LIST ( expression )* ) )
+                # grammars/Miranda.g:202:7: LBRACKET ( expression )? ( COMMA expression )* RBRACKET
                 pass 
-                LBRACKET98 = self.match(self.input, LBRACKET, self.FOLLOW_LBRACKET_in_list1361) 
+                LBRACKET99 = self.match(self.input, LBRACKET, self.FOLLOW_LBRACKET_in_list1364) 
                 if self._state.backtracking == 0:
-                    stream_LBRACKET.add(LBRACKET98)
+                    stream_LBRACKET.add(LBRACKET99)
 
 
-                # grammars/Miranda.g:201:16: ( expression )?
+                # grammars/Miranda.g:202:16: ( expression )?
                 alt34 = 2
                 LA34_0 = self.input.LA(1)
 
                 if (LA34_0 == CHAR or (FALSE <= LA34_0 <= FLOAT) or LA34_0 == ID or LA34_0 == INT or LA34_0 == LBRACKET or LA34_0 == LPAREN or LA34_0 == NOT or LA34_0 == STRING or LA34_0 == TRUE) :
                     alt34 = 1
                 if alt34 == 1:
-                    # grammars/Miranda.g:201:16: expression
+                    # grammars/Miranda.g:202:16: expression
                     pass 
-                    self._state.following.append(self.FOLLOW_expression_in_list1363)
-                    expression99 = self.expression()
+                    self._state.following.append(self.FOLLOW_expression_in_list1366)
+                    expression100 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_expression.add(expression99.tree)
+                        stream_expression.add(expression100.tree)
 
 
 
 
 
-                # grammars/Miranda.g:201:28: ( COMMA expression )*
+                # grammars/Miranda.g:202:28: ( COMMA expression )*
                 while True: #loop35
                     alt35 = 2
                     LA35_0 = self.input.LA(1)
@@ -4066,19 +4076,19 @@ class MirandaParser(Parser):
 
 
                     if alt35 == 1:
-                        # grammars/Miranda.g:201:29: COMMA expression
+                        # grammars/Miranda.g:202:29: COMMA expression
                         pass 
-                        COMMA100 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_list1367) 
+                        COMMA101 = self.match(self.input, COMMA, self.FOLLOW_COMMA_in_list1370) 
                         if self._state.backtracking == 0:
-                            stream_COMMA.add(COMMA100)
+                            stream_COMMA.add(COMMA101)
 
 
-                        self._state.following.append(self.FOLLOW_expression_in_list1369)
-                        expression101 = self.expression()
+                        self._state.following.append(self.FOLLOW_expression_in_list1372)
+                        expression102 = self.expression()
 
                         self._state.following.pop()
                         if self._state.backtracking == 0:
-                            stream_expression.add(expression101.tree)
+                            stream_expression.add(expression102.tree)
 
 
 
@@ -4086,9 +4096,9 @@ class MirandaParser(Parser):
                         break #loop35
 
 
-                RBRACKET102 = self.match(self.input, RBRACKET, self.FOLLOW_RBRACKET_in_list1373) 
+                RBRACKET103 = self.match(self.input, RBRACKET, self.FOLLOW_RBRACKET_in_list1376) 
                 if self._state.backtracking == 0:
-                    stream_RBRACKET.add(RBRACKET102)
+                    stream_RBRACKET.add(RBRACKET103)
 
 
                 # AST Rewrite
@@ -4107,14 +4117,14 @@ class MirandaParser(Parser):
 
 
                     root_0 = self._adaptor.nil()
-                    # 202:7: -> ^( LIST ( expression )* )
-                    # grammars/Miranda.g:202:10: ^( LIST ( expression )* )
+                    # 203:7: -> ^( LIST ( expression )* )
+                    # grammars/Miranda.g:203:10: ^( LIST ( expression )* )
                     root_1 = self._adaptor.nil()
                     root_1 = self._adaptor.becomeRoot(
                     self._adaptor.createFromType(LIST, "LIST")
                     , root_1)
 
-                    # grammars/Miranda.g:202:17: ( expression )*
+                    # grammars/Miranda.g:203:17: ( expression )*
                     while stream_expression.hasNext():
                         self._adaptor.addChild(root_1, stream_expression.nextTree())
 
@@ -4170,7 +4180,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "section"
-    # grammars/Miranda.g:205:1: section : ( LPAREN operator RPAREN -> ^( SECTION operator ) | LPAREN operator expression RPAREN -> ^( SECTION operator expression ) | LPAREN expression operator RPAREN -> ^( SECTION expression operator ) );
+    # grammars/Miranda.g:206:1: section : ( LPAREN operator RPAREN -> ^( SECTION operator ) | LPAREN operator expression RPAREN -> ^( SECTION operator expression ) | LPAREN expression operator RPAREN -> ^( SECTION expression operator ) );
     def section(self, ):
         retval = self.section_return()
         retval.start = self.input.LT(1)
@@ -4179,29 +4189,29 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        LPAREN103 = None
-        RPAREN105 = None
-        LPAREN106 = None
-        RPAREN109 = None
-        LPAREN110 = None
-        RPAREN113 = None
-        operator104 = None
+        LPAREN104 = None
+        RPAREN106 = None
+        LPAREN107 = None
+        RPAREN110 = None
+        LPAREN111 = None
+        RPAREN114 = None
+        operator105 = None
 
-        operator107 = None
+        operator108 = None
 
-        expression108 = None
+        expression109 = None
 
-        expression111 = None
+        expression112 = None
 
-        operator112 = None
+        operator113 = None
 
 
-        LPAREN103_tree = None
-        RPAREN105_tree = None
-        LPAREN106_tree = None
-        RPAREN109_tree = None
-        LPAREN110_tree = None
-        RPAREN113_tree = None
+        LPAREN104_tree = None
+        RPAREN106_tree = None
+        LPAREN107_tree = None
+        RPAREN110_tree = None
+        LPAREN111_tree = None
+        RPAREN114_tree = None
         stream_RPAREN = RewriteRuleTokenStream(self._adaptor, "token RPAREN")
         stream_LPAREN = RewriteRuleTokenStream(self._adaptor, "token LPAREN")
         stream_expression = RewriteRuleSubtreeStream(self._adaptor, "rule expression")
@@ -4216,7 +4226,7 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:206:3: ( LPAREN operator RPAREN -> ^( SECTION operator ) | LPAREN operator expression RPAREN -> ^( SECTION operator expression ) | LPAREN expression operator RPAREN -> ^( SECTION expression operator ) )
+                # grammars/Miranda.g:207:3: ( LPAREN operator RPAREN -> ^( SECTION operator ) | LPAREN operator expression RPAREN -> ^( SECTION operator expression ) | LPAREN expression operator RPAREN -> ^( SECTION expression operator ) )
                 alt36 = 3
                 LA36_0 = self.input.LA(1)
 
@@ -4534,24 +4544,24 @@ class MirandaParser(Parser):
 
 
                 if alt36 == 1:
-                    # grammars/Miranda.g:206:5: LPAREN operator RPAREN
+                    # grammars/Miranda.g:207:5: LPAREN operator RPAREN
                     pass 
-                    LPAREN103 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1399) 
+                    LPAREN104 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1402) 
                     if self._state.backtracking == 0:
-                        stream_LPAREN.add(LPAREN103)
+                        stream_LPAREN.add(LPAREN104)
 
 
-                    self._state.following.append(self.FOLLOW_operator_in_section1401)
-                    operator104 = self.operator()
+                    self._state.following.append(self.FOLLOW_operator_in_section1404)
+                    operator105 = self.operator()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_operator.add(operator104.tree)
+                        stream_operator.add(operator105.tree)
 
 
-                    RPAREN105 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1403) 
+                    RPAREN106 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1406) 
                     if self._state.backtracking == 0:
-                        stream_RPAREN.add(RPAREN105)
+                        stream_RPAREN.add(RPAREN106)
 
 
                     # AST Rewrite
@@ -4570,8 +4580,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 207:4: -> ^( SECTION operator )
-                        # grammars/Miranda.g:207:7: ^( SECTION operator )
+                        # 208:4: -> ^( SECTION operator )
+                        # grammars/Miranda.g:208:7: ^( SECTION operator )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         self._adaptor.createFromType(SECTION, "SECTION")
@@ -4590,36 +4600,36 @@ class MirandaParser(Parser):
 
 
                 elif alt36 == 2:
-                    # grammars/Miranda.g:208:5: LPAREN operator expression RPAREN
+                    # grammars/Miranda.g:209:5: LPAREN operator expression RPAREN
                     pass 
-                    LPAREN106 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1420) 
+                    LPAREN107 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1423) 
                     if self._state.backtracking == 0:
-                        stream_LPAREN.add(LPAREN106)
+                        stream_LPAREN.add(LPAREN107)
 
 
-                    self._state.following.append(self.FOLLOW_operator_in_section1422)
-                    operator107 = self.operator()
+                    self._state.following.append(self.FOLLOW_operator_in_section1425)
+                    operator108 = self.operator()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_operator.add(operator107.tree)
+                        stream_operator.add(operator108.tree)
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_section1424)
-                    expression108 = self.expression()
+                    self._state.following.append(self.FOLLOW_expression_in_section1427)
+                    expression109 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_expression.add(expression108.tree)
+                        stream_expression.add(expression109.tree)
 
 
-                    RPAREN109 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1426) 
+                    RPAREN110 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1429) 
                     if self._state.backtracking == 0:
-                        stream_RPAREN.add(RPAREN109)
+                        stream_RPAREN.add(RPAREN110)
 
 
                     # AST Rewrite
-                    # elements: operator, expression
+                    # elements: expression, operator
                     # token labels: 
                     # rule labels: retval
                     # token list labels: 
@@ -4634,8 +4644,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 209:4: -> ^( SECTION operator expression )
-                        # grammars/Miranda.g:209:7: ^( SECTION operator expression )
+                        # 210:4: -> ^( SECTION operator expression )
+                        # grammars/Miranda.g:210:7: ^( SECTION operator expression )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         self._adaptor.createFromType(SECTION, "SECTION")
@@ -4656,32 +4666,32 @@ class MirandaParser(Parser):
 
 
                 elif alt36 == 3:
-                    # grammars/Miranda.g:210:5: LPAREN expression operator RPAREN
+                    # grammars/Miranda.g:211:5: LPAREN expression operator RPAREN
                     pass 
-                    LPAREN110 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1445) 
+                    LPAREN111 = self.match(self.input, LPAREN, self.FOLLOW_LPAREN_in_section1448) 
                     if self._state.backtracking == 0:
-                        stream_LPAREN.add(LPAREN110)
+                        stream_LPAREN.add(LPAREN111)
 
 
-                    self._state.following.append(self.FOLLOW_expression_in_section1447)
-                    expression111 = self.expression()
+                    self._state.following.append(self.FOLLOW_expression_in_section1450)
+                    expression112 = self.expression()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_expression.add(expression111.tree)
+                        stream_expression.add(expression112.tree)
 
 
-                    self._state.following.append(self.FOLLOW_operator_in_section1449)
-                    operator112 = self.operator()
+                    self._state.following.append(self.FOLLOW_operator_in_section1452)
+                    operator113 = self.operator()
 
                     self._state.following.pop()
                     if self._state.backtracking == 0:
-                        stream_operator.add(operator112.tree)
+                        stream_operator.add(operator113.tree)
 
 
-                    RPAREN113 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1451) 
+                    RPAREN114 = self.match(self.input, RPAREN, self.FOLLOW_RPAREN_in_section1454) 
                     if self._state.backtracking == 0:
-                        stream_RPAREN.add(RPAREN113)
+                        stream_RPAREN.add(RPAREN114)
 
 
                     # AST Rewrite
@@ -4700,8 +4710,8 @@ class MirandaParser(Parser):
 
 
                         root_0 = self._adaptor.nil()
-                        # 211:4: -> ^( SECTION expression operator )
-                        # grammars/Miranda.g:211:7: ^( SECTION expression operator )
+                        # 212:4: -> ^( SECTION expression operator )
+                        # grammars/Miranda.g:212:7: ^( SECTION expression operator )
                         root_1 = self._adaptor.nil()
                         root_1 = self._adaptor.becomeRoot(
                         self._adaptor.createFromType(SECTION, "SECTION")
@@ -4759,7 +4769,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "operator"
-    # grammars/Miranda.g:213:10: fragment operator : ( OR | AND | LT | LTE | EQ | NEQ | GTE | GT | ADD | MIN | CONCAT | SUBTRACT | DIV |{...}? STARS | IDIV | MOD | EXP );
+    # grammars/Miranda.g:214:10: fragment operator : ( OR | AND | LT | LTE | EQ | NEQ | GTE | GT | ADD | MIN | CONCAT | SUBTRACT | DIV |{...}? STARS | IDIV | MOD | EXP );
     def operator(self, ):
         retval = self.operator_return()
         retval.start = self.input.LT(1)
@@ -4768,41 +4778,41 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        OR114 = None
-        AND115 = None
-        LT116 = None
-        LTE117 = None
-        EQ118 = None
-        NEQ119 = None
-        GTE120 = None
-        GT121 = None
-        ADD122 = None
-        MIN123 = None
-        CONCAT124 = None
-        SUBTRACT125 = None
-        DIV126 = None
-        STARS127 = None
-        IDIV128 = None
-        MOD129 = None
-        EXP130 = None
+        OR115 = None
+        AND116 = None
+        LT117 = None
+        LTE118 = None
+        EQ119 = None
+        NEQ120 = None
+        GTE121 = None
+        GT122 = None
+        ADD123 = None
+        MIN124 = None
+        CONCAT125 = None
+        SUBTRACT126 = None
+        DIV127 = None
+        STARS128 = None
+        IDIV129 = None
+        MOD130 = None
+        EXP131 = None
 
-        OR114_tree = None
-        AND115_tree = None
-        LT116_tree = None
-        LTE117_tree = None
-        EQ118_tree = None
-        NEQ119_tree = None
-        GTE120_tree = None
-        GT121_tree = None
-        ADD122_tree = None
-        MIN123_tree = None
-        CONCAT124_tree = None
-        SUBTRACT125_tree = None
-        DIV126_tree = None
-        STARS127_tree = None
-        IDIV128_tree = None
-        MOD129_tree = None
-        EXP130_tree = None
+        OR115_tree = None
+        AND116_tree = None
+        LT117_tree = None
+        LTE118_tree = None
+        EQ119_tree = None
+        NEQ120_tree = None
+        GTE121_tree = None
+        GT122_tree = None
+        ADD123_tree = None
+        MIN124_tree = None
+        CONCAT125_tree = None
+        SUBTRACT126_tree = None
+        DIV127_tree = None
+        STARS128_tree = None
+        IDIV129_tree = None
+        MOD130_tree = None
+        EXP131_tree = None
 
         success = False
 
@@ -4814,7 +4824,7 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:213:18: ( OR | AND | LT | LTE | EQ | NEQ | GTE | GT | ADD | MIN | CONCAT | SUBTRACT | DIV |{...}? STARS | IDIV | MOD | EXP )
+                # grammars/Miranda.g:214:18: ( OR | AND | LT | LTE | EQ | NEQ | GTE | GT | ADD | MIN | CONCAT | SUBTRACT | DIV |{...}? STARS | IDIV | MOD | EXP )
                 alt37 = 17
                 LA37 = self.input.LA(1)
                 if LA37 == OR:
@@ -4862,189 +4872,189 @@ class MirandaParser(Parser):
 
 
                 if alt37 == 1:
-                    # grammars/Miranda.g:213:20: OR
+                    # grammars/Miranda.g:214:20: OR
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    OR114 = self.match(self.input, OR, self.FOLLOW_OR_in_operator1473)
+                    OR115 = self.match(self.input, OR, self.FOLLOW_OR_in_operator1476)
                     if self._state.backtracking == 0:
-                        OR114_tree = self._adaptor.createWithPayload(OR114)
-                        self._adaptor.addChild(root_0, OR114_tree)
+                        OR115_tree = self._adaptor.createWithPayload(OR115)
+                        self._adaptor.addChild(root_0, OR115_tree)
 
 
 
 
                 elif alt37 == 2:
-                    # grammars/Miranda.g:213:23: AND
+                    # grammars/Miranda.g:214:23: AND
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    AND115 = self.match(self.input, AND, self.FOLLOW_AND_in_operator1475)
+                    AND116 = self.match(self.input, AND, self.FOLLOW_AND_in_operator1478)
                     if self._state.backtracking == 0:
-                        AND115_tree = self._adaptor.createWithPayload(AND115)
-                        self._adaptor.addChild(root_0, AND115_tree)
+                        AND116_tree = self._adaptor.createWithPayload(AND116)
+                        self._adaptor.addChild(root_0, AND116_tree)
 
 
 
 
                 elif alt37 == 3:
-                    # grammars/Miranda.g:213:27: LT
+                    # grammars/Miranda.g:214:27: LT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    LT116 = self.match(self.input, LT, self.FOLLOW_LT_in_operator1477)
+                    LT117 = self.match(self.input, LT, self.FOLLOW_LT_in_operator1480)
                     if self._state.backtracking == 0:
-                        LT116_tree = self._adaptor.createWithPayload(LT116)
-                        self._adaptor.addChild(root_0, LT116_tree)
+                        LT117_tree = self._adaptor.createWithPayload(LT117)
+                        self._adaptor.addChild(root_0, LT117_tree)
 
 
 
 
                 elif alt37 == 4:
-                    # grammars/Miranda.g:213:30: LTE
+                    # grammars/Miranda.g:214:30: LTE
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    LTE117 = self.match(self.input, LTE, self.FOLLOW_LTE_in_operator1479)
+                    LTE118 = self.match(self.input, LTE, self.FOLLOW_LTE_in_operator1482)
                     if self._state.backtracking == 0:
-                        LTE117_tree = self._adaptor.createWithPayload(LTE117)
-                        self._adaptor.addChild(root_0, LTE117_tree)
+                        LTE118_tree = self._adaptor.createWithPayload(LTE118)
+                        self._adaptor.addChild(root_0, LTE118_tree)
 
 
 
 
                 elif alt37 == 5:
-                    # grammars/Miranda.g:213:34: EQ
+                    # grammars/Miranda.g:214:34: EQ
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    EQ118 = self.match(self.input, EQ, self.FOLLOW_EQ_in_operator1481)
+                    EQ119 = self.match(self.input, EQ, self.FOLLOW_EQ_in_operator1484)
                     if self._state.backtracking == 0:
-                        EQ118_tree = self._adaptor.createWithPayload(EQ118)
-                        self._adaptor.addChild(root_0, EQ118_tree)
+                        EQ119_tree = self._adaptor.createWithPayload(EQ119)
+                        self._adaptor.addChild(root_0, EQ119_tree)
 
 
 
 
                 elif alt37 == 6:
-                    # grammars/Miranda.g:213:37: NEQ
+                    # grammars/Miranda.g:214:37: NEQ
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    NEQ119 = self.match(self.input, NEQ, self.FOLLOW_NEQ_in_operator1483)
+                    NEQ120 = self.match(self.input, NEQ, self.FOLLOW_NEQ_in_operator1486)
                     if self._state.backtracking == 0:
-                        NEQ119_tree = self._adaptor.createWithPayload(NEQ119)
-                        self._adaptor.addChild(root_0, NEQ119_tree)
+                        NEQ120_tree = self._adaptor.createWithPayload(NEQ120)
+                        self._adaptor.addChild(root_0, NEQ120_tree)
 
 
 
 
                 elif alt37 == 7:
-                    # grammars/Miranda.g:213:41: GTE
+                    # grammars/Miranda.g:214:41: GTE
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    GTE120 = self.match(self.input, GTE, self.FOLLOW_GTE_in_operator1485)
+                    GTE121 = self.match(self.input, GTE, self.FOLLOW_GTE_in_operator1488)
                     if self._state.backtracking == 0:
-                        GTE120_tree = self._adaptor.createWithPayload(GTE120)
-                        self._adaptor.addChild(root_0, GTE120_tree)
+                        GTE121_tree = self._adaptor.createWithPayload(GTE121)
+                        self._adaptor.addChild(root_0, GTE121_tree)
 
 
 
 
                 elif alt37 == 8:
-                    # grammars/Miranda.g:213:45: GT
+                    # grammars/Miranda.g:214:45: GT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    GT121 = self.match(self.input, GT, self.FOLLOW_GT_in_operator1487)
+                    GT122 = self.match(self.input, GT, self.FOLLOW_GT_in_operator1490)
                     if self._state.backtracking == 0:
-                        GT121_tree = self._adaptor.createWithPayload(GT121)
-                        self._adaptor.addChild(root_0, GT121_tree)
+                        GT122_tree = self._adaptor.createWithPayload(GT122)
+                        self._adaptor.addChild(root_0, GT122_tree)
 
 
 
 
                 elif alt37 == 9:
-                    # grammars/Miranda.g:213:48: ADD
+                    # grammars/Miranda.g:214:48: ADD
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    ADD122 = self.match(self.input, ADD, self.FOLLOW_ADD_in_operator1489)
+                    ADD123 = self.match(self.input, ADD, self.FOLLOW_ADD_in_operator1492)
                     if self._state.backtracking == 0:
-                        ADD122_tree = self._adaptor.createWithPayload(ADD122)
-                        self._adaptor.addChild(root_0, ADD122_tree)
+                        ADD123_tree = self._adaptor.createWithPayload(ADD123)
+                        self._adaptor.addChild(root_0, ADD123_tree)
 
 
 
 
                 elif alt37 == 10:
-                    # grammars/Miranda.g:213:52: MIN
+                    # grammars/Miranda.g:214:52: MIN
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    MIN123 = self.match(self.input, MIN, self.FOLLOW_MIN_in_operator1491)
+                    MIN124 = self.match(self.input, MIN, self.FOLLOW_MIN_in_operator1494)
                     if self._state.backtracking == 0:
-                        MIN123_tree = self._adaptor.createWithPayload(MIN123)
-                        self._adaptor.addChild(root_0, MIN123_tree)
+                        MIN124_tree = self._adaptor.createWithPayload(MIN124)
+                        self._adaptor.addChild(root_0, MIN124_tree)
 
 
 
 
                 elif alt37 == 11:
-                    # grammars/Miranda.g:213:56: CONCAT
+                    # grammars/Miranda.g:214:56: CONCAT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    CONCAT124 = self.match(self.input, CONCAT, self.FOLLOW_CONCAT_in_operator1493)
+                    CONCAT125 = self.match(self.input, CONCAT, self.FOLLOW_CONCAT_in_operator1496)
                     if self._state.backtracking == 0:
-                        CONCAT124_tree = self._adaptor.createWithPayload(CONCAT124)
-                        self._adaptor.addChild(root_0, CONCAT124_tree)
+                        CONCAT125_tree = self._adaptor.createWithPayload(CONCAT125)
+                        self._adaptor.addChild(root_0, CONCAT125_tree)
 
 
 
 
                 elif alt37 == 12:
-                    # grammars/Miranda.g:213:63: SUBTRACT
+                    # grammars/Miranda.g:214:63: SUBTRACT
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    SUBTRACT125 = self.match(self.input, SUBTRACT, self.FOLLOW_SUBTRACT_in_operator1495)
+                    SUBTRACT126 = self.match(self.input, SUBTRACT, self.FOLLOW_SUBTRACT_in_operator1498)
                     if self._state.backtracking == 0:
-                        SUBTRACT125_tree = self._adaptor.createWithPayload(SUBTRACT125)
-                        self._adaptor.addChild(root_0, SUBTRACT125_tree)
+                        SUBTRACT126_tree = self._adaptor.createWithPayload(SUBTRACT126)
+                        self._adaptor.addChild(root_0, SUBTRACT126_tree)
 
 
 
 
                 elif alt37 == 13:
-                    # grammars/Miranda.g:213:72: DIV
+                    # grammars/Miranda.g:214:72: DIV
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    DIV126 = self.match(self.input, DIV, self.FOLLOW_DIV_in_operator1497)
+                    DIV127 = self.match(self.input, DIV, self.FOLLOW_DIV_in_operator1500)
                     if self._state.backtracking == 0:
-                        DIV126_tree = self._adaptor.createWithPayload(DIV126)
-                        self._adaptor.addChild(root_0, DIV126_tree)
+                        DIV127_tree = self._adaptor.createWithPayload(DIV127)
+                        self._adaptor.addChild(root_0, DIV127_tree)
 
 
 
 
                 elif alt37 == 14:
-                    # grammars/Miranda.g:213:76: {...}? STARS
+                    # grammars/Miranda.g:214:76: {...}? STARS
                     pass 
                     root_0 = self._adaptor.nil()
 
@@ -5057,52 +5067,52 @@ class MirandaParser(Parser):
                         raise FailedPredicateException(self.input, "operator", "len(self.input.LT(1).text) == 1")
 
 
-                    STARS127 = self.match(self.input, STARS, self.FOLLOW_STARS_in_operator1501)
+                    STARS128 = self.match(self.input, STARS, self.FOLLOW_STARS_in_operator1504)
                     if self._state.backtracking == 0:
-                        STARS127_tree = self._adaptor.createWithPayload(STARS127)
-                        self._adaptor.addChild(root_0, STARS127_tree)
+                        STARS128_tree = self._adaptor.createWithPayload(STARS128)
+                        self._adaptor.addChild(root_0, STARS128_tree)
 
 
 
 
                 elif alt37 == 15:
-                    # grammars/Miranda.g:213:117: IDIV
+                    # grammars/Miranda.g:214:117: IDIV
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    IDIV128 = self.match(self.input, IDIV, self.FOLLOW_IDIV_in_operator1503)
+                    IDIV129 = self.match(self.input, IDIV, self.FOLLOW_IDIV_in_operator1506)
                     if self._state.backtracking == 0:
-                        IDIV128_tree = self._adaptor.createWithPayload(IDIV128)
-                        self._adaptor.addChild(root_0, IDIV128_tree)
+                        IDIV129_tree = self._adaptor.createWithPayload(IDIV129)
+                        self._adaptor.addChild(root_0, IDIV129_tree)
 
 
 
 
                 elif alt37 == 16:
-                    # grammars/Miranda.g:213:122: MOD
+                    # grammars/Miranda.g:214:122: MOD
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    MOD129 = self.match(self.input, MOD, self.FOLLOW_MOD_in_operator1505)
+                    MOD130 = self.match(self.input, MOD, self.FOLLOW_MOD_in_operator1508)
                     if self._state.backtracking == 0:
-                        MOD129_tree = self._adaptor.createWithPayload(MOD129)
-                        self._adaptor.addChild(root_0, MOD129_tree)
+                        MOD130_tree = self._adaptor.createWithPayload(MOD130)
+                        self._adaptor.addChild(root_0, MOD130_tree)
 
 
 
 
                 elif alt37 == 17:
-                    # grammars/Miranda.g:213:126: EXP
+                    # grammars/Miranda.g:214:126: EXP
                     pass 
                     root_0 = self._adaptor.nil()
 
 
-                    EXP130 = self.match(self.input, EXP, self.FOLLOW_EXP_in_operator1507)
+                    EXP131 = self.match(self.input, EXP, self.FOLLOW_EXP_in_operator1510)
                     if self._state.backtracking == 0:
-                        EXP130_tree = self._adaptor.createWithPayload(EXP130)
-                        self._adaptor.addChild(root_0, EXP130_tree)
+                        EXP131_tree = self._adaptor.createWithPayload(EXP131)
+                        self._adaptor.addChild(root_0, EXP131_tree)
 
 
 
@@ -5145,7 +5155,7 @@ class MirandaParser(Parser):
 
 
     # $ANTLR start "boolean"
-    # grammars/Miranda.g:215:1: boolean : ( TRUE | FALSE );
+    # grammars/Miranda.g:216:1: boolean : ( TRUE | FALSE );
     def boolean(self, ):
         retval = self.boolean_return()
         retval.start = self.input.LT(1)
@@ -5154,9 +5164,9 @@ class MirandaParser(Parser):
 
         root_0 = None
 
-        set131 = None
+        set132 = None
 
-        set131_tree = None
+        set132_tree = None
 
         success = False
 
@@ -5168,18 +5178,18 @@ class MirandaParser(Parser):
                     return retval
 
 
-                # grammars/Miranda.g:215:8: ( TRUE | FALSE )
+                # grammars/Miranda.g:216:8: ( TRUE | FALSE )
                 # grammars/Miranda.g:
                 pass 
                 root_0 = self._adaptor.nil()
 
 
-                set131 = self.input.LT(1)
+                set132 = self.input.LT(1)
 
                 if self.input.LA(1) == FALSE or self.input.LA(1) == TRUE:
                     self.input.consume()
                     if self._state.backtracking == 0:
-                        self._adaptor.addChild(root_0, self._adaptor.createWithPayload(set131))
+                        self._adaptor.addChild(root_0, self._adaptor.createWithPayload(set132))
 
                     self._state.errorRecovery = False
 
@@ -5224,10 +5234,10 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred2_Miranda"
     def synpred2_Miranda_fragment(self, ):
-        # grammars/Miranda.g:112:4: ( ( typedef | definition ) DEDENT )
-        # grammars/Miranda.g:112:4: ( typedef | definition ) DEDENT
+        # grammars/Miranda.g:113:4: ( ( typedef | definition ) DEDENT )
+        # grammars/Miranda.g:113:4: ( typedef | definition ) DEDENT
         pass 
-        # grammars/Miranda.g:112:4: ( typedef | definition )
+        # grammars/Miranda.g:113:4: ( typedef | definition )
         alt38 = 2
         LA38_0 = self.input.LA(1)
 
@@ -5259,7 +5269,7 @@ class MirandaParser(Parser):
 
 
         if alt38 == 1:
-            # grammars/Miranda.g:112:5: typedef
+            # grammars/Miranda.g:113:5: typedef
             pass 
             self._state.following.append(self.FOLLOW_typedef_in_synpred2_Miranda650)
             self.typedef()
@@ -5268,7 +5278,7 @@ class MirandaParser(Parser):
 
 
         elif alt38 == 2:
-            # grammars/Miranda.g:112:13: definition
+            # grammars/Miranda.g:113:13: definition
             pass 
             self._state.following.append(self.FOLLOW_definition_in_synpred2_Miranda652)
             self.definition()
@@ -5288,8 +5298,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred4_Miranda"
     def synpred4_Miranda_fragment(self, ):
-        # grammars/Miranda.g:118:17: ( body )
-        # grammars/Miranda.g:118:17: body
+        # grammars/Miranda.g:119:17: ( body )
+        # grammars/Miranda.g:119:17: body
         pass 
         self._state.following.append(self.FOLLOW_body_in_synpred4_Miranda699)
         self.body()
@@ -5304,8 +5314,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred9_Miranda"
     def synpred9_Miranda_fragment(self, ):
-        # grammars/Miranda.g:128:31: ( STARS )
-        # grammars/Miranda.g:128:31: STARS
+        # grammars/Miranda.g:129:31: ( STARS )
+        # grammars/Miranda.g:129:31: STARS
         pass 
         self.match(self.input, STARS, self.FOLLOW_STARS_in_synpred9_Miranda808)
 
@@ -5317,8 +5327,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred18_Miranda"
     def synpred18_Miranda_fragment(self, ):
-        # grammars/Miranda.g:139:26: ( DEDENT definition )
-        # grammars/Miranda.g:139:26: DEDENT definition
+        # grammars/Miranda.g:140:26: ( DEDENT definition )
+        # grammars/Miranda.g:140:26: DEDENT definition
         pass 
         self.match(self.input, DEDENT, self.FOLLOW_DEDENT_in_synpred18_Miranda899)
 
@@ -5335,8 +5345,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred26_Miranda"
     def synpred26_Miranda_fragment(self, ):
-        # grammars/Miranda.g:151:5: ( tuple )
-        # grammars/Miranda.g:151:5: tuple
+        # grammars/Miranda.g:152:5: ( tuple )
+        # grammars/Miranda.g:152:5: tuple
         pass 
         self._state.following.append(self.FOLLOW_tuple_in_synpred26_Miranda970)
         self.tuple()
@@ -5351,8 +5361,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred30_Miranda"
     def synpred30_Miranda_fragment(self, ):
-        # grammars/Miranda.g:157:15: ( ( CONCAT | SUBTRACT | COLON ) expr0 )
-        # grammars/Miranda.g:157:15: ( CONCAT | SUBTRACT | COLON ) expr0
+        # grammars/Miranda.g:158:15: ( ( CONCAT | SUBTRACT | COLON ) expr0 )
+        # grammars/Miranda.g:158:15: ( CONCAT | SUBTRACT | COLON ) expr0
         pass 
         if self.input.LA(1) == COLON or self.input.LA(1) == CONCAT or self.input.LA(1) == SUBTRACT:
             self.input.consume()
@@ -5369,7 +5379,7 @@ class MirandaParser(Parser):
 
 
 
-        self._state.following.append(self.FOLLOW_expr0_in_synpred30_Miranda1021)
+        self._state.following.append(self.FOLLOW_expr0_in_synpred30_Miranda1024)
         self.expr0()
 
         self._state.following.pop()
@@ -5382,12 +5392,12 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred31_Miranda"
     def synpred31_Miranda_fragment(self, ):
-        # grammars/Miranda.g:159:15: ( OR expression )
-        # grammars/Miranda.g:159:15: OR expression
+        # grammars/Miranda.g:160:15: ( OR expression )
+        # grammars/Miranda.g:160:15: OR expression
         pass 
-        self.match(self.input, OR, self.FOLLOW_OR_in_synpred31_Miranda1033)
+        self.match(self.input, OR, self.FOLLOW_OR_in_synpred31_Miranda1036)
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred31_Miranda1039)
+        self._state.following.append(self.FOLLOW_expression_in_synpred31_Miranda1042)
         self.expression()
 
         self._state.following.pop()
@@ -5400,12 +5410,12 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred32_Miranda"
     def synpred32_Miranda_fragment(self, ):
-        # grammars/Miranda.g:161:15: ( AND expression )
-        # grammars/Miranda.g:161:15: AND expression
+        # grammars/Miranda.g:162:15: ( AND expression )
+        # grammars/Miranda.g:162:15: AND expression
         pass 
-        self.match(self.input, AND, self.FOLLOW_AND_in_synpred32_Miranda1051)
+        self.match(self.input, AND, self.FOLLOW_AND_in_synpred32_Miranda1054)
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred32_Miranda1057)
+        self._state.following.append(self.FOLLOW_expression_in_synpred32_Miranda1060)
         self.expression()
 
         self._state.following.pop()
@@ -5418,8 +5428,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred38_Miranda"
     def synpred38_Miranda_fragment(self, ):
-        # grammars/Miranda.g:163:15: ( ( LT | LTE | EQ | NEQ | GTE | GT ) expression )
-        # grammars/Miranda.g:163:15: ( LT | LTE | EQ | NEQ | GTE | GT ) expression
+        # grammars/Miranda.g:164:15: ( ( LT | LTE | EQ | NEQ | GTE | GT ) expression )
+        # grammars/Miranda.g:164:15: ( LT | LTE | EQ | NEQ | GTE | GT ) expression
         pass 
         if self.input.LA(1) == EQ or (GT <= self.input.LA(1) <= GTE) or (LT <= self.input.LA(1) <= LTE) or self.input.LA(1) == NEQ:
             self.input.consume()
@@ -5436,7 +5446,7 @@ class MirandaParser(Parser):
 
 
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred38_Miranda1084)
+        self._state.following.append(self.FOLLOW_expression_in_synpred38_Miranda1087)
         self.expression()
 
         self._state.following.pop()
@@ -5449,8 +5459,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred40_Miranda"
     def synpred40_Miranda_fragment(self, ):
-        # grammars/Miranda.g:165:15: ( ( ADD | MIN ) expression )
-        # grammars/Miranda.g:165:15: ( ADD | MIN ) expression
+        # grammars/Miranda.g:166:15: ( ( ADD | MIN ) expression )
+        # grammars/Miranda.g:166:15: ( ADD | MIN ) expression
         pass 
         if self.input.LA(1) == ADD or self.input.LA(1) == MIN:
             self.input.consume()
@@ -5467,7 +5477,7 @@ class MirandaParser(Parser):
 
 
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred40_Miranda1110)
+        self._state.following.append(self.FOLLOW_expression_in_synpred40_Miranda1113)
         self.expression()
 
         self._state.following.pop()
@@ -5480,10 +5490,10 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred42_Miranda"
     def synpred42_Miranda_fragment(self, ):
-        # grammars/Miranda.g:167:15: ( ( DIV |{...}? STARS ) expression )
-        # grammars/Miranda.g:167:15: ( DIV |{...}? STARS ) expression
+        # grammars/Miranda.g:168:15: ( ( DIV |{...}? STARS ) expression )
+        # grammars/Miranda.g:168:15: ( DIV |{...}? STARS ) expression
         pass 
-        # grammars/Miranda.g:167:15: ( DIV |{...}? STARS )
+        # grammars/Miranda.g:168:15: ( DIV |{...}? STARS )
         alt39 = 2
         LA39_0 = self.input.LA(1)
 
@@ -5502,13 +5512,13 @@ class MirandaParser(Parser):
 
 
         if alt39 == 1:
-            # grammars/Miranda.g:167:16: DIV
+            # grammars/Miranda.g:168:16: DIV
             pass 
-            self.match(self.input, DIV, self.FOLLOW_DIV_in_synpred42_Miranda1123)
+            self.match(self.input, DIV, self.FOLLOW_DIV_in_synpred42_Miranda1126)
 
 
         elif alt39 == 2:
-            # grammars/Miranda.g:167:31: {...}? STARS
+            # grammars/Miranda.g:168:31: {...}? STARS
             pass 
             if not ((len(self.input.LT(1).text) == 1)):
                 if self._state.backtracking > 0:
@@ -5518,12 +5528,12 @@ class MirandaParser(Parser):
                 raise FailedPredicateException(self.input, "synpred42_Miranda", "len(self.input.LT(1).text) == 1")
 
 
-            self.match(self.input, STARS, self.FOLLOW_STARS_in_synpred42_Miranda1132)
+            self.match(self.input, STARS, self.FOLLOW_STARS_in_synpred42_Miranda1135)
 
 
 
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred42_Miranda1139)
+        self._state.following.append(self.FOLLOW_expression_in_synpred42_Miranda1142)
         self.expression()
 
         self._state.following.pop()
@@ -5536,8 +5546,8 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred44_Miranda"
     def synpred44_Miranda_fragment(self, ):
-        # grammars/Miranda.g:169:15: ( ( IDIV | MOD ) expression )
-        # grammars/Miranda.g:169:15: ( IDIV | MOD ) expression
+        # grammars/Miranda.g:170:15: ( ( IDIV | MOD ) expression )
+        # grammars/Miranda.g:170:15: ( IDIV | MOD ) expression
         pass 
         if self.input.LA(1) == IDIV or self.input.LA(1) == MOD:
             self.input.consume()
@@ -5554,7 +5564,7 @@ class MirandaParser(Parser):
 
 
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred44_Miranda1159)
+        self._state.following.append(self.FOLLOW_expression_in_synpred44_Miranda1162)
         self.expression()
 
         self._state.following.pop()
@@ -5567,18 +5577,18 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred45_Miranda"
     def synpred45_Miranda_fragment(self, ):
-        # grammars/Miranda.g:171:15: ( ( EXP ) expression )
-        # grammars/Miranda.g:171:15: ( EXP ) expression
+        # grammars/Miranda.g:172:15: ( ( EXP ) expression )
+        # grammars/Miranda.g:172:15: ( EXP ) expression
         pass 
-        # grammars/Miranda.g:171:15: ( EXP )
-        # grammars/Miranda.g:171:16: EXP
+        # grammars/Miranda.g:172:15: ( EXP )
+        # grammars/Miranda.g:172:16: EXP
         pass 
-        self.match(self.input, EXP, self.FOLLOW_EXP_in_synpred45_Miranda1172)
+        self.match(self.input, EXP, self.FOLLOW_EXP_in_synpred45_Miranda1175)
 
 
 
 
-        self._state.following.append(self.FOLLOW_expression_in_synpred45_Miranda1176)
+        self._state.following.append(self.FOLLOW_expression_in_synpred45_Miranda1179)
         self.expression()
 
         self._state.following.pop()
@@ -5591,10 +5601,10 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred46_Miranda"
     def synpred46_Miranda_fragment(self, ):
-        # grammars/Miranda.g:173:8: ( aexpr )
-        # grammars/Miranda.g:173:8: aexpr
+        # grammars/Miranda.g:174:8: ( aexpr )
+        # grammars/Miranda.g:174:8: aexpr
         pass 
-        self._state.following.append(self.FOLLOW_aexpr_in_synpred46_Miranda1185)
+        self._state.following.append(self.FOLLOW_aexpr_in_synpred46_Miranda1188)
         self.aexpr()
 
         self._state.following.pop()
@@ -5607,10 +5617,10 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred54_Miranda"
     def synpred54_Miranda_fragment(self, ):
-        # grammars/Miranda.g:191:5: ( section )
-        # grammars/Miranda.g:191:5: section
+        # grammars/Miranda.g:192:5: ( section )
+        # grammars/Miranda.g:192:5: section
         pass 
-        self._state.following.append(self.FOLLOW_section_in_synpred54_Miranda1294)
+        self._state.following.append(self.FOLLOW_section_in_synpred54_Miranda1297)
         self.section()
 
         self._state.following.pop()
@@ -5623,10 +5633,10 @@ class MirandaParser(Parser):
 
     # $ANTLR start "synpred55_Miranda"
     def synpred55_Miranda_fragment(self, ):
-        # grammars/Miranda.g:192:5: ( tuple )
-        # grammars/Miranda.g:192:5: tuple
+        # grammars/Miranda.g:193:5: ( tuple )
+        # grammars/Miranda.g:193:5: tuple
         pass 
-        self._state.following.append(self.FOLLOW_tuple_in_synpred55_Miranda1300)
+        self._state.following.append(self.FOLLOW_tuple_in_synpred55_Miranda1303)
         self.tuple()
 
         self._state.following.pop()
@@ -5894,92 +5904,93 @@ class MirandaParser(Parser):
     FOLLOW_boolean_in_basic958 = frozenset([1])
     FOLLOW_list_in_basic964 = frozenset([1])
     FOLLOW_tuple_in_basic970 = frozenset([1])
-    FOLLOW_LPAREN_in_basic976 = frozenset([21, 22, 26, 28, 30, 32, 46, 52])
+    FOLLOW_LPAREN_in_basic976 = frozenset([21, 22, 26, 28, 30, 32, 52])
     FOLLOW_pattern_in_basic979 = frozenset([21, 22, 26, 28, 30, 32, 46, 52])
-    FOLLOW_RPAREN_in_basic982 = frozenset([1])
-    FOLLOW_expr0_in_expression991 = frozenset([1])
-    FOLLOW_expr1_in_expr0998 = frozenset([1, 10, 13, 51])
-    FOLLOW_CONCAT_in_expr01002 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_SUBTRACT_in_expr01008 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_COLON_in_expr01014 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expr0_in_expr01021 = frozenset([1])
-    FOLLOW_expr2_in_expr11030 = frozenset([1, 41])
-    FOLLOW_OR_in_expr11033 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr11039 = frozenset([1, 41])
-    FOLLOW_expr3_in_expr21048 = frozenset([1, 6])
-    FOLLOW_AND_in_expr21051 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr21057 = frozenset([1, 6])
-    FOLLOW_expr4_in_expr31066 = frozenset([1, 19, 24, 25, 33, 34, 37])
-    FOLLOW_set_in_expr31069 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr31084 = frozenset([1, 19, 24, 25, 33, 34, 37])
-    FOLLOW_expr5_in_expr41093 = frozenset([1, 4, 35])
-    FOLLOW_ADD_in_expr41097 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_MIN_in_expr41103 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr41110 = frozenset([1, 4, 35])
-    FOLLOW_expr6_in_expr51119 = frozenset([1, 16, 49])
-    FOLLOW_DIV_in_expr51123 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_STARS_in_expr51132 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr51139 = frozenset([1, 16, 49])
-    FOLLOW_expr7_in_expr61148 = frozenset([1, 27, 36])
-    FOLLOW_IDIV_in_expr61152 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_MOD_in_expr61155 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr61159 = frozenset([1, 27, 36])
-    FOLLOW_expr8_in_expr71168 = frozenset([1, 20])
-    FOLLOW_EXP_in_expr71172 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_expr71176 = frozenset([1, 20])
-    FOLLOW_aexpr_in_expr81185 = frozenset([1, 8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_ID_in_aexpr1198 = frozenset([1])
-    FOLLOW_INT_in_aexpr1217 = frozenset([1])
-    FOLLOW_FLOAT_in_aexpr1236 = frozenset([1])
-    FOLLOW_CHAR_in_aexpr1255 = frozenset([1])
-    FOLLOW_STRING_in_aexpr1274 = frozenset([1])
-    FOLLOW_NOT_in_aexpr1280 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_aexpr1282 = frozenset([1])
-    FOLLOW_boolean_in_aexpr1288 = frozenset([1])
-    FOLLOW_section_in_aexpr1294 = frozenset([1])
-    FOLLOW_tuple_in_aexpr1300 = frozenset([1])
-    FOLLOW_list_in_aexpr1306 = frozenset([1])
-    FOLLOW_LPAREN_in_aexpr1312 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_aexpr1315 = frozenset([46])
-    FOLLOW_RPAREN_in_aexpr1317 = frozenset([1])
-    FOLLOW_LPAREN_in_tuple1326 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_tuple1328 = frozenset([11])
-    FOLLOW_COMMA_in_tuple1331 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_tuple1333 = frozenset([11, 46])
-    FOLLOW_RPAREN_in_tuple1337 = frozenset([1])
-    FOLLOW_LBRACKET_in_list1361 = frozenset([8, 11, 21, 22, 26, 28, 30, 32, 38, 45, 50, 52])
-    FOLLOW_expression_in_list1363 = frozenset([11, 45])
-    FOLLOW_COMMA_in_list1367 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_list1369 = frozenset([11, 45])
-    FOLLOW_RBRACKET_in_list1373 = frozenset([1])
-    FOLLOW_LPAREN_in_section1399 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
-    FOLLOW_operator_in_section1401 = frozenset([46])
-    FOLLOW_RPAREN_in_section1403 = frozenset([1])
-    FOLLOW_LPAREN_in_section1420 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
-    FOLLOW_operator_in_section1422 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_section1424 = frozenset([46])
-    FOLLOW_RPAREN_in_section1426 = frozenset([1])
-    FOLLOW_LPAREN_in_section1445 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_section1447 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
-    FOLLOW_operator_in_section1449 = frozenset([46])
-    FOLLOW_RPAREN_in_section1451 = frozenset([1])
-    FOLLOW_OR_in_operator1473 = frozenset([1])
-    FOLLOW_AND_in_operator1475 = frozenset([1])
-    FOLLOW_LT_in_operator1477 = frozenset([1])
-    FOLLOW_LTE_in_operator1479 = frozenset([1])
-    FOLLOW_EQ_in_operator1481 = frozenset([1])
-    FOLLOW_NEQ_in_operator1483 = frozenset([1])
-    FOLLOW_GTE_in_operator1485 = frozenset([1])
-    FOLLOW_GT_in_operator1487 = frozenset([1])
-    FOLLOW_ADD_in_operator1489 = frozenset([1])
-    FOLLOW_MIN_in_operator1491 = frozenset([1])
-    FOLLOW_CONCAT_in_operator1493 = frozenset([1])
-    FOLLOW_SUBTRACT_in_operator1495 = frozenset([1])
-    FOLLOW_DIV_in_operator1497 = frozenset([1])
-    FOLLOW_STARS_in_operator1501 = frozenset([1])
-    FOLLOW_IDIV_in_operator1503 = frozenset([1])
-    FOLLOW_MOD_in_operator1505 = frozenset([1])
-    FOLLOW_EXP_in_operator1507 = frozenset([1])
+    FOLLOW_pattern_in_basic982 = frozenset([21, 22, 26, 28, 30, 32, 46, 52])
+    FOLLOW_RPAREN_in_basic985 = frozenset([1])
+    FOLLOW_expr0_in_expression994 = frozenset([1])
+    FOLLOW_expr1_in_expr01001 = frozenset([1, 10, 13, 51])
+    FOLLOW_CONCAT_in_expr01005 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_SUBTRACT_in_expr01011 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_COLON_in_expr01017 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expr0_in_expr01024 = frozenset([1])
+    FOLLOW_expr2_in_expr11033 = frozenset([1, 41])
+    FOLLOW_OR_in_expr11036 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr11042 = frozenset([1, 41])
+    FOLLOW_expr3_in_expr21051 = frozenset([1, 6])
+    FOLLOW_AND_in_expr21054 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr21060 = frozenset([1, 6])
+    FOLLOW_expr4_in_expr31069 = frozenset([1, 19, 24, 25, 33, 34, 37])
+    FOLLOW_set_in_expr31072 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr31087 = frozenset([1, 19, 24, 25, 33, 34, 37])
+    FOLLOW_expr5_in_expr41096 = frozenset([1, 4, 35])
+    FOLLOW_ADD_in_expr41100 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_MIN_in_expr41106 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr41113 = frozenset([1, 4, 35])
+    FOLLOW_expr6_in_expr51122 = frozenset([1, 16, 49])
+    FOLLOW_DIV_in_expr51126 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_STARS_in_expr51135 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr51142 = frozenset([1, 16, 49])
+    FOLLOW_expr7_in_expr61151 = frozenset([1, 27, 36])
+    FOLLOW_IDIV_in_expr61155 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_MOD_in_expr61158 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr61162 = frozenset([1, 27, 36])
+    FOLLOW_expr8_in_expr71171 = frozenset([1, 20])
+    FOLLOW_EXP_in_expr71175 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_expr71179 = frozenset([1, 20])
+    FOLLOW_aexpr_in_expr81188 = frozenset([1, 8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_ID_in_aexpr1201 = frozenset([1])
+    FOLLOW_INT_in_aexpr1220 = frozenset([1])
+    FOLLOW_FLOAT_in_aexpr1239 = frozenset([1])
+    FOLLOW_CHAR_in_aexpr1258 = frozenset([1])
+    FOLLOW_STRING_in_aexpr1277 = frozenset([1])
+    FOLLOW_NOT_in_aexpr1283 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_aexpr1285 = frozenset([1])
+    FOLLOW_boolean_in_aexpr1291 = frozenset([1])
+    FOLLOW_section_in_aexpr1297 = frozenset([1])
+    FOLLOW_tuple_in_aexpr1303 = frozenset([1])
+    FOLLOW_list_in_aexpr1309 = frozenset([1])
+    FOLLOW_LPAREN_in_aexpr1315 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_aexpr1318 = frozenset([46])
+    FOLLOW_RPAREN_in_aexpr1320 = frozenset([1])
+    FOLLOW_LPAREN_in_tuple1329 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_tuple1331 = frozenset([11])
+    FOLLOW_COMMA_in_tuple1334 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_tuple1336 = frozenset([11, 46])
+    FOLLOW_RPAREN_in_tuple1340 = frozenset([1])
+    FOLLOW_LBRACKET_in_list1364 = frozenset([8, 11, 21, 22, 26, 28, 30, 32, 38, 45, 50, 52])
+    FOLLOW_expression_in_list1366 = frozenset([11, 45])
+    FOLLOW_COMMA_in_list1370 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_list1372 = frozenset([11, 45])
+    FOLLOW_RBRACKET_in_list1376 = frozenset([1])
+    FOLLOW_LPAREN_in_section1402 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
+    FOLLOW_operator_in_section1404 = frozenset([46])
+    FOLLOW_RPAREN_in_section1406 = frozenset([1])
+    FOLLOW_LPAREN_in_section1423 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
+    FOLLOW_operator_in_section1425 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_section1427 = frozenset([46])
+    FOLLOW_RPAREN_in_section1429 = frozenset([1])
+    FOLLOW_LPAREN_in_section1448 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_section1450 = frozenset([4, 6, 13, 16, 19, 20, 24, 25, 27, 33, 34, 35, 36, 37, 41, 49, 51])
+    FOLLOW_operator_in_section1452 = frozenset([46])
+    FOLLOW_RPAREN_in_section1454 = frozenset([1])
+    FOLLOW_OR_in_operator1476 = frozenset([1])
+    FOLLOW_AND_in_operator1478 = frozenset([1])
+    FOLLOW_LT_in_operator1480 = frozenset([1])
+    FOLLOW_LTE_in_operator1482 = frozenset([1])
+    FOLLOW_EQ_in_operator1484 = frozenset([1])
+    FOLLOW_NEQ_in_operator1486 = frozenset([1])
+    FOLLOW_GTE_in_operator1488 = frozenset([1])
+    FOLLOW_GT_in_operator1490 = frozenset([1])
+    FOLLOW_ADD_in_operator1492 = frozenset([1])
+    FOLLOW_MIN_in_operator1494 = frozenset([1])
+    FOLLOW_CONCAT_in_operator1496 = frozenset([1])
+    FOLLOW_SUBTRACT_in_operator1498 = frozenset([1])
+    FOLLOW_DIV_in_operator1500 = frozenset([1])
+    FOLLOW_STARS_in_operator1504 = frozenset([1])
+    FOLLOW_IDIV_in_operator1506 = frozenset([1])
+    FOLLOW_MOD_in_operator1508 = frozenset([1])
+    FOLLOW_EXP_in_operator1510 = frozenset([1])
     FOLLOW_typedef_in_synpred2_Miranda650 = frozenset([14])
     FOLLOW_definition_in_synpred2_Miranda652 = frozenset([14])
     FOLLOW_DEDENT_in_synpred2_Miranda655 = frozenset([1])
@@ -5988,26 +5999,26 @@ class MirandaParser(Parser):
     FOLLOW_DEDENT_in_synpred18_Miranda899 = frozenset([26])
     FOLLOW_definition_in_synpred18_Miranda902 = frozenset([1])
     FOLLOW_tuple_in_synpred26_Miranda970 = frozenset([1])
-    FOLLOW_set_in_synpred30_Miranda1001 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expr0_in_synpred30_Miranda1021 = frozenset([1])
-    FOLLOW_OR_in_synpred31_Miranda1033 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred31_Miranda1039 = frozenset([1])
-    FOLLOW_AND_in_synpred32_Miranda1051 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred32_Miranda1057 = frozenset([1])
-    FOLLOW_set_in_synpred38_Miranda1069 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred38_Miranda1084 = frozenset([1])
-    FOLLOW_set_in_synpred40_Miranda1096 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred40_Miranda1110 = frozenset([1])
-    FOLLOW_DIV_in_synpred42_Miranda1123 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_STARS_in_synpred42_Miranda1132 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred42_Miranda1139 = frozenset([1])
-    FOLLOW_set_in_synpred44_Miranda1151 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred44_Miranda1159 = frozenset([1])
-    FOLLOW_EXP_in_synpred45_Miranda1172 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
-    FOLLOW_expression_in_synpred45_Miranda1176 = frozenset([1])
-    FOLLOW_aexpr_in_synpred46_Miranda1185 = frozenset([1])
-    FOLLOW_section_in_synpred54_Miranda1294 = frozenset([1])
-    FOLLOW_tuple_in_synpred55_Miranda1300 = frozenset([1])
+    FOLLOW_set_in_synpred30_Miranda1004 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expr0_in_synpred30_Miranda1024 = frozenset([1])
+    FOLLOW_OR_in_synpred31_Miranda1036 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred31_Miranda1042 = frozenset([1])
+    FOLLOW_AND_in_synpred32_Miranda1054 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred32_Miranda1060 = frozenset([1])
+    FOLLOW_set_in_synpred38_Miranda1072 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred38_Miranda1087 = frozenset([1])
+    FOLLOW_set_in_synpred40_Miranda1099 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred40_Miranda1113 = frozenset([1])
+    FOLLOW_DIV_in_synpred42_Miranda1126 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_STARS_in_synpred42_Miranda1135 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred42_Miranda1142 = frozenset([1])
+    FOLLOW_set_in_synpred44_Miranda1154 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred44_Miranda1162 = frozenset([1])
+    FOLLOW_EXP_in_synpred45_Miranda1175 = frozenset([8, 21, 22, 26, 28, 30, 32, 38, 50, 52])
+    FOLLOW_expression_in_synpred45_Miranda1179 = frozenset([1])
+    FOLLOW_aexpr_in_synpred46_Miranda1188 = frozenset([1])
+    FOLLOW_section_in_synpred54_Miranda1297 = frozenset([1])
+    FOLLOW_tuple_in_synpred55_Miranda1303 = frozenset([1])
 
 
 
